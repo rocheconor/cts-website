@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Thinking Systems — Applied AI for Cultural and Creative Industries</title>
+    <meta name="description" content="Applied AI research, development, and production for cultural and creative industries. Enhancing human creativity in an era of artificial intelligence.">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 95,50 50,95 5,50' fill='none' stroke='%231a1a1a' stroke-width='6'/></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --light: rgba(0,0,0,0.07);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-size: clamp(1rem, 1.1vw, 1.125rem);
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; }
+        ::selection { background: rgba(0,0,0,0.12); }
+
+        /* =============================================
+           FIXED VIDEO CANVAS
+           Video replaces the static image. Ping-pong
+           loop creates seamless endless motion.
+           ============================================= */
+        .video-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            background: var(--bg);
+        }
+
+        .video-canvas__video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 12%;
+        }
+
+        /* =============================================
+           LAYOUT
+           ============================================= */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
+        }
+
+        .hero .container {
+            max-width: 1200px;
+        }
+
+        .content-section {
+            position: relative;
+            z-index: 2;
+            background: rgba(245,244,240,0.92);
+        }
+
+        /* =============================================
+           HERO
+           ============================================= */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .hero__gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(245,244,240,0.25) 18%,
+                rgba(245,244,240,0.65) 38%,
+                rgba(245,244,240,0.9) 58%,
+                var(--bg) 80%
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 2;
+            padding-bottom: clamp(1.5rem, 2vw, 2rem);
+        }
+
+        .hero__name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+        }
+
+        .hero__subtitle {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+            line-height: 1.35;
+            color: var(--body);
+            max-width: 24ch;
+        }
+
+        .hero__scroll {
+            position: absolute;
+            bottom: clamp(1.5rem, 2.5vw, 2rem);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            width: 1px;
+            height: 48px;
+            overflow: hidden;
+        }
+
+        .hero__scroll::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--text);
+            animation: scrollLine 2.2s ease-in-out infinite;
+        }
+
+        @keyframes scrollLine {
+            0%   { transform: translateY(-105%); opacity: 0; }
+            25%  { opacity: 0.4; }
+            75%  { opacity: 0.4; }
+            100% { transform: translateY(105%); opacity: 0; }
+        }
+
+        /* =============================================
+           ART WINDOWS
+           ============================================= */
+        .art-window {
+            position: relative;
+            z-index: 1;
+        }
+
+        .art-window--section { height: 48vh; }
+        .art-window--break   { height: 38vh; }
+
+        .art-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to bottom, var(--bg), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .art-window::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(245,244,240,0.35) 25%,
+                rgba(245,244,240,0.8) 60%,
+                var(--bg) 100%
+            );
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .art-window__label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            padding: 0 clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .art-window__label .container { padding: 0; }
+
+        .art-window__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: -0.025em;
+            line-height: 1.0;
+            color: var(--text);
+            text-shadow:
+                0 0 30px var(--bg),
+                0 0 60px var(--bg),
+                0 0 100px var(--bg),
+                0 0 140px var(--bg);
+        }
+
+        /* =============================================
+           INTRO
+           ============================================= */
+        .intro {
+            padding: clamp(6rem, 10vw, 10rem) 0;
+        }
+
+        .intro__body {
+            font-size: clamp(1.1rem, 1.3vw, 1.2rem);
+            line-height: 1.8;
+            color: var(--body);
+            max-width: 56ch;
+            margin-bottom: 4rem;
+        }
+
+        .intro__body strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .intro__mission {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+            line-height: 1.38;
+            color: var(--text);
+            max-width: 26ch;
+            padding-left: 2rem;
+            border-left: 4px solid var(--text);
+        }
+
+        /* =============================================
+           WHAT WE DO + PILLARS
+           ============================================= */
+        .what-we-do {
+            padding: clamp(2.5rem, 4vw, 3.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        .what-we-do__intro {
+            font-size: clamp(1.1rem, 1.3vw, 1.2rem);
+            line-height: 1.7;
+            color: var(--body);
+            max-width: 55ch;
+        }
+
+        .pillar {
+            padding: clamp(3rem, 5vw, 4rem) 0;
+            border-top: 1px solid var(--light);
+        }
+
+        .pillar__number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .pillar__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: clamp(1.4rem, 2vw, 1.7rem);
+            margin-bottom: 0.6rem;
+        }
+
+        .pillar__desc {
+            font-size: 1rem;
+            color: var(--body);
+            max-width: 55ch;
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+        }
+
+        .pillar__items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .pillar__item {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: var(--body);
+            padding: 1.25rem 1.5rem;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .pillar__item:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .pillar__item strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* =============================================
+           WHO
+           ============================================= */
+        .who {
+            padding: clamp(5rem, 8vw, 7rem) 0;
+        }
+
+        .who__heading {
+            font-family: 'Instrument Serif', serif;
+            font-weight: 400;
+            font-size: clamp(2.4rem, 4vw, 3.2rem);
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .who__body {
+            font-size: 1.05rem;
+            color: var(--body);
+            line-height: 1.8;
+            max-width: 58ch;
+        }
+
+        .who__body strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .who__partner {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--light);
+            font-size: 1rem;
+            color: var(--body);
+            max-width: 58ch;
+        }
+
+        .who__partner strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .who__partner a {
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid var(--light);
+            transition: border-color 0.3s ease;
+        }
+
+        .who__partner a:hover {
+            border-color: var(--text);
+        }
+
+        /* =============================================
+           CONTACT WINDOW
+           ============================================= */
+        .contact-window {
+            position: relative;
+            z-index: 1;
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(3rem, 5vw, 4rem) clamp(1.5rem, 4vw, 3rem);
+        }
+
+        .contact-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to bottom, var(--bg), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .contact-window__card {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            padding: clamp(3rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+            background: rgba(245, 244, 240, 0.8);
+            backdrop-filter: blur(28px) saturate(1.2);
+            -webkit-backdrop-filter: blur(28px) saturate(1.2);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.35);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 16px rgba(0,0,0,0.04),
+                0 16px 56px rgba(0,0,0,0.06);
+        }
+
+        .contact-window__heading {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            margin-bottom: 1.25rem;
+        }
+
+        .contact-window__body {
+            font-size: 1rem;
+            color: var(--body);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .contact-window__email {
+            display: inline-block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: clamp(0.88rem, 1vw, 1rem);
+            color: var(--bg);
+            text-decoration: none;
+            padding: 0.9rem 2.4rem;
+            background: var(--text);
+            border-radius: 100px;
+            transition: all 0.35s cubic-bezier(0.25,0.1,0.25,1);
+        }
+
+        .contact-window__email:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.18);
+        }
+
+        /* =============================================
+           FOOTER
+           ============================================= */
+        .site-footer {
+            position: relative;
+            z-index: 2;
+            background: var(--bg);
+            padding: 3rem clamp(1.5rem, 4vw, 3rem) 2.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+            text-align: center;
+        }
+
+        /* =============================================
+           SCROLL-REVEAL
+           ============================================= */
+        .reveal { opacity: 1; transform: none; }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .js .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 { transition-delay: 0.12s !important; }
+        .reveal-d2 { transition-delay: 0.24s !important; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            .hero__scroll::after { animation: none; opacity: 0.3; }
+            .video-canvas__video { display: none; }
+        }
+
+        /* =============================================
+           RESPONSIVE
+           ============================================= */
+        @media (max-width: 768px) {
+            .hero__gradient { height: 58%; }
+
+            .art-window--section { height: 38vh; }
+            .art-window--break   { height: 28vh; }
+
+            .intro__mission { padding-left: 1.5rem; }
+
+            .contact-window { min-height: 55vh; }
+        }
+
+        @media (max-width: 480px) {
+            .hero__gradient { height: 62%; }
+
+            .art-window--section { height: 30vh; }
+            .art-window--break   { height: 22vh; }
+
+            .contact-window__card { margin: 0 0.25rem; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==========================================
+         FIXED VIDEO CANVAS
+         Ping-pong loop: plays forward then reverses,
+         creating a seamless infinite oscillation.
+         ========================================== -->
+    <div class="video-canvas" aria-hidden="true">
+        <video class="video-canvas__video"
+               muted
+               playsinline
+               autoplay
+               preload="auto"
+               poster="design/images/dash_3.jpg">
+            <source src="design/videos/Animated_Looping_Image_Creation.mp4" type="video/mp4">
+        </video>
+    </div>
+
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <section class="hero">
+        <div class="hero__gradient"></div>
+        <div class="hero__content container">
+            <h1 class="hero__name reveal">Creative Thinking<br>Systems</h1>
+            <p class="hero__subtitle reveal reveal-d1">Applied AI for Cultural and Creative Industries</p>
+        </div>
+        <div class="hero__scroll reveal reveal-d2" aria-hidden="true"></div>
+    </section>
+
+
+    <!-- ==========================================
+         INTRO
+         ========================================== -->
+    <section class="content-section intro">
+        <div class="container">
+            <p class="intro__body reveal"><strong>Creative Thinking Systems</strong> is an applied AI research, development, and production entity focused exclusively on cultural and creative industries. We exist to ensure that AI serves creativity rather than displacing it, and that the people, artists, creatives, and institutions who create culture retain agency, ownership, and economic reward in the process.</p>
+            <p class="intro__mission reveal reveal-d1">Our mission is to enhance, incentivise, and enshrine human creativity in an era of artificial intelligence.</p>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         ART WINDOW — "What We Do"
+         ========================================== -->
+    <div class="art-window art-window--section">
+        <div class="art-window__label">
+            <div class="container">
+                <h2 class="art-window__heading reveal">What We Do</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         WHAT WE DO + PILLARS
+         ========================================== -->
+    <section class="content-section what-we-do">
+        <div class="container">
+            <p class="what-we-do__intro reveal">We collaborate with cultural institutions, venues, creative organisations, and public bodies, through work that spans research, strategy, and production.</p>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="container">
+
+            <div class="pillar reveal">
+                <span class="pillar__number">01</span>
+                <h3 class="pillar__heading">Research &amp; Development</h3>
+                <p class="pillar__desc">Applied research and public demonstrators that make the fast-moving AI landscape legible for the cultural sector.</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong>Dead Internet Monitor (DIM):</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms &mdash; measuring how &ldquo;dead&rdquo; the internet is becoming</li>
+                    <li class="pillar__item"><strong>Copyright Intelligence:</strong> Monitoring how AI systems crawl and train on cultural and copyrighted content &mdash; tracking crawler compliance, and developing attribution methodologies and systems</li>
+                    <li class="pillar__item"><strong>Cooperative Intelligence Benchmark:</strong> Evaluating and informing how frontier AI models cooperate with humans on creative tasks</li>
+                </ul>
+            </div>
+
+            <div class="pillar reveal">
+                <span class="pillar__number">02</span>
+                <h3 class="pillar__heading">Strategy &amp; Operations</h3>
+                <p class="pillar__desc">AI strategy, design, and deployment for cultural organisations &mdash; from readiness diagnostics to sovereign infrastructure.</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong>AI for Cultural Organisations:</strong> Diagnostic health checks, workflow design, training, and implementations tailored to the specific needs of cultural institutions adopting AI.</li>
+                    <li class="pillar__item"><strong>Sovereign AI:</strong> Deploying AI solutions that keep sensitive content, data and workflows under the organisation&rsquo;s own control &mdash; built on open-weight models and nationally compliant infrastructure.</li>
+                    <li class="pillar__item"><strong>AI-Enabled Event Production:</strong> Sovereign agentic systems that coordinate event production</li>
+                </ul>
+            </div>
+
+            <div class="pillar reveal">
+                <span class="pillar__number">03</span>
+                <h3 class="pillar__heading">Production &amp; Content</h3>
+                <p class="pillar__desc">AI-native production capabilities</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong>Autonomous Content Production:</strong> AI-driven content creation across multiple formats and platforms, from creation to distribution</li>
+                    <li class="pillar__item"><strong>World Models for Culture:</strong> Applying emerging AI world models &mdash; systems that generate coherent, navigable environments &mdash; to cultural production: immersive venue experiences, interactive heritage walkthroughs, and virtual reconstructions of historical sites and performances</li>
+                    <li class="pillar__item"><strong>Generative AI for Public Space:</strong> Culturally authentic generative content and music for venues, public spaces, and cultural districts &mdash; serving regional aesthetics at scale</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         ART WINDOW — visual break
+         ========================================== -->
+    <div class="art-window art-window--break"></div>
+
+
+    <!-- ==========================================
+         WHO
+         ========================================== -->
+    <section class="content-section who">
+        <div class="container">
+            <h2 class="who__heading reveal">Who</h2>
+            <p class="who__body reveal reveal-d1">CTS is led by <strong>Conor Roche</strong>, with 20 years of experience at the intersection of technology and creativity, building creative operations internationally, from London&rsquo;s Roundhouse digital production unit to Shanghai&rsquo;s West Kowloon Cultural District to a $500B city-scale development in the Middle East. He holds an MSc in Artificial Intelligence (University of Bath), delivered European Commission research on AI&rsquo;s impact across creative industries, is a NESTA Clore Fellow, and sits on the board of Dublin&rsquo;s Gate Theatre.</p>
+            <p class="who__partner reveal reveal-d2"><strong>Technical partner:</strong> <a href="https://disrupter.com" target="_blank" rel="noopener noreferrer">Disrupter</a> (disrupter.com) &mdash; specialist delivery partner for sovereign AI architecture and infrastructure.</p>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         CONTACT WINDOW
+         ========================================== -->
+    <div class="contact-window">
+        <div class="contact-window__card reveal">
+            <h2 class="contact-window__heading">Get in Touch</h2>
+            <p class="contact-window__body">We are actively exploring partnerships, co-funding opportunities, and collaborative research arrangements with cultural institutions, universities, and funding bodies across the UK and Europe. If you are navigating AI in a cultural context &mdash; or funding those who are &mdash; we would welcome a conversation.</p>
+            <a href="mailto:hello@creativethinkingsystems.com" class="contact-window__email">hello@creativethinkingsystems.com</a>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="site-footer">
+        <p>&copy; 2026 Creative Thinking Systems</p>
+    </footer>
+
+
+    <!-- ==========================================
+         SCROLL ENGINE + PING-PONG VIDEO LOOP
+         ========================================== -->
+    <script>
+        (function () {
+            'use strict';
+            document.documentElement.classList.add('js');
+
+            // ------------------------------------------------
+            // VIDEO — plays once then holds on final frame
+            // ------------------------------------------------
+            var video = document.querySelector('.video-canvas__video');
+
+            if (video) {
+                var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+                if (prefersReducedMotion.matches) {
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            }
+
+            // ------------------------------------------------
+            // SCROLL-REVEAL
+            // ------------------------------------------------
+            var reveals = document.querySelectorAll('.reveal');
+
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) e.target.classList.add('visible');
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+                reveals.forEach(function (el) { io.observe(el); });
+            } else {
+                reveals.forEach(function (el) { el.classList.add('visible'); });
+            }
+
+            // Hero entrance
+            setTimeout(function () {
+                document.querySelectorAll('.hero .reveal').forEach(function (el) {
+                    el.classList.add('visible');
+                });
+            }, 300);
+
+            // Hero parallax
+            var heroContent = document.querySelector('.hero__content');
+            var heroScroll = document.querySelector('.hero__scroll');
+            var vh = window.innerHeight;
+            var ticking = false;
+
+            window.addEventListener('scroll', function () {
+                if (!ticking) {
+                    requestAnimationFrame(function () {
+                        var y = window.pageYOffset;
+                        if (y < vh) {
+                            var ratio = y / vh;
+                            var drift = ratio * 60;
+                            var fade = 1 - ratio * 0.6;
+                            heroContent.style.transform = 'translateY(' + drift + 'px)';
+                            heroContent.style.opacity = fade;
+                            heroScroll.style.opacity = 1 - ratio * 3;
+                        }
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+        })();
+    </script>
+
+</body>
+</html>
