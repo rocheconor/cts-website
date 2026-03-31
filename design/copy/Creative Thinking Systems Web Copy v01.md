@@ -44,7 +44,7 @@ AI-native production capabilities
 
 ## **Who**
 
-CTS is led by **Conor Roche**, with 20 years of experience at the intersection of technology and creativity, building creative operations internationally, from London's Roundhouse digital production unit to Shanghai's West Kowloon Cultural District to a $500B city-scale development in the Middle East. He holds an MSc in Artificial Intelligence (University of Bath), delivered European Commission research on AI's impact across creative industries, is a NESTA Clore Fellow, and sits on the board of Dublin's Gate Theatre.
+CTS is led by **Conor Roche**, with 20 years of experience at the intersection of technology and creativity, building creative operations internationally, from London's Roundhouse digital production unit to Hong Kong's West Kowloon Cultural District to a $500B city-scale development in the Middle East. He holds an MSc in Artificial Intelligence (University of Bath), delivered European Commission research on AI's impact across creative industries, is a NESTA Clore Fellow, and sits on the board of Dublin's Gate Theatre.
 
 **Technical partner:** Disrupter (disrupter.com) — specialist delivery partner for sovereign AI architecture and infrastructure.
 
