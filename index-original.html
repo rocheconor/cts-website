@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creative Thinking Systems — Applied AI for Cultural and Creative Industries</title>
+    <title>Creative Thinking Systems</title>
     <meta name="description" content="Applied AI research, development, and production for cultural and creative industries. Enhancing human creativity in an era of artificial intelligence.">
 
     <!-- Open Graph -->
@@ -19,7 +19,10 @@
     <meta name="twitter:description" content="Applied AI for Cultural and Creative Industries.">
     <meta name="twitter:image" content="https://creativethinkingsystems.com/design/images/dash_3.jpg">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 95,50 50,95 5,50' fill='none' stroke='%231a1a1a' stroke-width='6'/></svg>">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,6 +81,12 @@
             height: 100%;
             object-fit: cover;
             object-position: center 12%;
+            animation: slowBreath 30s ease-in-out infinite;
+        }
+
+        @keyframes slowBreath {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.018); }
         }
 
         /* =============================================
@@ -89,18 +98,18 @@
             padding: 0 clamp(1.5rem, 4vw, 3rem);
         }
 
-        .container--wide {
+        .hero .container {
             max-width: 1200px;
         }
 
         .content-section {
             position: relative;
             z-index: 2;
-            background: var(--bg);
+            background: rgba(245,244,240,0.92);
         }
 
         /* =============================================
-           HERO — Bold image, commanding type
+           HERO
            ============================================= */
         .hero {
             position: relative;
@@ -116,14 +125,14 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 65%;
+            height: 60%;
             background: linear-gradient(
                 to bottom,
                 transparent 0%,
-                rgba(245,244,240,0.3) 15%,
-                rgba(245,244,240,0.7) 35%,
-                rgba(245,244,240,0.92) 55%,
-                var(--bg) 75%
+                rgba(245,244,240,0.25) 18%,
+                rgba(245,244,240,0.65) 38%,
+                rgba(245,244,240,0.9) 58%,
+                var(--bg) 80%
             );
             pointer-events: none;
             z-index: 1;
@@ -132,28 +141,28 @@
         .hero__content {
             position: relative;
             z-index: 2;
-            padding-bottom: clamp(3rem, 5vw, 5rem);
+            padding-bottom: clamp(1.5rem, 2vw, 2rem);
         }
 
         .hero__name {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            font-size: clamp(3.5rem, 9vw, 8rem);
-            line-height: 0.95;
-            letter-spacing: -0.05em;
-            margin-bottom: 1.25rem;
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1.05;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
         }
 
         .hero__subtitle {
             font-family: 'Instrument Serif', serif;
             font-style: italic;
-            font-size: clamp(1.4rem, 2.8vw, 2.4rem);
-            line-height: 1.3;
+            font-size: clamp(1.3rem, 2.5vw, 2.1rem);
+            line-height: 1.35;
             color: var(--body);
-            max-width: 28ch;
+            max-width: 24ch;
         }
 
-        /* Scroll indicator */
+        /* Scroll indicator — a falling line */
         .hero__scroll {
             position: absolute;
             bottom: clamp(1.5rem, 2.5vw, 2rem);
@@ -184,29 +193,40 @@
         }
 
         /* =============================================
-           ART WINDOWS — Bold, unmasked
+           ART WINDOWS
            ============================================= */
         .art-window {
             position: relative;
             z-index: 1;
         }
 
-        .art-window--section { height: 60vh; }
-        .art-window--break   { height: 45vh; }
+        .art-window--section { height: 48vh; }
+        .art-window--break   { height: 38vh; }
 
-        /* Top: clean hard edge, no gradient mask */
-        /* Bottom: simple short fade into bg */
+        .art-window::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to bottom, var(--bg), transparent);
+            z-index: 1;
+            pointer-events: none;
+        }
+
         .art-window::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 25%;
+            height: 50%;
             background: linear-gradient(
                 to bottom,
                 transparent 0%,
-                rgba(245,244,240,0.6) 50%,
+                rgba(245,244,240,0.35) 25%,
+                rgba(245,244,240,0.8) 60%,
                 var(--bg) 100%
             );
             z-index: 1;
@@ -227,10 +247,15 @@
         .art-window__heading {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            font-size: clamp(3rem, 8vw, 7rem);
-            letter-spacing: -0.04em;
-            line-height: 0.95;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: -0.025em;
+            line-height: 1.0;
             color: var(--text);
+            text-shadow:
+                0 0 30px var(--bg),
+                0 0 60px var(--bg),
+                0 0 100px var(--bg),
+                0 0 140px var(--bg);
         }
 
         /* =============================================
@@ -245,7 +270,7 @@
             line-height: 1.8;
             color: var(--body);
             max-width: 56ch;
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
         }
 
         .intro__body strong {
@@ -253,29 +278,15 @@
             color: var(--text);
         }
 
-        /* Mission — centred, large, a moment */
         .intro__mission {
             font-family: 'Instrument Serif', serif;
             font-style: italic;
-            font-size: clamp(2rem, 4vw, 3.2rem);
-            line-height: 1.3;
+            font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+            line-height: 1.38;
             color: var(--text);
-            max-width: 22ch;
-            text-align: left;
+            max-width: 26ch;
             padding-left: 2rem;
             border-left: 4px solid var(--text);
-        }
-
-        .intro__mission .word {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .intro__mission .word.word-visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         /* =============================================
@@ -292,31 +303,8 @@
             max-width: 55ch;
         }
 
-        /* Pillar connector line */
-        .pillars-wrapper {
-            position: relative;
-        }
-
-        .pillars-wrapper::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 3px;
-            height: 0;
-            background: var(--text);
-            transition: none;
-            z-index: 1;
-        }
-
         .pillar {
             padding: clamp(3rem, 5vw, 4rem) 0;
-            padding-left: clamp(1.5rem, 2.5vw, 2.5rem);
-            border-top: none;
-            position: relative;
-        }
-
-        .pillar + .pillar {
             border-top: 1px solid var(--light);
         }
 
@@ -359,18 +347,14 @@
             padding: 1.25rem 1.5rem;
             background: #fff;
             border-radius: 6px;
-            border-left: 3px solid transparent;
             box-shadow:
                 0 1px 2px rgba(0,0,0,0.03),
                 0 4px 12px rgba(0,0,0,0.03);
-            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
-                        box-shadow 0.35s ease,
-                        border-color 0.35s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .pillar__item:hover {
             transform: translateY(-2px);
-            border-left-color: var(--text);
             box-shadow:
                 0 2px 4px rgba(0,0,0,0.04),
                 0 8px 24px rgba(0,0,0,0.06);
@@ -382,7 +366,10 @@
         }
 
         /* =============================================
-           WHO — Typographic hierarchy
+           WHO
+           The serif shift — geometric gives way to
+           organic at the human section. This is the
+           typographic heart of the page.
            ============================================= */
         .who {
             padding: clamp(5rem, 8vw, 7rem) 0;
@@ -393,7 +380,7 @@
             font-weight: 400;
             font-size: clamp(2.4rem, 4vw, 3.2rem);
             line-height: 1.1;
-            margin-bottom: 0.5rem;
+            margin-bottom: 2rem;
         }
 
         .who__body {
@@ -408,13 +395,14 @@
             color: var(--text);
         }
 
+
         /* =============================================
            CONTACT WINDOW
            ============================================= */
         .contact-window {
             position: relative;
             z-index: 1;
-            min-height: 85vh;
+            min-height: 75vh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -427,7 +415,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 20%;
+            height: 30%;
             background: linear-gradient(to bottom, var(--bg), transparent);
             z-index: 1;
             pointer-events: none;
@@ -437,26 +425,26 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            max-width: 640px;
+            max-width: 600px;
             width: 100%;
-            padding: clamp(3rem, 5vw, 5rem) clamp(2.5rem, 5vw, 4.5rem);
-            background: rgba(245, 244, 240, 0.75);
-            backdrop-filter: blur(32px) saturate(1.3);
-            -webkit-backdrop-filter: blur(32px) saturate(1.3);
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.4);
+            padding: clamp(3rem, 5vw, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+            background: rgba(245, 244, 240, 0.8);
+            backdrop-filter: blur(28px) saturate(1.2);
+            -webkit-backdrop-filter: blur(28px) saturate(1.2);
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.35);
             box-shadow:
                 0 1px 2px rgba(0,0,0,0.03),
                 0 4px 16px rgba(0,0,0,0.04),
-                0 24px 64px rgba(0,0,0,0.07);
+                0 16px 56px rgba(0,0,0,0.06);
         }
 
         .contact-window__heading {
             font-family: 'Instrument Serif', serif;
             font-style: italic;
             font-weight: 400;
-            font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-            margin-bottom: 1.5rem;
+            font-size: clamp(2rem, 3.5vw, 2.8rem);
+            margin-bottom: 1.25rem;
         }
 
         .contact-window__body {
@@ -470,11 +458,10 @@
             display: inline-block;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 500;
-            font-size: clamp(1rem, 1.3vw, 1.2rem);
+            font-size: clamp(1rem, 1.2vw, 1.15rem);
             color: var(--text);
             text-decoration: none;
-            border-bottom: 2px solid rgba(0,0,0,0.15);
-            padding-bottom: 2px;
+            border-bottom: 1px solid var(--light);
             transition: border-color 0.3s ease;
             user-select: text;
             -webkit-user-select: text;
@@ -508,9 +495,9 @@
 
         .js .reveal {
             opacity: 0;
-            transform: translateY(32px);
-            transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
-                        transform 0.9s cubic-bezier(0.16,1,0.3,1);
+            transform: translateY(28px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.8s cubic-bezier(0.16,1,0.3,1);
         }
 
         .js .reveal.visible {
@@ -518,42 +505,36 @@
             transform: translateY(0);
         }
 
-        .reveal-d1 { transition-delay: 0.15s !important; }
-        .reveal-d2 { transition-delay: 0.3s !important; }
+        .reveal-d1 { transition-delay: 0.12s !important; }
+        .reveal-d2 { transition-delay: 0.24s !important; }
 
         @media (prefers-reduced-motion: reduce) {
             .js .reveal { opacity: 1; transform: none; transition: none; }
             .image-canvas__img { animation: none; }
             .hero__scroll::after { animation: none; opacity: 0.3; }
-            .intro__mission .word { opacity: 1; transform: none; transition: none; }
         }
 
         /* =============================================
            RESPONSIVE
            ============================================= */
         @media (max-width: 768px) {
-            .hero__gradient { height: 55%; }
+            .hero__gradient { height: 58%; }
 
-            .art-window--section { height: 45vh; }
-            .art-window--break   { height: 32vh; }
+            .art-window--section { height: 38vh; }
+            .art-window--break   { height: 28vh; }
 
             .intro__mission { padding-left: 1.5rem; }
 
-            .contact-window { min-height: 60vh; }
-
-            .pillar { padding-left: 1rem; }
+            .contact-window { min-height: 55vh; }
         }
 
         @media (max-width: 480px) {
-            .hero__gradient { height: 60%; }
-            .hero__name { font-size: clamp(2.8rem, 12vw, 4rem); }
+            .hero__gradient { height: 62%; }
 
-            .art-window--section { height: 35vh; }
-            .art-window--break   { height: 25vh; }
+            .art-window--section { height: 30vh; }
+            .art-window--break   { height: 22vh; }
 
             .contact-window__card { margin: 0 0.25rem; }
-
-            .pillar { padding-left: 0.75rem; }
         }
     </style>
 </head>
@@ -561,7 +542,7 @@
 <body>
 
     <!-- ==========================================
-         FIXED IMAGE CANVAS — Full opacity, bold
+         FIXED IMAGE CANVAS
          ========================================== -->
     <div class="image-canvas" aria-hidden="true">
         <img src="design/images/dash_3.jpg"
@@ -572,13 +553,12 @@
 
 
     <!-- ==========================================
-         HERO — Commanding type over bold image
+         HERO
          ========================================== -->
     <section class="hero">
         <div class="hero__gradient"></div>
-        <div class="hero__content container container--wide">
+        <div class="hero__content container">
             <h1 class="hero__name reveal">Creative Thinking<br>Systems</h1>
-            <!--<p class="hero__subtitle reveal reveal-d1">Applied AI for Cultural and Creative Industries</p>-->
         </div>
         <div class="hero__scroll reveal reveal-d2" aria-hidden="true"></div>
     </section>
@@ -590,7 +570,7 @@
     <section class="content-section intro">
         <div class="container">
             <p class="intro__body reveal"><strong>Creative Thinking Systems</strong> is an applied AI research, development, and production company. We exist to ensure that AI serves creativity rather than displacing it, and that the people and organisations who create retain agency, ownership, and economic reward in the process.</p>
-            <p class="intro__mission" id="mission">Our mission is to enhance, incentivise, and enshrine human creativity in an era of artificial intelligence.</p>
+            <p class="intro__mission reveal reveal-d1">Our mission is to enhance, incentivise, and enshrine human creativity in an era of artificial intelligence.</p>
         </div>
     </section>
 
@@ -610,48 +590,41 @@
     <!-- ==========================================
          WHAT WE DO + PILLARS
          ========================================== -->
-    <section class="content-section what-we-do">
-        <div class="container">
-        </div>
-    </section>
-
     <section class="content-section">
         <div class="container">
-            <div class="pillars-wrapper" id="pillarsWrapper">
 
-                <div class="pillar reveal">
-                    <span class="pillar__number">01</span>
-                    <h3 class="pillar__heading">Research &amp; Development</h3>
-                    <p class="pillar__desc">Applied research, tools, and public demonstrators.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.2);transition:border-color 0.3s ease">Dead Internet Monitor</a>:</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how &ldquo;dead&rdquo; the internet is becoming.</li>
-                        <li class="pillar__item"><strong>Creator Value Monitor:</strong> Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.</li>
-                        <li class="pillar__item"><strong>Cooperative Intelligence Benchmark:</strong> Evaluating and informing how frontier AI models cooperate with humans on complex creative tasks.</li>
-                    </ul>
-                </div>
-
-                <div class="pillar reveal">
-                    <span class="pillar__number">02</span>
-                    <h3 class="pillar__heading">Sovereign AI Infrastructure &amp; Agentic Systems</h3>
-                    <p class="pillar__desc">Designing and building AI solutions for organisations that cannot process sensitive intellectual property, collections data, or operational information through third-party cloud AI services.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong>Sovereign Deployment:</strong> AI systems built on open-weight models and nationally compliant infrastructure, keeping data, content, and workflows under the organisation&rsquo;s own control. This applies to any institution managing sensitive assets at scale, from digitised collections to multi-site operations.</li>
-                        <li class="pillar__item"><strong>Agentic Operations:</strong> Building multi-agent systems that coordinate complex real-world workflows including event production, venue operations, and programming, reducing operational overhead while maintaining human oversight and control.</li>
-                        <li class="pillar__item"><strong>AI Readiness and Implementation:</strong> Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.</li>
-                    </ul>
-                </div>
-
-                <div class="pillar reveal">
-                    <span class="pillar__number">03</span>
-                    <h3 class="pillar__heading">Production &amp; Content</h3>
-                    <p class="pillar__desc">Emerging AI-native production capabilities, developed through our R&amp;D programme and built in partnership with clients.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong>Generative Content for Public Space:</strong> Culturally authentic generative content and music for venues, public spaces, and districts, serving regional aesthetics at scale. Currently in development through applied research partnerships.</li>
-                        <li class="pillar__item"><strong>World Models:</strong> Exploring the application of emerging AI world models, systems that generate coherent, navigable environments, to production contexts: immersive experiences, interactive walkthroughs, and virtual reconstructions. An active development direction building on our sovereign infrastructure work.</li>
-                    </ul>
-                </div>
-
+            <div class="pillar reveal">
+                <span class="pillar__number">01</span>
+                <h3 class="pillar__heading">Research &amp; Development</h3>
+                <p class="pillar__desc">Applied research, tools, and public demonstrators.</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.2);transition:border-color 0.3s ease">Dead Internet Monitor</a>:</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how &ldquo;dead&rdquo; the internet is becoming.</li>
+                    <li class="pillar__item"><strong>Creator Value Monitor:</strong> Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.</li>
+                    <li class="pillar__item"><strong>Cooperative Intelligence Benchmark:</strong> Evaluating and informing how frontier AI models cooperate with humans on complex creative tasks.</li>
+                </ul>
             </div>
+
+            <div class="pillar reveal">
+                <span class="pillar__number">02</span>
+                <h3 class="pillar__heading">Sovereign AI Infrastructure &amp; Agentic Systems</h3>
+                <p class="pillar__desc">Designing and building AI solutions for organisations that cannot process sensitive intellectual property, collections data, or operational information through third-party cloud AI services.</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong>Sovereign Deployment:</strong> AI systems built on open-weight models and nationally compliant infrastructure, keeping data, content, and workflows under the organisation&rsquo;s own control. This applies to any institution managing sensitive assets at scale, from digitised collections to multi-site operations.</li>
+                    <li class="pillar__item"><strong>Agentic Operations:</strong> Building multi-agent systems that coordinate complex real-world workflows including event production, venue operations, and programming, reducing operational overhead while maintaining human oversight and control.</li>
+                    <li class="pillar__item"><strong>AI Readiness and Implementation:</strong> Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.</li>
+                </ul>
+            </div>
+
+            <div class="pillar reveal">
+                <span class="pillar__number">03</span>
+                <h3 class="pillar__heading">Production &amp; Content</h3>
+                <p class="pillar__desc">Emerging AI-native production capabilities, developed through our R&amp;D programme and built in partnership with clients.</p>
+                <ul class="pillar__items">
+                    <li class="pillar__item"><strong>Generative Content for Public Space:</strong> Culturally authentic generative content and music for venues, public spaces, and districts, serving regional aesthetics at scale. Currently in development through applied research partnerships.</li>
+                    <li class="pillar__item"><strong>World Models:</strong> Exploring the application of emerging AI world models, systems that generate coherent, navigable environments, to production contexts: immersive experiences, interactive walkthroughs, and virtual reconstructions. An active development direction building on our sovereign infrastructure work.</li>
+                </ul>
+            </div>
+
         </div>
     </section>
 
@@ -663,7 +636,7 @@
 
 
     <!-- ==========================================
-         WHO — Typographic hierarchy
+         WHO
          ========================================== -->
     <section class="content-section who">
         <div class="container">
@@ -694,15 +667,16 @@
 
 
     <!-- ==========================================
-         SCROLL ENGINE — Enhanced
+         SCROLL ENGINE
          ========================================== -->
     <script>
         (function () {
             'use strict';
             document.documentElement.classList.add('js');
 
-            // ---- Scroll Reveal ----
             var reveals = document.querySelectorAll('.reveal');
+
+            // Scroll-reveal
             if ('IntersectionObserver' in window) {
                 var io = new IntersectionObserver(function (entries) {
                     entries.forEach(function (e) {
@@ -714,100 +688,38 @@
                 reveals.forEach(function (el) { el.classList.add('visible'); });
             }
 
-            // ---- Hero entrance ----
+            // Hero entrance — staggered
             setTimeout(function () {
                 document.querySelectorAll('.hero .reveal').forEach(function (el) {
                     el.classList.add('visible');
                 });
             }, 300);
 
-            // ---- Hero parallax ----
+            // Hero parallax — title drifts and fades as you scroll
             var heroContent = document.querySelector('.hero__content');
             var heroScroll = document.querySelector('.hero__scroll');
             var vh = window.innerHeight;
             var ticking = false;
 
-            // ---- Pillar connector line ----
-            var pillarsWrapper = document.getElementById('pillarsWrapper');
-            var pillarsLine = pillarsWrapper ? pillarsWrapper.querySelector(':before') : null;
-
-            // ---- Mission word reveal ----
-            var mission = document.getElementById('mission');
-            if (mission) {
-                var text = mission.textContent;
-                mission.innerHTML = '';
-                var words = text.split(/\s+/);
-                words.forEach(function (word, i) {
-                    var span = document.createElement('span');
-                    span.className = 'word';
-                    span.textContent = word;
-                    span.style.transitionDelay = (i * 0.06) + 's';
-                    mission.appendChild(span);
-                    if (i < words.length - 1) {
-                        mission.appendChild(document.createTextNode(' '));
-                    }
-                });
-
-                var missionIO = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (e) {
-                        if (e.isIntersecting) {
-                            mission.querySelectorAll('.word').forEach(function (w) {
-                                w.classList.add('word-visible');
-                            });
-                            missionIO.unobserve(mission);
-                        }
-                    });
-                }, { threshold: 0.3 });
-                missionIO.observe(mission);
-            }
-
-            // ---- Scroll handler ----
             window.addEventListener('scroll', function () {
                 if (!ticking) {
                     requestAnimationFrame(function () {
                         var y = window.pageYOffset;
-
-                        // Hero parallax
                         if (y < vh) {
                             var ratio = y / vh;
-                            var drift = ratio * 80;
-                            var fade = 1 - ratio * 0.7;
+                            var drift = ratio * 60;
+                            var fade = 1 - ratio * 0.6;
                             heroContent.style.transform = 'translateY(' + drift + 'px)';
                             heroContent.style.opacity = fade;
                             heroScroll.style.opacity = 1 - ratio * 3;
                         }
-
-                        // Pillar connector line
-                        if (pillarsWrapper) {
-                            var rect = pillarsWrapper.getBoundingClientRect();
-                            var wrapperTop = rect.top;
-                            var wrapperHeight = rect.height;
-                            var viewportMid = vh * 0.5;
-
-                            if (wrapperTop < viewportMid) {
-                                var scrolled = viewportMid - wrapperTop;
-                                var progress = Math.min(scrolled / wrapperHeight, 1);
-                                pillarsWrapper.style.setProperty('--line-height', (progress * 100) + '%');
-                            } else {
-                                pillarsWrapper.style.setProperty('--line-height', '0%');
-                            }
-                        }
-
                         ticking = false;
                     });
                     ticking = true;
                 }
             }, { passive: true });
-
         })();
     </script>
-
-    <style>
-        /* Pillar line driven by scroll via CSS custom property */
-        .pillars-wrapper::before {
-            height: var(--line-height, 0%);
-        }
-    </style>
 
 </body>
 </html>
