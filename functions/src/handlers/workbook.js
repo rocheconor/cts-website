@@ -8,7 +8,7 @@ const { isValidEmail } = require('../lib/validation');
 const { rateLimitOk, getClientIp } = require('../lib/rateLimit');
 const { sendWorkbookEmail } = require('../lib/email');
 
-const WORKBOOK_URL = 'https://creativethinkingsystems.com/aird/AI-readiness-workbook.pdf';
+const WORKBOOK_URL = 'https://creativethinkingsystems.com/aireadiness/AI-readiness-workbook.pdf';
 const WORKBOOK_PATH = path.join(__dirname, '..', '..', 'assets', 'AI-readiness-workbook.pdf');
 
 function getWorkbookBytes() {

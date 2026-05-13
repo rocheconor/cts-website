@@ -3,8 +3,8 @@ business-plan/
 .firebase/
 
 # Internal docs not for public repo
-aird/aird-brief.md
-aird/aird-content.md
+aireadiness/aird-brief.md
+aireadiness/aird-content.md
 AI_Readiness_Assessment__Gate_Theatre.pdf
 
 # Build artefacts and local tool state

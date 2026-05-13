@@ -5,7 +5,7 @@
 ## Nav
 
 - [Dead Internet Monitor](https://deadinternetmonitor.com)
-- [AI Readiness:](./aird)
+- [AI Readiness:](./aireadiness)
   
 
 ---
@@ -29,7 +29,7 @@ Our mission is to enhance, incentivise, and enshrine human creativity in an era 
 
 - **[Dead Internet Monitor](https://deadinternetmonitor.com):** A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how "dead" the internet is becoming.
 
-- **[AI Readiness:](./aird)** Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.
+- **[AI Readiness:](./aireadiness)** Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.
 
 - **Creator Value Monitor:** Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.
 

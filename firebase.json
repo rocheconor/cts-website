@@ -12,8 +12,8 @@
       "node_modules",
       "build/**",
       "functions/**",
-      "aird/aird-brief.md",
-      "aird/aird-content.md",
+      "aireadiness/aird-brief.md",
+      "aireadiness/aird-content.md",
       "AI_Readiness_Assessment__Gate_Theatre.pdf",
       "business-plan/**",
       "firestore.rules",
@@ -48,11 +48,15 @@
         ]
       },
       {
-        "source": "aird/AI-readiness-workbook.pdf",
+        "source": "aireadiness/AI-readiness-workbook.pdf",
         "headers": [
           { "key": "Cache-Control", "value": "public, max-age=3600" }
         ]
       }
+    ],
+    "redirects": [
+      { "source": "/aird", "destination": "/aireadiness", "type": 301 },
+      { "source": "/aird/:rest*", "destination": "/aireadiness/:rest", "type": 301 }
     ]
   },
   "functions": [

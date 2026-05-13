@@ -1,5 +1,5 @@
-// Render the AIRD workbook template to /aird/workbook.pdf using Puppeteer.
-// Run: node build/aird-workbook/render.js
+// Render the AIRD workbook template to /aireadiness/AI-readiness-workbook.pdf
+// using Puppeteer. Run: node build/aird-workbook/render.js
 
 const path = require('path');
 const fs = require('fs');
@@ -7,7 +7,7 @@ const puppeteer = require('puppeteer');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const TEMPLATE = path.join(__dirname, 'template.html');
-const OUTPUT = path.join(ROOT, 'aird', 'AI-readiness-workbook.pdf');
+const OUTPUT = path.join(ROOT, 'aireadiness', 'AI-readiness-workbook.pdf');
 const FN_ASSET = path.join(ROOT, 'functions', 'assets', 'AI-readiness-workbook.pdf');
 
 const dateStr = new Date().toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
