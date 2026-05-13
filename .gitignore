@@ -1,3 +1,16 @@
 .DS_Store
 business-plan/
 .firebase/
+
+# Internal docs not for public repo
+aird/aird-brief.md
+aird/aird-content.md
+AI_Readiness_Assessment__Gate_Theatre.pdf
+
+# Build artefacts and local tool state
+build/aird-workbook/node_modules/
+build/aird-workbook/package-lock.json
+.claude/worktrees/
+
+# Editor / app config
+design/copy/.obsidian/

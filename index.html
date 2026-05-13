@@ -103,6 +103,41 @@
         }
 
         /* =============================================
+           SITE NAV — Lightweight, non-sticky
+           ============================================= */
+        .site-nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1.5rem, 4vw, 3rem);
+        }
+
+        .site-nav__list {
+            list-style: none;
+            display: flex;
+            justify-content: flex-end;
+            gap: clamp(1.25rem, 3vw, 2.5rem);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+        }
+
+        .site-nav__link {
+            color: var(--text);
+            text-decoration: none;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .site-nav__link:hover {
+            border-bottom-color: var(--text);
+        }
+
+        /* =============================================
            HERO — Bold image, commanding type
            ============================================= */
         .hero {
@@ -248,7 +283,11 @@
             line-height: 1.8;
             color: var(--body);
             max-width: 56ch;
-            margin-bottom: 5rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .intro__body + .intro__mission {
+            margin-top: 3.5rem;
         }
 
         .intro__body strong {
@@ -384,6 +423,55 @@
             color: var(--text);
         }
 
+        /* Offerings — flat list of services/products */
+        .offerings {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: clamp(1rem, 2vw, 1.5rem) 0 clamp(4rem, 6vw, 5rem);
+        }
+
+        .offering {
+            font-size: clamp(1rem, 1.15vw, 1.05rem);
+            line-height: 1.7;
+            color: var(--body);
+            padding: clamp(1.5rem, 2.5vw, 2rem) clamp(1.5rem, 2.5vw, 2rem);
+            background: #fff;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                        box-shadow 0.35s ease,
+                        border-color 0.35s ease;
+        }
+
+        .offering:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--text);
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .offering strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .offering__link {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            transition: border-color 0.3s ease;
+        }
+
+        .offering__link:hover {
+            border-bottom-color: var(--text);
+        }
+
         /* =============================================
            WHO — Typographic hierarchy
            ============================================= */
@@ -409,6 +497,113 @@
         .who__body strong {
             font-weight: 600;
             color: var(--text);
+        }
+
+        /* =============================================
+           NEWSLETTER SECTION
+           ============================================= */
+        .newsletter-section {
+            padding: clamp(5rem, 8vw, 7rem) 0;
+        }
+
+        .newsletter-section__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin-bottom: 2rem;
+            max-width: 44rem;
+        }
+
+        .newsletter-section__title em {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--body);
+        }
+
+        .newsletter-section__sep {
+            color: var(--muted);
+            font-weight: 400;
+            margin: 0 0.15em;
+        }
+
+        .newsletter-section__form {
+            max-width: 36rem;
+        }
+
+        .newsletter-section__row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .newsletter-section__input {
+            flex: 1 1 220px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            padding: 0.85rem 1.1rem;
+            border: 1px solid rgba(0,0,0,0.18);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .newsletter-section__input:focus {
+            border-color: var(--text);
+        }
+
+        .newsletter-section__btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.85rem 1.6rem;
+            border-radius: 999px;
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            cursor: pointer;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .newsletter-section__btn:hover {
+            transform: translateY(-1px);
+            background: #000;
+        }
+
+        .newsletter-section__privacy {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .newsletter-section__status {
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 1.5em;
+        }
+
+        .newsletter-section__status[data-state="ok"] { color: #1a5d2e; }
+        .newsletter-section__status[data-state="err"] { color: #8a2424; }
+
+        .newsletter-section__hp {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        @media (max-width: 600px) {
+            .newsletter-section__row { flex-direction: column; }
+            .newsletter-section__input,
+            .newsletter-section__btn { width: 100%; }
         }
 
         /* =============================================
@@ -578,6 +773,13 @@
          HERO — Commanding type over bold image
          ========================================== -->
     <section class="hero">
+        <nav class="site-nav reveal" aria-label="Primary">
+            <ul class="site-nav__list">
+                <li><a class="site-nav__link" href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer">Dead Internet Monitor</a></li>
+                <li><a class="site-nav__link" href="./aird">AI Readiness</a></li>
+                <li><a class="site-nav__link" href="#newsletter">Newsletter</a></li>
+            </ul>
+        </nav>
         <div class="hero__gradient"></div>
         <div class="hero__content container container--wide">
             <h1 class="hero__name reveal">Creative Thinking<br>Systems</h1>
@@ -592,7 +794,8 @@
          ========================================== -->
     <section class="content-section intro">
         <div class="container">
-            <p class="intro__body reveal"><strong>Creative Thinking Systems</strong> is an applied AI research, development, and production company. We exist to ensure that AI serves creativity rather than displacing it, and that the people and organisations who create retain agency, ownership, and economic reward in the process.</p>
+            <p class="intro__body reveal"><strong>Creative Thinking Systems</strong> is an applied AI company developing tools, diagnostics and agentic workflows for the creative sectors.</p>
+            <p class="intro__body reveal">We exist to ensure that AI serves creativity rather than displacing it, and that the people and organisations who create retain agency, ownership, and economic reward in the process.</p>
             <p class="intro__mission" id="mission">Our mission is to enhance, incentivise, and enshrine human creativity in an era of artificial intelligence.</p>
         </div>
     </section>
@@ -604,7 +807,7 @@
     <div class="art-window art-window--section">
         <div class="art-window__label">
             <div class="container">
-                <h2 class="art-window__heading reveal">What We Do</h2>
+                <h2 class="art-window__heading reveal">Our Work</h2>
             </div>
         </div>
     </div>
@@ -620,41 +823,23 @@
 
     <section class="content-section">
         <div class="container">
-            <div class="pillars-wrapper" id="pillarsWrapper">
-
-                <div class="pillar reveal">
-                    <span class="pillar__number">01</span>
-                    <h3 class="pillar__heading">Research &amp; Development</h3>
-                    <p class="pillar__desc">Applied research, tools, and public demonstrators.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.2);transition:border-color 0.3s ease">Dead Internet Monitor</a>:</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how &ldquo;dead&rdquo; the internet is becoming.</li>
-                        <li class="pillar__item"><strong>Creator Value Monitor:</strong> Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.</li>
-                        <li class="pillar__item"><strong>Cooperative Intelligence Benchmark:</strong> Evaluating and informing how frontier AI models cooperate with humans on complex creative tasks.</li>
-                    </ul>
-                </div>
-
-                <div class="pillar reveal">
-                    <span class="pillar__number">02</span>
-                    <h3 class="pillar__heading">Sovereign AI Infrastructure &amp; Agentic Systems</h3>
-                    <p class="pillar__desc">Designing and building AI solutions for organisations that cannot process sensitive intellectual property, collections data, or operational information through third-party cloud AI services.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong>Sovereign Deployment:</strong> AI systems built on open-weight models and nationally compliant infrastructure, keeping data, content, and workflows under the organisation&rsquo;s own control. This applies to any institution managing sensitive assets at scale, from digitised collections to multi-site operations.</li>
-                        <li class="pillar__item"><strong>Agentic Operations:</strong> Building multi-agent systems that coordinate complex real-world workflows including event production, venue operations, and programming, reducing operational overhead while maintaining human oversight and control.</li>
-                        <li class="pillar__item"><strong>AI Readiness and Implementation:</strong> Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.</li>
-                    </ul>
-                </div>
-
-                <div class="pillar reveal">
-                    <span class="pillar__number">03</span>
-                    <h3 class="pillar__heading">Production &amp; Content</h3>
-                    <p class="pillar__desc">Emerging AI-native production capabilities, developed through our R&amp;D programme and built in partnership with clients.</p>
-                    <ul class="pillar__items">
-                        <li class="pillar__item"><strong>Generative Content for Public Space:</strong> Culturally authentic generative content and music for venues, public spaces, and districts, serving regional aesthetics at scale. Currently in development through applied research partnerships.</li>
-                        <li class="pillar__item"><strong>World Models:</strong> Exploring the application of emerging AI world models, systems that generate coherent, navigable environments, to production contexts: immersive experiences, interactive walkthroughs, and virtual reconstructions. An active development direction building on our sovereign infrastructure work.</li>
-                    </ul>
-                </div>
-
-            </div>
+            <ul class="offerings" id="pillarsWrapper">
+                <li class="offering reveal">
+                    <strong><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" class="offering__link">Dead Internet Monitor</a>:</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how &ldquo;dead&rdquo; the internet is becoming.
+                </li>
+                <li class="offering reveal">
+                    <strong><a href="./aird" class="offering__link">AI Readiness</a>:</strong> Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.
+                </li>
+                <li class="offering reveal">
+                    <strong>Creator Value Monitor:</strong> Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.
+                </li>
+                <li class="offering reveal">
+                    <strong>Sovereign Deployment and Agentic Workflows:</strong> AI systems built on open-weight models and nationally compliant infrastructure, keeping data, content, and workflows under the organisation&rsquo;s own control. This applies to any institution managing sensitive assets at scale, from digitised collections to multi-site operations.
+                </li>
+                <li class="offering reveal">
+                    <strong>Agent Culture:</strong> Research into how AI agents can cooperate to make them collectively more creative over time.
+                </li>
+            </ul>
         </div>
     </section>
 
@@ -672,6 +857,26 @@
         <div class="container">
             <h2 class="who__heading reveal">Who</h2>
             <p class="who__body reveal reveal-d1">CTS is led by <strong><a href="https://www.linkedin.com/in/conorroche/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.2);transition:border-color 0.3s ease">Conor Roche</a></strong>, with 20 years of experience building technology-driven creative operations internationally, from London&rsquo;s Roundhouse to Hong Kong&rsquo;s West Kowloon Cultural District to a $500B city-scale development in the Middle East. He holds an MSc in Artificial Intelligence (University of Bath), holds a Harvard CopyrightX certification, delivered European Commission research on AI policy and creative industries, is a NESTA Clore Fellow, and sits on the board of Dublin&rsquo;s Gate Theatre.</p>
+        </div>
+    </section>
+
+
+    <!-- ==========================================
+         NEWSLETTER
+         ========================================== -->
+    <section class="content-section newsletter-section" id="newsletter">
+        <div class="container">
+            <h2 class="newsletter-section__title reveal">AI, Culture and Creativity Newsletter <span class="newsletter-section__sep">:</span> <em>A monthly update on all things AI for the cultural and creative sector.</em></h2>
+
+            <form id="newsletter-form" class="newsletter-section__form reveal" novalidate>
+                <input type="text" name="company" class="newsletter-section__hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <div class="newsletter-section__row">
+                    <input type="email" class="newsletter-section__input" name="email" placeholder="Email address" required autocomplete="email">
+                    <button type="submit" class="newsletter-section__btn">Subscribe</button>
+                </div>
+                <p class="newsletter-section__privacy">We use your email only to send the newsletter. You can unsubscribe at any time.</p>
+                <div class="newsletter-section__status" id="newsletter-status" role="status" aria-live="polite"></div>
+            </form>
         </div>
     </section>
 
@@ -801,6 +1006,53 @@
                     ticking = true;
                 }
             }, { passive: true });
+
+            // ---- Newsletter form ----
+            var newsForm = document.getElementById('newsletter-form');
+            var newsStatus = document.getElementById('newsletter-status');
+
+            function setNewsStatus(msg, state) {
+                if (!newsStatus) return;
+                newsStatus.textContent = msg;
+                newsStatus.setAttribute('data-state', state || '');
+            }
+
+            function validEmail(s) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+            }
+
+            if (newsForm) {
+                newsForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var email = newsForm.email.value.trim();
+                    var hp = newsForm.company.value;
+
+                    if (!validEmail(email)) {
+                        setNewsStatus('That does not look like a valid email address. Try again.', 'err');
+                        return;
+                    }
+
+                    var fields = newsForm.querySelectorAll('input, button');
+                    fields.forEach(function (el) { el.disabled = true; });
+                    setNewsStatus('Subscribing...', '');
+
+                    fetch('/api/newsletter-subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email: email, source: 'homepage', hp: hp })
+                    }).then(function (resp) {
+                        if (!resp.ok) throw new Error('Request failed');
+                        return resp.json().catch(function () { return {}; });
+                    }).then(function () {
+                        setNewsStatus('You are subscribed. Look out for the next issue.', 'ok');
+                        newsForm.reset();
+                    }).catch(function () {
+                        setNewsStatus('Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    }).finally(function () {
+                        fields.forEach(function (el) { el.disabled = false; });
+                    });
+                });
+            }
 
         })();
     </script>

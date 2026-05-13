@@ -4,11 +4,35 @@
     "ignore": [
       "firebase.json",
       ".firebase",
+      ".firebaserc",
       ".git",
       ".gitignore",
       "design/images/dash_3_original.jpg",
       "design/images/Gemini_Generated_Image_4c4yat4c4yat4c4y.png",
-      "node_modules"
+      "node_modules",
+      "build/**",
+      "functions/**",
+      "aird/aird-brief.md",
+      "aird/aird-content.md",
+      "AI_Readiness_Assessment__Gate_Theatre.pdf",
+      "business-plan/**",
+      "firestore.rules",
+      "firestore.indexes.json",
+      "storage.rules"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/workbook-request",
+        "function": { "functionId": "workbookRequest", "region": "europe-west1" }
+      },
+      {
+        "source": "/api/newsletter-subscribe",
+        "function": { "functionId": "newsletterSubscribe", "region": "europe-west1" }
+      },
+      {
+        "source": "/api/submit-assessment",
+        "function": { "functionId": "submitAssessment", "region": "europe-west1" }
+      }
     ],
     "headers": [
       {
@@ -22,7 +46,41 @@
         "headers": [
           { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
         ]
+      },
+      {
+        "source": "aird/AI-readiness-workbook.pdf",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=3600" }
+        ]
       }
     ]
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "nodejs20",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "functions": { "port": 5001 },
+    "firestore": { "port": 8080 },
+    "hosting": { "port": 5000 },
+    "storage": { "port": 9199 },
+    "ui": { "enabled": true }
   }
 }

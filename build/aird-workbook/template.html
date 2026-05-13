@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Readiness Workbook — Creative Thinking Systems</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* margins are controlled by Puppeteer's pdf() options */
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            font-family: 'Inter', sans-serif;
+            color: #1a1a1a;
+            background: #fff;
+            font-size: 10.5pt;
+            line-height: 1.55;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* ===== Cover ===== */
+        .cover {
+            page-break-after: always;
+            min-height: calc(297mm - 44mm);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 70mm;
+        }
+
+        .cover__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9pt;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: #1a1a1a;
+            margin-bottom: 12mm;
+        }
+
+        .cover__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 38pt;
+            line-height: 1.02;
+            letter-spacing: -0.03em;
+            margin-bottom: 16mm;
+            max-width: 18em;
+        }
+
+        .cover__sub {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: 16pt;
+            line-height: 1.35;
+            color: #444;
+            max-width: 32em;
+            padding-left: 5mm;
+            border-left: 1.5pt solid #1a1a1a;
+        }
+
+        /* ===== Sections ===== */
+        .section {
+            page-break-before: always;
+            padding-top: 4mm;
+        }
+
+        .section__head {
+            display: grid;
+            grid-template-columns: 12mm 1fr;
+            gap: 4mm;
+            align-items: baseline;
+            border-top: 0.6pt solid #1a1a1a;
+            padding-top: 4mm;
+            margin-bottom: 10mm;
+        }
+
+        .section__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 8.5pt;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: #999;
+            padding-top: 3mm;
+        }
+
+        .section__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 20pt;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .section__body p { margin-bottom: 3mm; color: #1a1a1a; }
+        .section__body p.muted { color: #555; }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 12pt;
+            margin-top: 7mm;
+            margin-bottom: 3mm;
+        }
+
+        h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 10pt;
+            margin-top: 4mm;
+            margin-bottom: 2mm;
+        }
+
+        strong { font-weight: 600; }
+
+        ul.numbered {
+            list-style: none;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1mm 8mm;
+            margin: 3mm 0 5mm;
+        }
+
+        ul.numbered li {
+            display: grid;
+            grid-template-columns: 8mm 1fr;
+            gap: 2mm;
+            padding: 1.5mm 0;
+            border-bottom: 0.4pt solid #e6e4de;
+            font-size: 10pt;
+            line-height: 1.45;
+        }
+
+        ul.numbered li .n {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7.5pt;
+            color: #999;
+            letter-spacing: 0.06em;
+            padding-top: 0.5mm;
+        }
+
+        /* Exposure cards */
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3mm;
+            margin: 4mm 0 4mm;
+        }
+
+        .card {
+            border: 0.6pt solid #1a1a1a;
+            padding: 3.5mm 4mm;
+            page-break-inside: avoid;
+        }
+
+        .card__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7.5pt;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: #999;
+            margin-bottom: 1.5mm;
+        }
+
+        .card__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 10pt;
+            line-height: 1.25;
+            margin-bottom: 2mm;
+        }
+
+        .card__body {
+            font-size: 9pt;
+            line-height: 1.45;
+            margin-bottom: 2.5mm;
+            color: #1a1a1a;
+        }
+
+        .card__riskslabel {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7pt;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 1mm;
+        }
+
+        .card__risks {
+            font-size: 9pt;
+            line-height: 1.4;
+            color: #444;
+        }
+
+        .card--full { grid-column: 1 / -1; }
+
+        /* Scale list */
+        .scale {
+            list-style: none;
+            margin: 3mm 0 6mm;
+        }
+
+        .scale li {
+            display: grid;
+            grid-template-columns: 6mm 1fr;
+            gap: 2mm;
+            padding: 1.5mm 0;
+            border-bottom: 0.4pt solid #e6e4de;
+            font-size: 10pt;
+        }
+
+        .scale li .n {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        /* Scoring table */
+        table.grid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin: 3mm 0 5mm;
+            page-break-inside: avoid;
+        }
+
+        table.grid th, table.grid td {
+            border: 0.4pt solid #1a1a1a;
+            padding: 2mm 3mm;
+            vertical-align: top;
+            line-height: 1.35;
+        }
+
+        table.grid th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7.5pt;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-align: center;
+            background: #f5f4f0;
+            text-transform: uppercase;
+        }
+
+        table.grid th.area-th { text-align: left; }
+        table.grid td.score-td { text-align: center; width: 11mm; font-family: 'Space Grotesk', sans-serif; color: #999; }
+        table.grid td.num-td { font-family: 'Space Grotesk', sans-serif; font-size: 8pt; color: #999; text-align: center; width: 7mm; }
+        table.grid td.area-td { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 9pt; width: 38mm; }
+        table.grid td.q-td { font-size: 9pt; line-height: 1.4; }
+
+        /* Bands */
+        .band {
+            border-left: 1.5pt solid #1a1a1a;
+            padding: 1mm 4mm 1mm 4mm;
+            margin: 4mm 0;
+            page-break-inside: avoid;
+        }
+
+        .band__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 11pt;
+            margin-bottom: 1mm;
+        }
+
+        .band ul {
+            margin: 0 0 0 4mm;
+            font-size: 9.5pt;
+            color: #1a1a1a;
+        }
+
+        .band ul li { margin-bottom: 0.8mm; }
+
+        /* Success blocks */
+        .success { page-break-inside: avoid; margin-bottom: 5mm; }
+        .success__head {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 10.5pt;
+            margin-bottom: 1.5mm;
+        }
+        .success__body { font-size: 9.5pt; color: #1a1a1a; line-height: 1.5; }
+
+        /* Plan blocks */
+        .plan {
+            border-top: 0.6pt solid #1a1a1a;
+            padding-top: 4mm;
+            margin-top: 5mm;
+            page-break-inside: avoid;
+        }
+        .plan__head {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 12pt;
+            margin-bottom: 2mm;
+            letter-spacing: -0.01em;
+        }
+        .plan__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 7.5pt;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            color: #999;
+            text-transform: uppercase;
+            margin-top: 2.5mm;
+            margin-bottom: 1mm;
+        }
+        .plan ul { margin-left: 4mm; font-size: 9.5pt; line-height: 1.55; }
+        .plan ul li { margin-bottom: 0.5mm; }
+        .plan__output {
+            margin-top: 2.5mm;
+            font-size: 9pt;
+            color: #444;
+            border-left: 1pt solid #999;
+            padding-left: 3mm;
+        }
+
+        .about {
+            margin-top: 4mm;
+            font-size: 10pt;
+            line-height: 1.6;
+        }
+
+        .about__contact {
+            margin-top: 5mm;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 10pt;
+            font-weight: 500;
+        }
+
+        a { color: inherit; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <!-- ===== Cover ===== -->
+    <section class="cover">
+        <p class="cover__label">AI Readiness Workbook</p>
+        <h1 class="cover__title">AI Readiness for Creative and Cultural Organisations</h1>
+        <p class="cover__sub">A self-serve diagnostic for executive teams, senior management and boards in creative and cultural organisations. Score your organisation, interpret the result, and agree what to do next.</p>
+    </section>
+
+    <!-- ===== 01 Introduction ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">01</span>
+            <h2 class="section__title">Introduction</h2>
+        </header>
+        <div class="section__body">
+            <p>This workbook gives your organisation a practical framework for understanding its current exposure to AI, identifying opportunities, and deciding what controls and next steps are needed. It is designed for executive teams, senior management and boards in creative and cultural organisations.</p>
+            <p>It can be completed by one person, used in a workshop, or taken to a board meeting. The workbook is free to use, share and adapt internally. Please keep the Creative Thinking Systems attribution intact.</p>
+        </div>
+    </section>
+
+    <!-- ===== 02 Why AI Readiness Matters Now ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">02</span>
+            <h2 class="section__title">Why AI Readiness Matters Now</h2>
+        </header>
+        <div class="section__body">
+            <p>AI is already entering creative and cultural organisations through everyday tools, staff experimentation, suppliers, partners, audiences and creative workflows.</p>
+            <p>Advances in AI are increasing risks around cybersecurity, intellectual property, personal data and confidential information. At the same time, AI can support more efficient ways of operating, managing and communicating in the cultural sector.</p>
+
+            <h3>Being AI ready means knowing:</h3>
+            <ul class="numbered">
+                <li><span class="n">01</span><span>Where AI is already being used across your organisation.</span></li>
+                <li><span class="n">02</span><span>Which activities create data, IP, copyright, confidentiality or reputational risk.</span></li>
+                <li><span class="n">03</span><span>Which workflows could benefit from safe AI support.</span></li>
+                <li><span class="n">04</span><span>Which tools are approved for staff use.</span></li>
+                <li><span class="n">05</span><span>What information should never be entered into public AI tools.</span></li>
+                <li><span class="n">06</span><span>Who remains accountable for AI-assisted outputs.</span></li>
+                <li><span class="n">07</span><span>How benefits and risks will be measured.</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ===== 03 Current Exposure and Risk Areas ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">03</span>
+            <h2 class="section__title">Current Exposure and Risk Areas</h2>
+        </header>
+        <div class="section__body">
+            <p>Your organisation is likely already exposed to AI-related risk before it has formally adopted an AI strategy or issued organisation-wide guidance. A priority is to understand where AI may already be in use, where that use creates exposure, and what controls are needed.</p>
+            <p>You should know whether staff, suppliers or partners are using AI in the following areas, because these uses may involve personal data, confidential information, copyrighted material, public-facing content or operational decisions.</p>
+            <p class="muted">The examples below do not imply confirmed non-compliance. They identify where AI use could create GDPR, IP, confidentiality, cybersecurity, fraud or reputational exposure if unmanaged.</p>
+
+            <div class="cards">
+                <div class="card">
+                    <div class="card__num">01</div>
+                    <div class="card__title">Staff using public AI tools with internal material</div>
+                    <p class="card__body">Board papers, HR documents, contracts, financial information, strategy notes or internal reports may be copied into public AI tools for drafting, summarising or rewriting.</p>
+                    <div class="card__riskslabel">Main risks</div>
+                    <p class="card__risks">Confidential information exposure; personal data processing without safeguards; loss of control over sensitive organisational material.</p>
+                </div>
+                <div class="card">
+                    <div class="card__num">02</div>
+                    <div class="card__title">Audience, donor or CRM data being analysed with AI</div>
+                    <p class="card__body">Staff may use AI to analyse survey responses, audience feedback, donor notes, booking patterns or stakeholder information.</p>
+                    <div class="card__riskslabel">Main risks</div>
+                    <p class="card__risks">GDPR exposure; donor and audience trust risk; inaccurate or biased analysis.</p>
+                </div>
+                <div class="card">
+                    <div class="card__num">03</div>
+                    <div class="card__title">Creative and production materials being entered into AI tools</div>
+                    <p class="card__body">Scripts, recordings, exhibition assets, design references, production documentation, archive material, artists’ images or commissioned works may be used in AI tools.</p>
+                    <div class="card__riskslabel">Main risks</div>
+                    <p class="card__risks">Copyright or licence breach; unclear ownership of AI-assisted outputs; lack of artist or contributor consent; attribution issues; reputational risk with artists, writers, performers and rights holders.</p>
+                </div>
+                <div class="card">
+                    <div class="card__num">04</div>
+                    <div class="card__title">AI transcription, marketing or supplier tools operating without review</div>
+                    <p class="card__body">AI meeting summaries, marketing generators, translation tools, ticketing platforms, CRM systems or email tools may already be processing your data through embedded AI features.</p>
+                    <div class="card__riskslabel">Main risks</div>
+                    <p class="card__risks">Unknown data processing, retention or reuse; supplier terms may not meet your requirements; confidential meetings may be recorded or summarised without proper notice.</p>
+                </div>
+                <div class="card card--full">
+                    <div class="card__num">05</div>
+                    <div class="card__title">AI-enabled cybersecurity and fraud exposure</div>
+                    <p class="card__body">AI may be used to create convincing phishing emails, fake invoices, malicious links, synthetic voice messages, impersonation of senior staff or suppliers, or attacks on email accounts, the website or key IT systems.</p>
+                    <div class="card__riskslabel">Main risks</div>
+                    <p class="card__risks">Financial loss; payment fraud; system compromise; data breach; operational disruption; reputational damage; loss of trust with suppliers, donors, audiences or artists.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 04 The Diagnostic ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">04</span>
+            <h2 class="section__title">The Diagnostic</h2>
+        </header>
+        <div class="section__body">
+            <p>Use this to assess your organisation’s current AI maturity. Score each area 1 to 5.</p>
+
+            <h3>Maturity scale</h3>
+            <ul class="scale">
+                <li><span class="n">1</span><span><strong>No clear position.</strong> Use is unknown or unmanaged.</span></li>
+                <li><span class="n">2</span><span><strong>Informal experimentation.</strong> Inconsistent controls.</span></li>
+                <li><span class="n">3</span><span><strong>Basic guidance exists.</strong> Useful use cases identified.</span></li>
+                <li><span class="n">4</span><span><strong>Managed adoption.</strong> Clear ownership, tools, training and controls.</span></li>
+                <li><span class="n">5</span><span><strong>Integrated practice.</strong> Benefits and risks are actively measured.</span></li>
+            </ul>
+
+            <h3>Scoring grid</h3>
+            <table class="grid">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="area-th">Area</th>
+                        <th class="area-th">Key question</th>
+                        <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="num-td">01</td>
+                        <td class="area-td">Leadership and governance</td>
+                        <td class="q-td">Does your organisation have clear executive and board ownership of AI risk and opportunity?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">02</td>
+                        <td class="area-td">Data protection and confidentiality</td>
+                        <td class="q-td">Do staff know what information can and cannot be used in AI tools?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">03</td>
+                        <td class="area-td">Cybersecurity, fraud and supplier risk</td>
+                        <td class="q-td">Has your organisation assessed AI-enabled fraud, phishing and supplier platform risks?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">04</td>
+                        <td class="area-td">Approved tools and access</td>
+                        <td class="q-td">Has your organisation identified which AI tools are approved, for which purposes, and under what conditions?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">05</td>
+                        <td class="area-td">Staff use, skills and confidence</td>
+                        <td class="q-td">Do staff know how to use AI safely, critically and productively in line with your organisation’s policies?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">06</td>
+                        <td class="area-td">Workflow and productivity opportunities</td>
+                        <td class="q-td">Has your organisation mapped where AI could support recurring work across operations, fundraising, marketing and programming, and how benefits will be measured?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">07</td>
+                        <td class="area-td">Knowledge, archive and reusable assets</td>
+                        <td class="q-td">Can your organisation safely use its existing policies, reports, templates, board papers and archive material as organisational knowledge?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                    <tr>
+                        <td class="num-td">08</td>
+                        <td class="area-td">Creative rights, IP and accountability</td>
+                        <td class="q-td">Does your organisation have clear principles for AI use involving creative works, recordings, designs, artists’ materials, archive material and public-facing content?</td>
+                        <td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td><td class="score-td">☐</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ===== 05 How to Interpret the Scores ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">05</span>
+            <h2 class="section__title">How to Interpret the Scores</h2>
+        </header>
+        <div class="section__body">
+
+            <div class="band">
+                <div class="band__title">Mostly 1s and 2s. Your organisation has unmanaged exposure. The priority is control:</div>
+                <ul>
+                    <li>Map current AI use</li>
+                    <li>Issue interim guidance</li>
+                    <li>Identify approved tools</li>
+                    <li>Review data and confidentiality risks</li>
+                    <li>Add AI to the risk register</li>
+                </ul>
+            </div>
+
+            <div class="band">
+                <div class="band__title">Mostly 3s. Your organisation has started to respond. The priority is structure:</div>
+                <ul>
+                    <li>Map workflows</li>
+                    <li>Train staff</li>
+                    <li>Select pilot use cases</li>
+                    <li>Define review and approval processes</li>
+                    <li>Report progress to leadership and the board</li>
+                </ul>
+            </div>
+
+            <div class="band">
+                <div class="band__title">Mostly 4s and 5s. Your organisation is ready to scale adoption. The priority is improvement:</div>
+                <ul>
+                    <li>Measure benefits</li>
+                    <li>Refine governance</li>
+                    <li>Expand safe use cases</li>
+                    <li>Improve knowledge management</li>
+                    <li>Embed AI into priority workflows</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 06 What Success Looks Like ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">06</span>
+            <h2 class="section__title">What Success Looks Like</h2>
+        </header>
+        <div class="section__body">
+            <p>An AI-ready organisation does not replace people with technology. It uses AI to reduce friction, improve coordination, strengthen governance and give staff more time for judgement, relationships and delivery.</p>
+
+            <div class="success">
+                <div class="success__head">Administration.</div>
+                <p class="success__body">AI reduces repetitive drafting, formatting, summarising and coordination work. First drafts of reports, briefings, policies and funding materials are produced faster, drawing more effectively on existing knowledge and data. Meeting notes, actions and summaries become easier to produce and share. Teams reduce duplication across departments.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">Risk and governance.</div>
+                <p class="success__body">Your organisation knows where AI is being used and applies proportionate controls. AI appears on the organisational risk register. Staff understand what data must not be entered into AI tools. Approved tools and prohibited uses are clearly defined. Supplier AI features are reviewed. Public-facing AI-assisted content is checked before release.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">Operations and delivery.</div>
+                <p class="success__body">AI supports planning, documentation, handovers and reporting. Operational teams spend less time creating and reworking routine documentation. Risk assessments, access notes and technical checklists become more consistent. Project reports and post-event learning are easier to capture and share.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">Fundraising and development.</div>
+                <p class="success__body">AI supports research, drafting, stakeholder mapping and impact reporting. Donor, trust and stakeholder research becomes faster. Funding applications and impact reports move from blank page to review draft more quickly. Funder-facing claims remain accurate, evidenced and human-reviewed.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">Marketing and audience development.</div>
+                <p class="success__body">AI supports campaign development, audience insight, accessibility and communication. Marketing teams create more campaign variants without losing their organisation’s voice. Audience feedback and survey data are analysed more consistently. Accessibility, plain-English and multilingual materials become easier to produce.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">People and creative judgement.</div>
+                <p class="success__body">AI supports staff, artists and leadership without replacing judgement. Staff understand when to use AI and when not to. Final decisions remain with accountable people. Artistic, contractual, safeguarding and reputational decisions stay human-led. Artists and creative teams understand how AI may or may not be used in their work.</p>
+            </div>
+
+            <div class="success">
+                <div class="success__head">Knowledge and archive.</div>
+                <p class="success__body">Your organisation makes better use of its existing knowledge, archive and institutional memory. Teams can draw on previous reports, templates, policies and project records more easily. New staff and partners can access clearer onboarding and background material. Past projects, audience insights and funding materials inform future work.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 07 What to Do Next ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">07</span>
+            <h2 class="section__title">What to Do Next</h2>
+        </header>
+        <div class="section__body">
+            <p>Take a staged approach. Establish control, identify value, pilot and measure.</p>
+
+            <div class="plan">
+                <div class="plan__head">First 30 days <span style="color:#999;font-weight:500">: Establish control</span></div>
+                <div class="plan__label">Actions</div>
+                <ul>
+                    <li>Map current AI use across staff and partners.</li>
+                    <li>Identify high-risk information, including audience, donor, HR, artist, contract, board and financial data.</li>
+                    <li>Identify any immediate GDPR, confidentiality or cyber concerns.</li>
+                    <li>Add AI to the organisational risk register.</li>
+                    <li>Define approved and non-approved tools.</li>
+                    <li>Issue interim AI usage guidance.</li>
+                </ul>
+                <div class="plan__output"><strong>Output:</strong> Current exposure map and interim AI guidance.</div>
+            </div>
+
+            <div class="plan">
+                <div class="plan__head">Days 30 to 60 <span style="color:#999;font-weight:500">: Identify value</span></div>
+                <div class="plan__label">Actions</div>
+                <ul>
+                    <li>Map recurring workflows across operations, fundraising, marketing, programming and governance.</li>
+                    <li>Identify three to five low-risk, high-utility pilot use cases.</li>
+                    <li>Agree approval rules for public-facing AI-assisted material.</li>
+                    <li>Identify training needs for staff and managers.</li>
+                </ul>
+                <div class="plan__output"><strong>Output:</strong> Prioritised AI opportunity map and pilot plan.</div>
+            </div>
+
+            <div class="plan">
+                <div class="plan__head">Days 60 to 90 <span style="color:#999;font-weight:500">: Pilot and measure</span></div>
+                <div class="plan__label">Actions</div>
+                <ul>
+                    <li>Train pilot users and agree use-case owners.</li>
+                    <li>Test AI in selected workflows.</li>
+                    <li>Track time saved, quality improved and risks identified.</li>
+                    <li>Review staff confidence and adoption.</li>
+                    <li>Capture lessons and refine guidance.</li>
+                    <li>Report findings to the executive team and board.</li>
+                    <li>Decide whether to scale, pause or redesign each pilot.</li>
+                </ul>
+                <div class="plan__output"><strong>Output:</strong> AI readiness update report and next-stage adoption plan.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 08 About CTS ===== -->
+    <section class="section">
+        <header class="section__head">
+            <span class="section__num">08</span>
+            <h2 class="section__title">About Creative Thinking Systems</h2>
+        </header>
+        <div class="section__body about">
+            <p>Creative Thinking Systems is an applied AI research, development and production entity focused exclusively on cultural and creative industries. We work with cultural organisations across Europe and the Middle East to design and build AI tools, strategies and policies that fit how culture actually works.</p>
+            <p>If you would like help moving from diagnostic to action, get in touch.</p>
+            <p class="about__contact">creativethinkingsystems.com<br>hello@creativethinkingsystems.com</p>
+        </div>
+    </section>
+
+</body>
+</html>

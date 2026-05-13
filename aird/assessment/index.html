@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Diagnostic — Creative Thinking Systems</title>
+    <meta name="description" content="Three minutes. Eight questions. One clear picture of where your organisation stands on AI readiness.">
+    <meta name="robots" content="noindex">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --rule: rgba(0,0,0,0.12);
+            --light: rgba(0,0,0,0.07);
+            --selected: rgba(0,0,0,0.04);
+        }
+
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: clamp(1rem, 1.1vw, 1.05rem);
+            line-height: 1.65;
+            color: var(--text);
+            background: var(--bg);
+            min-height: 100vh;
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a { color: inherit; }
+        ::selection { background: rgba(0,0,0,0.12); }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 clamp(1.5rem, 4vw, 2.5rem);
+        }
+
+        .container--wide { max-width: 960px; }
+
+        /* ===== NAV ===== */
+        .site-nav {
+            padding: clamp(1.25rem, 2.5vw, 1.75rem) 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        .site-nav__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .site-nav__brand,
+        .site-nav__back {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-decoration: none;
+            color: var(--text);
+            border-bottom: 1px solid transparent;
+            padding-bottom: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .site-nav__brand:hover,
+        .site-nav__back:hover { border-bottom-color: var(--text); }
+
+        .site-nav__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        /* ===== PROGRESS ===== */
+        .progress {
+            height: 3px;
+            background: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress__bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--text);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        /* ===== MAIN ===== */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: flex-start;
+            padding: clamp(2rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+        }
+
+        .step { display: none; width: 100%; }
+        .step.active { display: block; animation: fadeIn 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .step.active { animation: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        .step__counter {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .step__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.25rem;
+        }
+
+        .step__sub {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.15rem, 1.8vw, 1.45rem);
+            line-height: 1.4;
+            color: var(--body);
+            margin-bottom: 2.25rem;
+            max-width: 36ch;
+        }
+
+        .step__body {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--body);
+            margin-bottom: 2rem;
+            max-width: 56ch;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.9rem 1.6rem;
+            border-radius: 999px;
+            text-decoration: none;
+            border: 1px solid var(--text);
+            cursor: pointer;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+            display: inline-block;
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .btn:not(:disabled):hover { transform: translateY(-1px); }
+
+        .btn--primary { background: var(--text); color: var(--bg); }
+        .btn--primary:not(:disabled):hover { background: #000; }
+
+        .btn--ghost {
+            border-color: transparent;
+            color: var(--body);
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+        }
+
+        .btn--ghost:hover {
+            color: var(--text);
+            transform: none;
+        }
+
+        /* ===== OPTION LIST (sector picker / scale) ===== */
+        .options {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.03);
+            font-size: 0.98rem;
+            line-height: 1.5;
+            color: var(--text);
+            text-align: left;
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .option:hover {
+            transform: translateY(-1px);
+            border-color: rgba(0,0,0,0.18);
+        }
+
+        .option.selected {
+            border-color: var(--text);
+            background: var(--selected);
+        }
+
+        .option__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            min-width: 1.5rem;
+            padding-top: 0.18rem;
+        }
+
+        .option__text { flex: 1; }
+        .option__text strong { font-weight: 600; }
+        .option__text .option__label { display: block; font-weight: 600; margin-bottom: 0.1rem; }
+        .option__text .option__desc { display: block; font-size: 0.9rem; color: var(--body); }
+
+        /* ===== INPUT FIELDS ===== */
+        .field {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.25rem;
+        }
+
+        .field__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .field__input {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            padding: 0.85rem 1.1rem;
+            border: 1px solid rgba(0,0,0,0.18);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .field__input:focus { border-color: var(--text); }
+
+        /* ===== QUESTION ===== */
+        .question__area {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .question__text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+            line-height: 1.35;
+            margin-bottom: 2rem;
+            max-width: 44ch;
+        }
+
+        .scale {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        /* ===== RESULTS ===== */
+        .result-band {
+            display: inline-block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .result-score {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 0.4rem;
+        }
+
+        .result-score__over {
+            color: var(--muted);
+            font-weight: 400;
+            font-size: 0.45em;
+            letter-spacing: 0;
+        }
+
+        .result-priority {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+            line-height: 1.35;
+            color: var(--body);
+            margin-bottom: 2.5rem;
+            max-width: 38ch;
+        }
+
+        .result-priority strong { color: var(--text); font-weight: 400; text-decoration: underline; text-underline-offset: 0.18em; }
+
+        .breakdown {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            margin: 0 0 2.5rem;
+        }
+
+        .bd-row {
+            display: grid;
+            grid-template-columns: 1.5rem 1fr auto;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--light);
+            font-size: 0.94rem;
+        }
+
+        .bd-row__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+        }
+
+        .bd-row__label { color: var(--text); }
+
+        .bd-row__bar {
+            display: inline-flex;
+            gap: 3px;
+        }
+
+        .bd-row__dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--light);
+        }
+
+        .bd-row__dot.active { background: var(--text); }
+
+        .interpretation {
+            background: #fff;
+            border-radius: 10px;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: 2.5rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .interpretation strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .interpretation p {
+            color: var(--body);
+            line-height: 1.75;
+        }
+
+        /* ===== REPORT CTA (download | email) ===== */
+        .report-cta {
+            background: #fff;
+            border-radius: 12px;
+            padding: clamp(1.75rem, 3vw, 2.25rem);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04);
+            margin-top: 1rem;
+        }
+
+        .report-cta__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .report-cta__body {
+            color: var(--body);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-cta__actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .report-cta__or {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        /* ===== EMAIL GATE ===== */
+        .gate {
+            background: #fff;
+            border-radius: 12px;
+            padding: clamp(1.75rem, 3vw, 2.25rem);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04);
+            margin-top: 1rem;
+        }
+
+        .gate__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .gate__body {
+            color: var(--body);
+            font-size: 0.98rem;
+            line-height: 1.65;
+            margin-bottom: 1.25rem;
+        }
+
+        .gate__row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .gate__row .field__input { flex: 1 1 220px; border-radius: 999px; padding: 0.85rem 1.2rem; }
+
+        .check-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--body);
+            line-height: 1.5;
+        }
+
+        .check-row input { margin-top: 0.25rem; flex-shrink: 0; }
+        .check-row em { font-family: 'Instrument Serif', serif; font-style: italic; color: var(--text); }
+
+        .privacy-line {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+        .privacy-line a { color: inherit; border-bottom: 1px solid rgba(0,0,0,0.2); text-decoration: none; }
+
+        .form-status { margin-top: 1rem; font-size: 0.95rem; line-height: 1.5; min-height: 1.5em; }
+        .form-status[data-state="ok"] { color: #1a5d2e; }
+        .form-status[data-state="err"] { color: #8a2424; }
+
+        .form-hp {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            padding: 1.5rem 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+            text-align: center;
+            border-top: 1px solid var(--rule);
+        }
+
+        @media (max-width: 600px) {
+            .gate__row { flex-direction: column; }
+            .gate__row .field__input { width: 100%; }
+            .btn-row { flex-direction: column; align-items: stretch; }
+            .btn { text-align: center; }
+            .btn--ghost { order: 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="container container--wide">
+            <div class="site-nav__inner">
+                <a class="site-nav__brand" href="/aird">&larr; AI Readiness</a>
+                <span class="site-nav__meta">Diagnostic</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="progress" aria-hidden="true">
+        <div class="progress__bar" id="progressBar"></div>
+    </div>
+
+    <main>
+        <div class="container">
+
+            <!-- Step: Welcome -->
+            <section class="step active" data-step="welcome">
+                <p class="step__counter">AI Readiness Diagnostic</p>
+                <h1 class="step__title">Three minutes. Eight questions.</h1>
+                <p class="step__sub">One clear picture of where your organisation stands.</p>
+                <p class="step__body">You will score your organisation 1 to 5 across eight areas, from leadership and governance to creative rights and accountability. At the end you get your score on screen, and you can either download or email yourself a personalised PDF report with tailored next steps.</p>
+                <div class="btn-row">
+                    <button type="button" class="btn btn--primary" data-go="sector">Begin</button>
+                </div>
+            </section>
+
+            <!-- Step: Sector picker -->
+            <section class="step" data-step="sector">
+                <p class="step__counter">Step 1 of 11</p>
+                <h2 class="step__title">What kind of organisation is this for?</h2>
+                <ul class="options" id="sectorOptions">
+                    <li><button type="button" class="option" data-value="theatre"><span class="option__text">Theatre or performing arts</span></button></li>
+                    <li><button type="button" class="option" data-value="museum"><span class="option__text">Museum, gallery or archive</span></button></li>
+                    <li><button type="button" class="option" data-value="festival"><span class="option__text">Festival</span></button></li>
+                    <li><button type="button" class="option" data-value="music"><span class="option__text">Music venue, label or ensemble</span></button></li>
+                    <li><button type="button" class="option" data-value="screen"><span class="option__text">Screen or broadcast</span></button></li>
+                    <li><button type="button" class="option" data-value="publishing"><span class="option__text">Publishing</span></button></li>
+                    <li><button type="button" class="option" data-value="agency"><span class="option__text">Creative agency or studio</span></button></li>
+                    <li><button type="button" class="option" data-value="funder"><span class="option__text">Arts council or funder</span></button></li>
+                    <li><button type="button" class="option" data-value="other"><span class="option__text">Other cultural or creative organisation</span></button></li>
+                </ul>
+                <div class="btn-row">
+                    <button type="button" class="btn btn--ghost" data-go="welcome">Back</button>
+                </div>
+            </section>
+
+            <!-- Step: Optional context -->
+            <section class="step" data-step="context">
+                <p class="step__counter">Step 2 of 11</p>
+                <h2 class="step__title">Tell us a little more</h2>
+                <p class="step__sub">All optional. Skip if you prefer.</p>
+
+                <div class="field">
+                    <label class="field__label" for="orgName">Organisation name</label>
+                    <input class="field__input" id="orgName" type="text" autocomplete="organization">
+                </div>
+                <div class="field">
+                    <label class="field__label" for="role">Your role</label>
+                    <input class="field__input" id="role" type="text" autocomplete="organization-title">
+                </div>
+                <div class="field">
+                    <label class="field__label" for="country">Country</label>
+                    <input class="field__input" id="country" type="text" autocomplete="country-name">
+                </div>
+
+                <div class="btn-row">
+                    <button type="button" class="btn btn--primary" data-go="q1">Continue</button>
+                    <button type="button" class="btn btn--ghost" data-go="q1">Skip this step</button>
+                </div>
+            </section>
+
+            <!-- Questions 1-8 generated programmatically below -->
+            <div id="questionSteps"></div>
+
+            <!-- Step: Results -->
+            <section class="step" data-step="results">
+                <p class="result-band" id="resultBand">Your AI readiness score</p>
+                <div class="result-score" id="resultScore">—<span class="result-score__over"> / 5</span></div>
+                <p class="result-priority" id="resultPriority"></p>
+
+                <h3 class="step__counter" style="margin-bottom:1rem;">Area by area</h3>
+                <ul class="breakdown" id="breakdown"></ul>
+
+                <div class="interpretation" id="interpretation"></div>
+
+                <div class="report-cta">
+                    <h3 class="report-cta__title">Your personalised PDF</h3>
+                    <p class="report-cta__body">A tailored 30/60/90 action plan based on your scores, plus a what-success-looks-like summary you can share with your team or board.</p>
+
+                    <div class="report-cta__actions">
+                        <button type="button" class="btn btn--primary" id="downloadBtn">Download as PDF</button>
+                        <span class="report-cta__or">or</span>
+                        <button type="button" class="btn btn--secondary" id="emailToggleBtn" aria-expanded="false">Email it to me</button>
+                    </div>
+                    <div class="form-status" id="downloadStatus" role="status" aria-live="polite"></div>
+                </div>
+
+                <form id="reportForm" class="gate" novalidate hidden>
+                    <h3 class="gate__title">Where shall we send your report?</h3>
+                    <p class="gate__body">We will email the PDF to you.</p>
+
+                    <input type="text" name="company" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <div class="gate__row">
+                        <input type="email" class="field__input" name="email" placeholder="Email address" required autocomplete="email">
+                        <button type="submit" class="btn btn--primary">Email me my report</button>
+                    </div>
+                    <label class="check-row">
+                        <input type="checkbox" name="newsletter" value="yes">
+                        <span>Send me the monthly newsletter, <em>AI, Culture and Creativity</em>.</span>
+                    </label>
+                    <p class="privacy-line">We use your email only to send your report. You can unsubscribe from the newsletter at any time. See our <a href="/privacy">privacy notice</a>.</p>
+                    <div class="form-status" id="reportStatus" role="status" aria-live="polite"></div>
+                </form>
+            </section>
+
+            <!-- Step: Confirmation -->
+            <section class="step" data-step="confirm">
+                <p class="step__counter">Submission received</p>
+                <h2 class="step__title">Your report is on its way.</h2>
+                <p class="step__sub">Check your inbox.</p>
+                <p class="step__body">If it has not arrived in a minute, check your spam folder. You can also download it directly using the link below.</p>
+                <div class="btn-row">
+                    <a class="btn btn--primary" id="downloadReport" href="#">Download my report now</a>
+                    <a class="btn btn--ghost" href="/aird">Back to AI Readiness</a>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <p>&copy; 2026 Creative Thinking Systems &nbsp;·&nbsp; <a href="/privacy" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.2);">Privacy</a></p>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // -------- Data --------
+            var QUESTIONS = [
+                { id: 'q1', area: 'Leadership and governance', text: 'Does your organisation have clear executive and board ownership of AI risk and opportunity?' },
+                { id: 'q2', area: 'Data protection and confidentiality', text: 'Do staff know what information can and cannot be used in AI tools?' },
+                { id: 'q3', area: 'Cybersecurity, fraud and supplier risk', text: 'Has your organisation assessed AI-enabled fraud, phishing and supplier platform risks?' },
+                { id: 'q4', area: 'Approved tools and access', text: 'Has your organisation identified which AI tools are approved, for which purposes, and under what conditions?' },
+                { id: 'q5', area: 'Staff use, skills and confidence', text: 'Do staff know how to use AI safely, critically and productively in line with your organisation’s policies?' },
+                { id: 'q6', area: 'Workflow and productivity opportunities', text: 'Has your organisation mapped where AI could support recurring work across operations, fundraising, marketing and programming, and how benefits will be measured?' },
+                { id: 'q7', area: 'Knowledge, archive and reusable assets', text: 'Can your organisation safely use its existing policies, reports, templates, board papers and archive material as organisational knowledge?' },
+                { id: 'q8', area: 'Creative rights, IP and accountability', text: 'Does your organisation have clear principles for AI use involving creative works, recordings, designs, artists’ materials, archive material and public-facing content?' }
+            ];
+
+            var SCALE = [
+                { value: 1, label: 'No clear position', desc: 'Use is unknown or unmanaged.' },
+                { value: 2, label: 'Informal experimentation', desc: 'Inconsistent controls.' },
+                { value: 3, label: 'Basic guidance exists', desc: 'Useful use cases identified.' },
+                { value: 4, label: 'Managed adoption', desc: 'Clear ownership, tools, training and controls.' },
+                { value: 5, label: 'Integrated practice', desc: 'Benefits and risks are actively measured.' }
+            ];
+
+            var BANDS = {
+                control: {
+                    label: 'Priority: Control',
+                    interp: 'Your organisation has <strong>unmanaged exposure</strong> to AI. The priority is control: map current use, issue interim guidance, identify approved tools, review data and confidentiality risks, and add AI to the risk register.'
+                },
+                structure: {
+                    label: 'Priority: Structure',
+                    interp: 'Your organisation has <strong>started to respond</strong>. The priority is structure: map workflows, train staff, select pilot use cases, define review and approval processes, and report progress to leadership and the board.'
+                },
+                improvement: {
+                    label: 'Priority: Improvement',
+                    interp: 'Your organisation is <strong>ready to scale adoption</strong>. The priority is improvement: measure benefits, refine governance, expand safe use cases, improve knowledge management, and embed AI into priority workflows.'
+                }
+            };
+
+            // -------- State --------
+            var state = {
+                sector: null,
+                organisation: '',
+                role: '',
+                country: '',
+                scores: {}, // {q1: 4, ...}
+                stepOrder: ['welcome', 'sector', 'context'],
+                downloadUrl: null
+            };
+
+            // Build step order including questions and results
+            QUESTIONS.forEach(function (q) { state.stepOrder.push(q.id); });
+            state.stepOrder.push('results', 'confirm');
+
+            // -------- DOM build: questions --------
+            var qStepsRoot = document.getElementById('questionSteps');
+            QUESTIONS.forEach(function (q, idx) {
+                var step = document.createElement('section');
+                step.className = 'step';
+                step.setAttribute('data-step', q.id);
+
+                var counter = document.createElement('p');
+                counter.className = 'step__counter';
+                counter.textContent = 'Step ' + (idx + 3) + ' of 11';
+                step.appendChild(counter);
+
+                var area = document.createElement('p');
+                area.className = 'question__area';
+                area.textContent = 'Q' + (idx + 1) + ' · ' + q.area;
+                step.appendChild(area);
+
+                var qt = document.createElement('h2');
+                qt.className = 'question__text';
+                qt.textContent = q.text;
+                step.appendChild(qt);
+
+                var scale = document.createElement('ul');
+                scale.className = 'scale';
+                SCALE.forEach(function (s) {
+                    var li = document.createElement('li');
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'option';
+                    btn.setAttribute('data-value', String(s.value));
+                    btn.setAttribute('data-q', q.id);
+                    btn.innerHTML =
+                        '<span class="option__num">' + s.value + '</span>' +
+                        '<span class="option__text">' +
+                            '<span class="option__label">' + s.label + '</span>' +
+                            '<span class="option__desc">' + s.desc + '</span>' +
+                        '</span>';
+                    li.appendChild(btn);
+                    scale.appendChild(li);
+                });
+                step.appendChild(scale);
+
+                var row = document.createElement('div');
+                row.className = 'btn-row';
+                var back = document.createElement('button');
+                back.type = 'button';
+                back.className = 'btn btn--ghost';
+                back.textContent = 'Back';
+                var prevStepId = idx === 0 ? 'context' : QUESTIONS[idx - 1].id;
+                back.setAttribute('data-go', prevStepId);
+                row.appendChild(back);
+                step.appendChild(row);
+
+                qStepsRoot.appendChild(step);
+            });
+
+            // -------- Navigation --------
+            var stepEls = document.querySelectorAll('.step');
+            var progressBar = document.getElementById('progressBar');
+
+            function go(stepId) {
+                stepEls.forEach(function (el) {
+                    el.classList.toggle('active', el.getAttribute('data-step') === stepId);
+                });
+                var idx = state.stepOrder.indexOf(stepId);
+                var pct = Math.round((idx / (state.stepOrder.length - 1)) * 100);
+                progressBar.style.width = pct + '%';
+                // Reset scroll on step change
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Wire up all data-go buttons
+            document.addEventListener('click', function (e) {
+                var t = e.target.closest('[data-go]');
+                if (t) {
+                    go(t.getAttribute('data-go'));
+                }
+            });
+
+            // -------- Sector picker --------
+            document.getElementById('sectorOptions').addEventListener('click', function (e) {
+                var btn = e.target.closest('.option');
+                if (!btn) return;
+                document.querySelectorAll('#sectorOptions .option').forEach(function (b) { b.classList.remove('selected'); });
+                btn.classList.add('selected');
+                state.sector = btn.getAttribute('data-value');
+                setTimeout(function () { go('context'); }, 200);
+            });
+
+            // -------- Context fields --------
+            ['orgName', 'role', 'country'].forEach(function (id) {
+                var el = document.getElementById(id);
+                el.addEventListener('input', function () {
+                    if (id === 'orgName') state.organisation = el.value.trim();
+                    else if (id === 'role') state.role = el.value.trim();
+                    else if (id === 'country') state.country = el.value.trim();
+                });
+            });
+
+            // -------- Question scoring --------
+            qStepsRoot.addEventListener('click', function (e) {
+                var btn = e.target.closest('.option');
+                if (!btn || !btn.hasAttribute('data-q')) return;
+                var qId = btn.getAttribute('data-q');
+                var value = parseInt(btn.getAttribute('data-value'), 10);
+                state.scores[qId] = value;
+
+                // visual select within the same question
+                var siblings = btn.closest('.scale').querySelectorAll('.option');
+                siblings.forEach(function (s) { s.classList.remove('selected'); });
+                btn.classList.add('selected');
+
+                // Auto-advance after short delay
+                setTimeout(function () {
+                    var idx = QUESTIONS.findIndex(function (q) { return q.id === qId; });
+                    if (idx < QUESTIONS.length - 1) {
+                        go(QUESTIONS[idx + 1].id);
+                    } else {
+                        computeResultsAndShow();
+                    }
+                }, 250);
+            });
+
+            // -------- Results --------
+            function bandFor(avg) {
+                if (avg < 2.5) return 'control';
+                if (avg < 3.5) return 'structure';
+                return 'improvement';
+            }
+
+            function computeResultsAndShow() {
+                var values = QUESTIONS.map(function (q) { return state.scores[q.id] || 0; });
+                var sum = values.reduce(function (a, b) { return a + b; }, 0);
+                var avg = sum / values.length;
+                var band = bandFor(avg);
+
+                document.getElementById('resultScore').innerHTML =
+                    avg.toFixed(1) + '<span class="result-score__over"> / 5</span>';
+                document.getElementById('resultBand').textContent = BANDS[band].label;
+                document.getElementById('resultPriority').innerHTML =
+                    'Your priority is <strong>' + (band === 'control' ? 'control' : band === 'structure' ? 'structure' : 'improvement') + '</strong>.';
+
+                // Breakdown
+                var bd = document.getElementById('breakdown');
+                bd.innerHTML = '';
+                QUESTIONS.forEach(function (q, i) {
+                    var row = document.createElement('li');
+                    row.className = 'bd-row';
+                    var dots = '';
+                    for (var d = 1; d <= 5; d++) {
+                        dots += '<span class="bd-row__dot' + (d <= values[i] ? ' active' : '') + '"></span>';
+                    }
+                    row.innerHTML =
+                        '<span class="bd-row__num">0' + (i + 1) + '</span>' +
+                        '<span class="bd-row__label">' + q.area + '</span>' +
+                        '<span class="bd-row__bar">' + dots + '</span>';
+                    bd.appendChild(row);
+                });
+
+                document.getElementById('interpretation').innerHTML = '<p>' + BANDS[band].interp + '</p>';
+
+                state.computed = { values: values, sum: sum, avg: avg, band: band };
+                go('results');
+            }
+
+            // -------- Submit report --------
+            var reportForm = document.getElementById('reportForm');
+            var reportStatus = document.getElementById('reportStatus');
+
+            function setStatus(el, msg, mode) {
+                el.textContent = msg;
+                el.setAttribute('data-state', mode || '');
+            }
+
+            function validEmail(s) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s); }
+
+            // Shared payload builder
+            function buildSubmissionPayload(extras) {
+                return Object.assign({
+                    sector: state.sector,
+                    organisation: state.organisation,
+                    role: state.role,
+                    country: state.country,
+                    scores: state.scores,
+                    overallScore: state.computed.avg,
+                    band: state.computed.band
+                }, extras || {});
+            }
+
+            function postSubmission(payload) {
+                return fetch('/api/submit-assessment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                }).then(function (resp) {
+                    if (!resp.ok) throw new Error('Request failed');
+                    return resp.json().catch(function () { return {}; });
+                });
+            }
+
+            // ---- Email form (Path A: email me) ----
+            reportForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var email = reportForm.email.value.trim();
+                var newsletter = reportForm.newsletter.checked;
+                var hp = reportForm.company.value;
+
+                if (!validEmail(email)) {
+                    setStatus(reportStatus, 'That does not look like a valid email address. Try again.', 'err');
+                    return;
+                }
+
+                var fields = reportForm.querySelectorAll('input, button');
+                fields.forEach(function (el) { el.disabled = true; });
+                setStatus(reportStatus, 'Sending your report...', '');
+
+                postSubmission(buildSubmissionPayload({ email: email, newsletter: newsletter, hp: hp }))
+                    .then(function (data) {
+                        state.downloadUrl = data && data.downloadUrl ? data.downloadUrl : null;
+                        if (state.downloadUrl) {
+                            document.getElementById('downloadReport').setAttribute('href', state.downloadUrl);
+                        } else {
+                            document.getElementById('downloadReport').style.display = 'none';
+                        }
+                        go('confirm');
+                    })
+                    .catch(function () {
+                        setStatus(reportStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                        fields.forEach(function (el) { el.disabled = false; });
+                    });
+            });
+
+            // ---- Download button (Path B: just give me the PDF) ----
+            var downloadBtn = document.getElementById('downloadBtn');
+            var downloadStatus = document.getElementById('downloadStatus');
+            var emailToggleBtn = document.getElementById('emailToggleBtn');
+
+            downloadBtn.addEventListener('click', function () {
+                downloadBtn.disabled = true;
+                emailToggleBtn.disabled = true;
+                setStatus(downloadStatus, 'Preparing your PDF...', '');
+
+                postSubmission(buildSubmissionPayload())
+                    .then(function (data) {
+                        if (!data || !data.downloadUrl) throw new Error('No download URL');
+                        // Open in a new tab so the assessment page stays around
+                        // (some browsers will inline the PDF; others will download).
+                        var a = document.createElement('a');
+                        a.href = data.downloadUrl;
+                        a.target = '_blank';
+                        a.rel = 'noopener';
+                        a.download = 'AI-Readiness-Report.pdf';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        setStatus(downloadStatus, 'Done. The PDF should open in a new tab.', 'ok');
+                        downloadBtn.textContent = 'Download again';
+                    })
+                    .catch(function () {
+                        setStatus(downloadStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    })
+                    .finally(function () {
+                        downloadBtn.disabled = false;
+                        emailToggleBtn.disabled = false;
+                    });
+            });
+
+            // ---- Email-toggle button (reveals the email form) ----
+            emailToggleBtn.addEventListener('click', function () {
+                var isHidden = reportForm.hasAttribute('hidden');
+                if (isHidden) {
+                    reportForm.removeAttribute('hidden');
+                    emailToggleBtn.setAttribute('aria-expanded', 'true');
+                    emailToggleBtn.textContent = 'Hide email option';
+                    reportForm.email.focus();
+                    reportForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    reportForm.setAttribute('hidden', '');
+                    emailToggleBtn.setAttribute('aria-expanded', 'false');
+                    emailToggleBtn.textContent = 'Email it to me';
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>

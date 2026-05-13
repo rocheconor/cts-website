@@ -1,0 +1,11 @@
+rules_version = '2';
+service firebase.storage {
+    match /b/{bucket}/o {
+        // Reports are written by Cloud Functions and accessed only via signed
+        // download tokens embedded in the URL returned to the user. No public
+        // listing or unauthenticated reads.
+        match /{allPaths=**} {
+            allow read, write: if false;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "cts-functions",
+  "version": "1.0.0",
+  "description": "Cloud Functions for Creative Thinking Systems site (AIRD diagnostic + newsletter).",
+  "main": "src/index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "serve": "firebase emulators:start --only functions,firestore",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "firebase-functions": "^5.0.0",
+    "puppeteer-core": "^22.0.0",
+    "@sparticuz/chromium": "^131.0.0",
+    "resend": "^4.0.0"
+  },
+  "private": true
+}

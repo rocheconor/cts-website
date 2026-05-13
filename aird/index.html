@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Readiness Diagnostic — Creative Thinking Systems</title>
+    <meta name="description" content="A free AI readiness diagnostic for creative and cultural organisations. Find out where you stand in three minutes, or download a workbook to use with your team.">
+
+    <meta property="og:title" content="AI Readiness Diagnostic — Creative Thinking Systems">
+    <meta property="og:description" content="A free diagnostic for creative and cultural organisations. Find out where you stand in three minutes, or download a workbook to use with your team.">
+    <meta property="og:url" content="https://creativethinkingsystems.com/aird">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --rule: rgba(0,0,0,0.12);
+            --light: rgba(0,0,0,0.07);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-size: clamp(1rem, 1.1vw, 1.125rem);
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; }
+        ::selection { background: rgba(0,0,0,0.12); }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
+        }
+
+        /* ===== NAV ===== */
+        .site-nav {
+            padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+        }
+
+        .site-nav__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .site-nav__brand,
+        .site-nav__link {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            text-decoration: none;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .site-nav__brand:hover,
+        .site-nav__link:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .site-nav__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: clamp(3rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+            border-top: 1px solid var(--rule);
+        }
+
+        .hero__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero__headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.6rem, 7vw, 5.4rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.75rem;
+            max-width: 16ch;
+        }
+
+        .hero__sub {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+            line-height: 1.4;
+            color: var(--body);
+            max-width: 36ch;
+            margin-bottom: clamp(2rem, 4vw, 3rem);
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+        }
+
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.95rem 1.5rem;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+            display: inline-block;
+            border: 1px solid var(--text);
+            cursor: pointer;
+        }
+
+        .btn--primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-1px);
+            background: #000;
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn--secondary:hover {
+            transform: translateY(-1px);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* ===== GENERIC SECTION ===== */
+        .section {
+            padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .section__number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+
+        .section__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.75rem;
+            max-width: 22ch;
+        }
+
+        .section__lede {
+            font-size: clamp(1.05rem, 1.25vw, 1.15rem);
+            line-height: 1.75;
+            color: var(--body);
+            max-width: 60ch;
+        }
+
+        .section__lede + .section__lede {
+            margin-top: 1.25rem;
+        }
+
+        .section__lede strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ===== KNOWING LIST ===== */
+        .knowing {
+            margin-top: 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0.5rem 2.5rem;
+            max-width: 64rem;
+        }
+
+        .knowing__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0;
+            margin-bottom: 0.5rem;
+            grid-column: 1 / -1;
+        }
+
+        .knowing__item {
+            display: grid;
+            grid-template-columns: 2.25rem 1fr;
+            gap: 0.5rem;
+            padding: 0.65rem 0;
+            border-bottom: 1px solid var(--light);
+            font-size: 0.98rem;
+            line-height: 1.55;
+            color: var(--body);
+        }
+
+        .knowing__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            padding-top: 0.18rem;
+        }
+
+        /* ===== EIGHT AREAS ===== */
+        .areas {
+            margin-top: 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .area {
+            background: #fff;
+            padding: 1.5rem 1.5rem 1.75rem;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 12px rgba(0,0,0,0.03);
+            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
+                        box-shadow 0.35s ease,
+                        border-color 0.35s ease;
+        }
+
+        .area:hover {
+            transform: translateY(-2px);
+            border-left-color: var(--text);
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.04),
+                0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .area__num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 0.65rem;
+        }
+
+        .area__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.3;
+            margin-bottom: 0.55rem;
+            color: var(--text);
+        }
+
+        .area__desc {
+            font-size: 0.94rem;
+            line-height: 1.6;
+            color: var(--body);
+        }
+
+        /* ===== TWO PATHS ===== */
+        .paths {
+            margin-top: 2.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .path {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 12px rgba(0,0,0,0.03);
+        }
+
+        .path__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+
+        .path__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.01em;
+        }
+
+        .path__body {
+            font-size: 0.98rem;
+            line-height: 1.65;
+            color: var(--body);
+            margin-bottom: 1.5rem;
+        }
+
+        .path .btn {
+            align-self: flex-start;
+        }
+
+        .path--form .form-row {
+            margin-top: 0.25rem;
+        }
+
+        .path--form .form-input {
+            border-color: rgba(0,0,0,0.18);
+        }
+
+        /* ===== INLINE FORM (workbook) ===== */
+        .form-block {
+            margin-top: 2.5rem;
+            background: #fff;
+            border-radius: 12px;
+            padding: clamp(1.75rem, 3vw, 2.5rem);
+            max-width: 36rem;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .form-block__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.6rem;
+        }
+
+        .form-block__body {
+            font-size: 0.98rem;
+            line-height: 1.65;
+            color: var(--body);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .form-input {
+            flex: 1 1 220px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--rule);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--text);
+        }
+
+        .form-checkbox-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--body);
+            line-height: 1.5;
+        }
+
+        .form-checkbox-row input {
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .form-checkbox-row em {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .form-privacy {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .form-privacy a {
+            color: inherit;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .form-status {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 1.5em;
+        }
+
+        .form-status[data-state="ok"] { color: #1a5d2e; }
+        .form-status[data-state="err"] { color: #8a2424; }
+
+        .form-hp {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        /* ===== ABOUT ===== */
+        .about__body {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--body);
+            max-width: 60ch;
+        }
+
+        .about__body strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .about__contact {
+            display: inline-block;
+            margin-top: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 2px solid rgba(0,0,0,0.15);
+            padding-bottom: 2px;
+        }
+
+        .about__contact:hover {
+            border-bottom-color: var(--text);
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            border-top: 1px solid var(--rule);
+            padding: clamp(3.5rem, 6vw, 5.5rem) 0 2.5rem;
+        }
+
+        .newsletter {
+            max-width: 44rem;
+        }
+
+        .newsletter__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.4rem, 2vw, 1.7rem);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter__title em {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--body);
+        }
+
+        .newsletter__sep {
+            color: var(--muted);
+            font-weight: 400;
+            margin: 0 0.15em;
+        }
+
+        .footer-meta {
+            margin-top: clamp(3rem, 5vw, 4rem);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .footer-meta a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .footer-meta a:hover {
+            border-bottom-color: var(--muted);
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal { opacity: 1; transform: none; }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .js .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .hero__headline { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+            .cta-row { flex-direction: column; align-items: stretch; }
+            .cta-row .btn { text-align: center; }
+            .form-row { flex-direction: column; }
+            .form-input { width: 100%; }
+            .footer-meta { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="container">
+            <div class="site-nav__inner">
+                <a class="site-nav__brand" href="/">&larr; Creative Thinking Systems</a>
+                <a class="site-nav__brand" href="#newsletter">Newsletter</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         HERO
+         ========================================== -->
+    <section class="hero">
+        <div class="container">
+            <p class="hero__label reveal">AI Readiness Diagnostic</p>
+            <h1 class="hero__headline reveal">Is your organisation AI ready?</h1>
+            <p class="hero__sub reveal">A free diagnostic for creative and cultural organisations. Find out where you stand in three minutes, or download a workbook to use with your team.</p>
+            <div class="cta-row reveal">
+                <a class="btn btn--primary" href="/aird/assessment/">Take the assessment online</a>
+                <a class="btn btn--secondary" href="#workbook">Download the workbook</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         WHY IT MATTERS
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">01 · Context</span>
+            <h2 class="section__heading reveal">Why AI readiness matters now</h2>
+            <p class="section__lede reveal">AI is already entering creative and cultural organisations through everyday tools, staff experimentation, suppliers, partners, audiences and creative workflows.</p>
+            <p class="section__lede reveal">Advances in AI are increasing risks around cybersecurity, intellectual property, personal data and confidential information. At the same time, AI can support more efficient ways of operating, managing and communicating in the cultural sector.</p>
+
+            <div class="knowing reveal">
+                <h3 class="knowing__title">Being AI ready means knowing:</h3>
+                <div class="knowing__item"><span class="knowing__num">01</span><span>Where AI is already being used across your organisation.</span></div>
+                <div class="knowing__item"><span class="knowing__num">02</span><span>Which activities create data, IP, copyright, confidentiality or reputational risk.</span></div>
+                <div class="knowing__item"><span class="knowing__num">03</span><span>Which workflows could benefit from safe AI support.</span></div>
+                <div class="knowing__item"><span class="knowing__num">04</span><span>Which tools are approved for staff use.</span></div>
+                <div class="knowing__item"><span class="knowing__num">05</span><span>What information should never be entered into public AI tools.</span></div>
+                <div class="knowing__item"><span class="knowing__num">06</span><span>Who remains accountable for AI-assisted outputs.</span></div>
+                <div class="knowing__item"><span class="knowing__num">07</span><span>How benefits and risks will be measured.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         THE EIGHT AREAS
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">02 · Framework</span>
+            <h2 class="section__heading reveal">The eight areas</h2>
+            <p class="section__lede reveal">This diagnostic looks at eight areas of AI readiness. You score your organisation 1 to 5 in each. The result tells you whether your priority is <strong>control</strong>, <strong>structure</strong> or <strong>improvement</strong>.</p>
+
+            <div class="areas reveal">
+                <div class="area">
+                    <span class="area__num">01</span>
+                    <h3 class="area__title">Leadership and governance</h3>
+                    <p class="area__desc">Who owns AI risk and opportunity at executive and board level.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">02</span>
+                    <h3 class="area__title">Data protection and confidentiality</h3>
+                    <p class="area__desc">What information can and cannot go into AI tools.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">03</span>
+                    <h3 class="area__title">Cybersecurity, fraud and supplier risk</h3>
+                    <p class="area__desc">AI-enabled phishing, fake invoices, supplier platform exposure.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">04</span>
+                    <h3 class="area__title">Approved tools and access</h3>
+                    <p class="area__desc">Which AI tools are sanctioned, for which purposes, under what conditions.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">05</span>
+                    <h3 class="area__title">Staff use, skills and confidence</h3>
+                    <p class="area__desc">Whether staff use AI safely, critically and productively.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">06</span>
+                    <h3 class="area__title">Workflow and productivity opportunities</h3>
+                    <p class="area__desc">Where AI could support recurring work, and how benefits are measured.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">07</span>
+                    <h3 class="area__title">Knowledge, archive and reusable assets</h3>
+                    <p class="area__desc">Whether your existing policies, reports, templates and archives can be safely used as organisational knowledge.</p>
+                </div>
+                <div class="area">
+                    <span class="area__num">08</span>
+                    <h3 class="area__title">Creative rights, IP and accountability</h3>
+                    <p class="area__desc">Principles for AI use involving creative works, artists' materials and public-facing content.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         HOW IT WORKS
+         ========================================== -->
+    <section class="section" id="workbook">
+        <div class="container">
+            <span class="section__number reveal">03 · How it works</span>
+            <h2 class="section__heading reveal">Two ways to use it</h2>
+
+            <div class="paths">
+                <div class="path reveal">
+                    <span class="path__label">Path 01</span>
+                    <h3 class="path__title">Take it online</h3>
+                    <p class="path__body">Three minutes. Eight questions. Get your score on screen immediately. Give us your email and we send a personalised PDF report with tailored 30/60/90 next steps.</p>
+                    <a class="btn btn--primary" href="/aird/assessment/">Take the assessment online</a>
+                </div>
+
+                <form class="path path--form reveal" id="workbook-form" novalidate>
+                    <span class="path__label">Path 02</span>
+                    <h3 class="path__title">Download the workbook</h3>
+                    <p class="path__body">A PDF you can complete in your own time, share with colleagues, and take to a board meeting. Same framework, full scoring grid, action templates included.</p>
+
+                    <input type="text" name="company" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                    <div class="form-row">
+                        <input type="email" class="form-input" name="email" placeholder="Email address" required autocomplete="email">
+                        <button type="submit" class="btn btn--primary">Send me the workbook</button>
+                    </div>
+
+                    <label class="form-checkbox-row">
+                        <input type="checkbox" name="newsletter" value="yes">
+                        <span>Send me the monthly newsletter, <em>AI, Culture and Creativity</em>.</span>
+                    </label>
+
+                    <p class="form-privacy">We use your email only to send what you asked for. You can unsubscribe from the newsletter at any time. See our <a href="/privacy">privacy notice</a>.</p>
+
+                    <div class="form-status" id="workbook-status" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER + NEWSLETTER
+         ========================================== -->
+    <footer class="site-footer" id="newsletter">
+        <div class="container">
+            <div class="newsletter">
+                <h2 class="newsletter__title">AI, Culture and Creativity Newsletter <span class="newsletter__sep">:</span> <em>A monthly update on all things AI for the cultural and creative sector.</em></h2>
+
+                <form id="newsletter-form" novalidate>
+                    <input type="text" name="company" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <div class="form-row">
+                        <input type="email" class="form-input" name="email" placeholder="Email address" required autocomplete="email">
+                        <button type="submit" class="btn btn--primary">Subscribe</button>
+                    </div>
+                    <p class="form-privacy">We use your email only to send the newsletter. You can unsubscribe at any time. See our <a href="/privacy">privacy notice</a>.</p>
+                    <div class="form-status" id="newsletter-status" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <div class="footer-meta">
+                <span>&copy; 2026 Creative Thinking Systems</span>
+                <span><a href="mailto:hello@creativethinkingsystems.com">hello@creativethinkingsystems.com</a> &nbsp;·&nbsp; <a href="/privacy">Privacy</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+            document.documentElement.classList.add('js');
+
+            // Scroll reveal
+            var reveals = document.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) {
+                            e.target.classList.add('visible');
+                            io.unobserve(e.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+                reveals.forEach(function (el) { io.observe(el); });
+
+                // Hero reveals immediately
+                setTimeout(function () {
+                    document.querySelectorAll('.hero .reveal').forEach(function (el) {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            } else {
+                reveals.forEach(function (el) { el.classList.add('visible'); });
+            }
+
+            // ---- Form submission helpers ----
+            function setStatus(el, msg, state) {
+                el.textContent = msg;
+                el.setAttribute('data-state', state || '');
+            }
+
+            function validEmail(s) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+            }
+
+            function disable(form, on) {
+                form.querySelectorAll('input, button').forEach(function (el) {
+                    el.disabled = on;
+                });
+            }
+
+            async function postJSON(url, body) {
+                var resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                var data = null;
+                try { data = await resp.json(); } catch (_) {}
+                if (!resp.ok) {
+                    var msg = (data && data.error) || ('Request failed (' + resp.status + ')');
+                    throw new Error(msg);
+                }
+                return data || {};
+            }
+
+            // ---- Workbook form ----
+            var workbookForm = document.getElementById('workbook-form');
+            var workbookStatus = document.getElementById('workbook-status');
+            if (workbookForm) {
+                workbookForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    var email = workbookForm.email.value.trim();
+                    var newsletter = workbookForm.newsletter.checked;
+                    var hp = workbookForm.company.value;
+
+                    if (!validEmail(email)) {
+                        setStatus(workbookStatus, 'That does not look like a valid email address. Try again.', 'err');
+                        return;
+                    }
+
+                    disable(workbookForm, true);
+                    setStatus(workbookStatus, 'Sending...', '');
+
+                    try {
+                        await postJSON('/api/workbook-request', {
+                            email: email,
+                            newsletter: newsletter,
+                            hp: hp
+                        });
+                        setStatus(workbookStatus, 'Your workbook is on its way. Check your inbox.', 'ok');
+                        workbookForm.reset();
+                    } catch (err) {
+                        setStatus(workbookStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    } finally {
+                        disable(workbookForm, false);
+                    }
+                });
+            }
+
+            // ---- Newsletter form ----
+            var newsForm = document.getElementById('newsletter-form');
+            var newsStatus = document.getElementById('newsletter-status');
+            if (newsForm) {
+                newsForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    var email = newsForm.email.value.trim();
+                    var hp = newsForm.company.value;
+
+                    if (!validEmail(email)) {
+                        setStatus(newsStatus, 'That does not look like a valid email address. Try again.', 'err');
+                        return;
+                    }
+
+                    disable(newsForm, true);
+                    setStatus(newsStatus, 'Subscribing...', '');
+
+                    try {
+                        await postJSON('/api/newsletter-subscribe', {
+                            email: email,
+                            source: 'aird-footer',
+                            hp: hp
+                        });
+                        setStatus(newsStatus, 'You are subscribed. Look out for the next issue.', 'ok');
+                        newsForm.reset();
+                    } catch (err) {
+                        setStatus(newsStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    } finally {
+                        disable(newsForm, false);
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
