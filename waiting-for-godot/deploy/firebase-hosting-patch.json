@@ -1,0 +1,37 @@
+{
+  "_comment": "DRAFT — do not paste verbatim into the root firebase.json. This shows the rewrites + ignore entries to MERGE into the existing root firebase.json's `hosting` object. See DEPLOY.md for the merged result.",
+  "hosting_additions": {
+    "ignore_additions": [
+      "waiting-for-godot/server/**",
+      "waiting-for-godot/docs/**",
+      "waiting-for-godot/dev-audio/**",
+      "waiting-for-godot/firebase.json",
+      "waiting-for-godot/.firebaserc",
+      "waiting-for-godot/firestore.rules",
+      "waiting-for-godot/README.md",
+      "waiting-for-godot/.gitignore",
+      "waiting-for-godot/deploy/**"
+    ],
+    "rewrites_additions": [
+      {
+        "source": "/wfg-api/**",
+        "run": { "serviceId": "wfg-server", "region": "europe-west1" }
+      },
+      {
+        "source": "/wfg/sessions/**",
+        "destination": "/waiting-for-godot/web/waitingforgodot/index.html"
+      },
+      {
+        "source": "/waitingforgodot/**",
+        "destination": "/waiting-for-godot/web/waitingforgodot/$1"
+      },
+      {
+        "source": "/wfg/**",
+        "destination": "/waiting-for-godot/web/wfg/$1"
+      }
+    ],
+    "redirects_additions": [
+      { "source": "/wfg", "destination": "/waitingforgodot", "type": 301 }
+    ]
+  }
+}

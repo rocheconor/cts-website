@@ -1,6 +1,8 @@
 node_modules/
 .env.local
 .env.*.local
+deploy/secrets.prod.env
+deploy/secrets.*.env
 *.log
 .DS_Store
 firebase-debug.log

@@ -1,0 +1,10 @@
+node_modules
+npm-debug.log
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+Dockerfile
+.dockerignore
+.gcloudignore

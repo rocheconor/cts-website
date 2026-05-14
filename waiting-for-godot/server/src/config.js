@@ -9,6 +9,7 @@ const required = (name) => {
 const optional = (name, fallback) => process.env[name] ?? fallback;
 
 export const config = {
+    // Cloud Run sets PORT=8080 by default; honour it. Local dev defaults to 8787.
     port: Number(optional('PORT', '8787')),
     sessionId: optional('SESSION_ID', 'change-makers-2026'),
     publicBaseUrl: optional('PUBLIC_BASE_URL', 'http://localhost:8787'),
