@@ -45,20 +45,18 @@ app.use('/wfg-api/feed', feedRouter);
 app.use('/wfg-api/admin', adminRouter);
 app.use('/wfg-api/audience', audienceRouter);
 
-// Static web in dev (in prod, Firebase Hosting serves these).
-if (!isProd) {
-    // Redirects must come before static middleware so they win over
-    // directory-trailing-slash 301s.
-    app.get(['/wfg', '/wfg/'], (_req, res) => res.redirect(301, '/waitingforgodot/'));
-    app.get('/', (_req, res) => res.redirect(302, '/waitingforgodot/'));
-    // Per-session archive URLs: serve the visitor template; the JS reads
-    // the sessionId from window.location.pathname. Regex covers both with
-    // and without trailing slash.
-    app.get(/^\/wfg\/sessions\/[^/]+\/?$/, (_req, res) =>
-        res.sendFile(path.join(webRoot, 'waitingforgodot', 'index.html')),
-    );
-    app.use(express.static(webRoot, { extensions: ['html'] }));
-}
+// Static web — served by Cloud Run when no upstream (Firebase Hosting)
+// is in front. Redundant but harmless once Hosting is rewriting.
+// Redirects must come before static middleware so they win over
+// directory-trailing-slash 301s.
+app.get(['/wfg', '/wfg/'], (_req, res) => res.redirect(301, '/waitingforgodot/'));
+app.get('/', (_req, res) => res.redirect(302, '/waitingforgodot/'));
+// Per-session archive URLs: serve the visitor template; the JS reads
+// the sessionId from window.location.pathname.
+app.get(/^\/wfg\/sessions\/[^/]+\/?$/, (_req, res) =>
+    res.sendFile(path.join(webRoot, 'waitingforgodot', 'index.html')),
+);
+app.use(express.static(webRoot, { extensions: ['html'] }));
 
 const server = http.createServer(app);
 
