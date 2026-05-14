@@ -7,5 +7,3 @@ npm-debug.log
 .env.*.local
 *.log
 .DS_Store
-Dockerfile
-.dockerignore

@@ -267,6 +267,13 @@ export class Orchestrator {
         feed.publishProfiles(this.profileList());
 
         logInfo('orch', 'loaded_session', { sessionId, label: meta.label, state: this.state });
+
+        // If the session was running at the time of the previous shutdown,
+        // resume ticking immediately — otherwise the bots silently stop on
+        // a Cloud Run cold-start mid-event.
+        if (this.state === STATES.RUNNING) {
+            this.#startTick();
+        }
     }
 
     async endCurrentSession() {
