@@ -1,0 +1,10 @@
+node_modules/
+.env.local
+.env.*.local
+*.log
+.DS_Store
+firebase-debug.log
+firestore-debug.log
+.firebase/
+dev-audio/*
+!dev-audio/.gitkeep

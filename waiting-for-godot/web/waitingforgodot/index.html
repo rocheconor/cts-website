@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Waiting for Godot</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="/waitingforgodot/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="url" id="page-url"></div>
+    <div class="credit">A <a href="https://creativethinkingsystems.com" rel="noopener">Creative Thinking Systems</a> demo</div>
+  </header>
+  <div id="archive-banner" class="archive-banner" hidden></div>
+  <main id="feed" class="feed" aria-live="polite"></main>
+  <section id="ask-godot" class="ask-godot" hidden aria-label="Godot Asks">
+    <form id="ask-form">
+      <div class="ask-header">
+        <label class="ask-label" for="ask-text">Godot Asks</label>
+        <span class="ask-counter" id="ask-counter">0 / 200</span>
+      </div>
+      <div class="ask-input-row">
+        <textarea id="ask-text" rows="1" maxlength="200" placeholder="Type a question for the three…"></textarea>
+        <button type="submit" id="ask-submit">Send</button>
+      </div>
+      <div class="ask-feedback" id="ask-feedback"></div>
+    </form>
+  </section>
+  <script src="/waitingforgodot/app.js"></script>
+</body>
+</html>

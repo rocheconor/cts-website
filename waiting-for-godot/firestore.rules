@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Server uses Admin SDK and bypasses these rules.
+    // Visitors do not talk to Firestore directly — they hit the Cloud Run
+    // service via SSE/HTTP — so all client access is locked.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

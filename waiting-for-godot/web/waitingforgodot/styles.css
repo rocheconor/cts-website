@@ -1,0 +1,201 @@
+:root {
+  --bg: #fafaf7;
+  --fg: #111;
+  --muted: #6b6b6b;
+  --line: #ececea;
+  --accent: #111;
+  --godot: #1a1a1a;
+  --godot-bg: #fff6cf;
+  --bubble-gap: 18px;
+  --max-width: 720px;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+body { min-height: 100dvh; display: flex; flex-direction: column; }
+
+a { color: inherit; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  padding: 12px 20px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+}
+.topbar .url { font-family: var(--font-mono); font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar .credit { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.topbar .credit a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+@media (max-width: 540px) {
+  .topbar { padding: 10px 14px; gap: 10px; }
+  .topbar .url { font-size: 11px; }
+  .topbar .credit { font-size: 11px; }
+}
+
+.feed {
+  flex: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  /* Newest at the top: DOM-append posts; flex column-reverse renders the
+     latest at the visual top of the feed. */
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.post {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.post:last-child { border-bottom: none; }
+.post .avatar {
+  width: 40px; height: 40px; border-radius: 8px;
+  background: #fff; border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.post .avatar img { width: 30px; height: 30px; object-fit: contain; }
+.post .avatar.empty { background: #111; color: #fff; font-weight: 700; font-size: 14px; }
+
+.post .body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.post .row1 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.post .name { font-weight: 600; font-size: 14.5px; }
+.post .nick { color: var(--muted); font-size: 13px; }
+.post .badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: auto;
+  padding: 2px 7px 2px 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  background: #fff;
+}
+.post .badge img { width: 12px; height: 12px; object-fit: contain; }
+
+.post .text {
+  font-size: 15.5px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.post.godot-question {
+  background: var(--godot-bg);
+  border-radius: 10px;
+  padding: 14px;
+  border-bottom: none;
+  margin: 18px 0;
+}
+.post.godot-question .avatar.empty { background: var(--godot); }
+
+.post.godot-deliberation .text { font-style: italic; color: #333; }
+
+/* Typing indicator — same layout as a post, but body is animated dots. */
+.post.typing-post {
+  opacity: 0.95;
+}
+.post.typing-post .text {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 0;
+}
+.typing-dots {
+  display: inline-flex; gap: 5px; align-items: flex-end;
+  padding: 4px 2px;
+}
+.typing-dots span {
+  display: inline-block;
+  width: 7px; height: 7px;
+  background: var(--muted);
+  border-radius: 999px;
+  animation: typingbounce 1.2s infinite ease-in-out;
+}
+.typing-dots span:nth-child(2) { animation-delay: 0.18s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.36s; }
+@keyframes typingbounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-5px); opacity: 1; }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--muted);
+  padding: 64px 16px;
+  font-size: 14px;
+}
+
+/* Floating Godot Asks composer — fixed at viewport bottom. */
+.ask-godot {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 30;
+  padding: 10px 16px 14px;
+  background: rgba(250, 250, 247, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid var(--line);
+}
+.ask-godot form {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+.ask-godot .ask-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.ask-godot .ask-label {
+  font-weight: 600; font-size: 13px; letter-spacing: 0.01em;
+}
+.ask-godot .ask-counter {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+}
+.ask-godot .ask-input-row {
+  display: flex; gap: 8px; align-items: stretch;
+}
+.ask-godot textarea {
+  flex: 1; resize: none; min-height: 38px; max-height: 96px;
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 8px 10px; font: inherit; background: #fff;
+  line-height: 1.35;
+}
+.ask-godot button {
+  appearance: none;
+  border: 1px solid var(--accent);
+  background: var(--accent); color: #fff;
+  padding: 0 18px; border-radius: 8px;
+  cursor: pointer; font: inherit; font-size: 13.5px; font-weight: 500;
+  white-space: nowrap;
+}
+.ask-godot button:disabled { opacity: 0.5; cursor: not-allowed; }
+.ask-godot .ask-feedback { font-size: 12px; color: var(--muted); margin-top: 6px; min-height: 1em; }
+.ask-godot .ask-feedback.err { color: var(--danger, #b00020); }
+.ask-godot .ask-feedback.ok { color: var(--good, #0a7d36); }
+
+/* When the composer is visible, leave room at the bottom of the feed
+   so the last post isn't hidden behind it. */
+body.has-composer .feed { padding-bottom: 140px; }
+
+@media (max-width: 540px) {
+  body.has-composer .feed { padding-bottom: 160px; }
+}
+
+.archive-banner {
+  max-width: var(--max-width);
+  margin: 12px auto 0;
+  padding: 10px 14px;
+  background: #f1ecdf;
+  border: 1px solid #e1d8c0;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4a3f1a;
+  display: flex; gap: 10px; align-items: baseline; justify-content: space-between;
+}
+.archive-banner .label { font-weight: 600; }
+.archive-banner .when { font-family: var(--font-mono); font-size: 12px; opacity: 0.7; }
