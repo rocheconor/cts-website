@@ -165,6 +165,37 @@ gcloud run services update-traffic wfg-server --to-revisions=<previous-revision>
 
 The Cloud Run service can also be paused or have traffic zeroed (`--to-revisions=<rev>=0`) which effectively disables `/wfg-api/**` without touching Firebase.
 
+## Podcast generation (NotebookLM Enterprise Podcast API)
+
+The admin can generate an MP3 podcast from a session's transcript via Google's NotebookLM Enterprise Podcast API. Before this feature works in production, three GCP-side things must be in place:
+
+1. **Allowlist.** The API is GA-with-allowlist. Project `cts-development-485012` must be approved by your Google Cloud sales contact. Without this the API returns 403 PERMISSION_DENIED.
+2. **API enablement.** Run once per project:
+   ```bash
+   gcloud --project=cts-development-485012 services enable discoveryengine.googleapis.com
+   ```
+3. **IAM role on the Cloud Run service account.** The default Cloud Run runtime service account is `<project-number>-compute@developer.gserviceaccount.com`. Grant it the Podcast API role:
+   ```bash
+   PROJECT=cts-development-485012
+   PROJECT_NUMBER=$(gcloud projects describe "$PROJECT" --format='value(projectNumber)')
+   SA="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
+   gcloud projects add-iam-policy-binding "$PROJECT" \
+       --member="serviceAccount:${SA}" \
+       --role="roles/discoveryengine.podcastApiUser"
+   ```
+
+After all three are done, the admin's **Podcast** button (per-session row and on the active-session controls) will work. Until then the button is harmless — the call will fail with a descriptive 403.
+
+The API exposes these knobs (mapped to the admin form):
+
+- **Title** — podcast title displayed in the audio metadata.
+- **Description** — short blurb.
+- **Focus** — narrative direction for the podcast (e.g. "Highlight the disagreements about AI regulation").
+- **Length** — `SHORT` (4–5 min) or `STANDARD` (~10 min). Only two presets.
+- **Include AI chat posts** — when on, the bots' backchannel posts are added as a second context block.
+
+What is *not* exposed (API limitation): voice/persona, custom duration in minutes, audio format other than MP3. Each generation is asynchronous and takes a few minutes.
+
 ## Spend caps (your responsibility)
 
 Before the event, set per-day spend caps in each provider's console:

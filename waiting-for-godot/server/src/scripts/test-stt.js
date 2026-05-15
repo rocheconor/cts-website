@@ -13,7 +13,6 @@ const main = async () => {
     const ws = new WebSocket(URL, {
         headers: {
             Authorization: `Bearer ${config.openaiApiKey}`,
-            'OpenAI-Beta': 'realtime=v1',
         },
     });
 
@@ -27,11 +26,16 @@ const main = async () => {
 
         ws.on('open', () => {
             ws.send(JSON.stringify({
-                type: 'transcription_session.update',
+                type: 'session.update',
                 session: {
-                    input_audio_format: 'pcm16',
-                    input_audio_transcription: { model: config.models.sttInputModel, language: 'en' },
-                    turn_detection: { type: 'server_vad' },
+                    type: 'transcription',
+                    audio: {
+                        input: {
+                            format: { type: 'audio/pcm', rate: 24000 },
+                            transcription: { model: config.models.sttInputModel, language: 'en' },
+                            turn_detection: { type: 'server_vad' },
+                        },
+                    },
                 },
             }));
         });
@@ -44,7 +48,7 @@ const main = async () => {
                 ws.close();
                 return reject(new Error(JSON.stringify(msg.error || msg)));
             }
-            if (msg.type === 'transcription_session.updated' || msg.type === 'session.updated' || msg.type === 'session.created') {
+            if (msg.type === 'session.updated' || msg.type === 'session.created') {
                 if (sessionConfigured) return;
                 sessionConfigured = true;
                 // Push 1 second of silence (24000 samples * 2 bytes = 48000 bytes)

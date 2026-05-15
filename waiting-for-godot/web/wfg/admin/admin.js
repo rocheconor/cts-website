@@ -119,6 +119,10 @@
     const setActiveLabel = (session) => {
         if (!session) { activeLabel.textContent = '—'; return; }
         activeLabel.textContent = `${session.label || session.id}${session.kind ? ' · ' + session.kind : ''}`;
+        // Active-session transcript download — sessionId omitted so the
+        // server resolves to whatever is currently active at click time.
+        const dl = document.getElementById('active-transcript-dl');
+        if (dl) dl.href = `/wfg-api/admin/transcript${session.id ? `?sessionId=${encodeURIComponent(session.id)}` : ''}`;
     };
 
     // ---------- Sessions ----------
@@ -156,7 +160,10 @@
                 <div class="row-actions">
                   ${s.id !== activeId ? `<button class="small ghost" data-activate="${escape(s.id)}">Activate</button>` : ''}
                   <a class="small ghost" target="_blank" href="/wfg/sessions/${encodeURIComponent(s.id)}/" style="display:inline-block;padding:5px 8px;text-decoration:none;border:1px solid #111;color:#111;background:#fff;border-radius:8px;font-size:12px;">Open</a>
+                  <a class="small ghost" target="_blank" rel="noopener" download href="/wfg-api/admin/transcript?sessionId=${encodeURIComponent(s.id)}" style="display:inline-block;padding:5px 8px;text-decoration:none;border:1px solid #111;color:#111;background:#fff;border-radius:8px;font-size:12px;">Transcript</a>
+                  <button class="small ghost" data-podcast="${escape(s.id)}" data-podcast-label="${escape(s.label || s.id)}">Podcast</button>
                   ${s.state !== 'ended' ? `<button class="small danger" data-end="${escape(s.id)}">End</button>` : ''}
+                  ${s.id !== activeId ? `<button class="small danger" data-delete="${escape(s.id)}" data-delete-label="${escape(s.label || s.id)}" title="Permanently delete this session and all its data">Delete</button>` : '<span class="small hint" title="Activate another session first">Delete</span>'}
                 </div>
             `;
             sessionsList.appendChild(row);
@@ -179,7 +186,194 @@
                 } catch (err) { alert(err.message); }
             });
         });
+        sessionsList.querySelectorAll('[data-podcast]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                openPodcastModal({
+                    sessionId: btn.dataset.podcast,
+                    sessionLabel: btn.dataset.podcastLabel || btn.dataset.podcast,
+                });
+            });
+        });
+        sessionsList.querySelectorAll('[data-delete]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                const id = btn.dataset.delete;
+                const label = btn.dataset.deleteLabel || id;
+                const msg =
+                    `Permanently delete "${label}"?\n\n` +
+                    `This wipes the session and all its posts, transcript, log, ` +
+                    `character profiles, and podcasts. The session itself is removed ` +
+                    `from Firestore. Cannot be undone.`;
+                if (!confirm(msg)) return;
+                btn.disabled = true;
+                btn.textContent = 'deleting…';
+                try {
+                    await api(`/admin/sessions/${encodeURIComponent(id)}/delete`, { method: 'POST' });
+                    await refreshSessions();
+                } catch (err) {
+                    alert(err.message);
+                    btn.disabled = false;
+                    btn.textContent = 'Delete';
+                }
+            });
+        });
     };
+
+    // ---------- Podcast modal ----------
+
+    const podcastModal = document.getElementById('podcast-modal');
+    const podcastSubtitle = document.getElementById('podcast-modal-subtitle');
+    const podcastCreateForm = document.getElementById('podcast-create-form');
+    const podcastCreateFeedback = document.getElementById('podcast-create-feedback');
+    const podcastListEl = document.getElementById('podcast-list');
+
+    let podcastModalSession = null; // { id, label }
+    let podcastPollHandle = null;
+
+    const openPodcastModal = ({ sessionId, sessionLabel }) => {
+        podcastModalSession = { id: sessionId, label: sessionLabel };
+        podcastSubtitle.textContent = `${sessionLabel} · session id ${sessionId}`;
+        podcastCreateForm.reset();
+        podcastCreateForm.elements['title'].value = `${sessionLabel} — podcast`;
+        podcastCreateForm.elements['length'].value = 'SHORT';
+        podcastCreateFeedback.textContent = '';
+        podcastCreateFeedback.className = 'hint';
+        podcastModal.hidden = false;
+        refreshPodcastList();
+        startPodcastPoll();
+    };
+
+    const closePodcastModal = () => {
+        podcastModal.hidden = true;
+        podcastModalSession = null;
+        stopPodcastPoll();
+    };
+
+    const startPodcastPoll = () => {
+        stopPodcastPoll();
+        podcastPollHandle = setInterval(() => {
+            if (!podcastModalSession) return stopPodcastPoll();
+            // Only poll when there's something generating.
+            const hasPending = podcastListEl.querySelector('[data-status="generating"], [data-status="queued"]');
+            if (hasPending) refreshPodcastList();
+        }, 15000);
+    };
+
+    const stopPodcastPoll = () => {
+        if (podcastPollHandle) { clearInterval(podcastPollHandle); podcastPollHandle = null; }
+    };
+
+    const refreshPodcastList = async () => {
+        if (!podcastModalSession) return;
+        const { id: sessionId } = podcastModalSession;
+        try {
+            const { podcasts } = await api(`/admin/podcasts?sessionId=${encodeURIComponent(sessionId)}`);
+            // Auto-poll any rows still generating before rendering.
+            const pending = (podcasts || []).filter((p) => p.status === 'generating' || p.status === 'queued');
+            for (const p of pending) {
+                try {
+                    const { podcast } = await api(`/admin/podcasts/${encodeURIComponent(p.id)}/refresh?sessionId=${encodeURIComponent(sessionId)}`, { method: 'POST' });
+                    Object.assign(p, podcast);
+                } catch {}
+            }
+            renderPodcastList(podcasts || []);
+        } catch (err) {
+            podcastListEl.innerHTML = `<div class="err">${escape(err.message)}</div>`;
+        }
+    };
+
+    const renderPodcastList = (podcasts) => {
+        podcastListEl.innerHTML = '';
+        if (!podcasts.length) {
+            podcastListEl.innerHTML = '<div class="hint">none yet.</div>';
+            return;
+        }
+        for (const p of podcasts) {
+            const created = p.createdAtMs ? new Date(p.createdAtMs).toLocaleString() : '—';
+            const lengthLabel = p.length === 'STANDARD' ? 'Standard ~10 min' : 'Short 4–5 min';
+            const includesChat = p.includeBotPosts ? ' · incl. bot chat' : '';
+            const errBlock = p.errorMessage ? `<div class="err">${escape(p.errorMessage)}</div>` : '';
+            const downloadBtn = p.status === 'ready'
+                ? `<a class="small ghost" target="_blank" rel="noopener" download href="/wfg-api/admin/podcasts/${encodeURIComponent(p.id)}/audio?sessionId=${encodeURIComponent(podcastModalSession.id)}" style="display:inline-block;padding:5px 8px;text-decoration:none;border:1px solid #111;color:#111;background:#fff;border-radius:8px;font-size:12px;">Download MP3</a>`
+                : '';
+            const refreshBtn = (p.status === 'generating' || p.status === 'queued')
+                ? `<button class="small ghost" data-refresh="${escape(p.id)}">Refresh</button>`
+                : '';
+            const row = document.createElement('div');
+            row.className = 'podcast-row';
+            row.dataset.status = p.status;
+            row.innerHTML = `
+                <div>
+                  <div class="pri">${escape(p.title || '(untitled)')}</div>
+                  <div class="meta">${escape(lengthLabel)}${escape(includesChat)} · ${escape(created)}</div>
+                  ${p.focus ? `<div class="meta">focus: ${escape(p.focus)}</div>` : ''}
+                  ${errBlock}
+                </div>
+                <div class="row-actions">
+                  <span class="pill ${escape(p.status)}">${escape(p.status)}</span>
+                  ${refreshBtn}
+                  ${downloadBtn}
+                </div>
+            `;
+            podcastListEl.appendChild(row);
+        }
+        podcastListEl.querySelectorAll('[data-refresh]').forEach((btn) => {
+            btn.addEventListener('click', async () => {
+                btn.disabled = true;
+                btn.textContent = 'refreshing…';
+                try {
+                    await api(`/admin/podcasts/${encodeURIComponent(btn.dataset.refresh)}/refresh?sessionId=${encodeURIComponent(podcastModalSession.id)}`, { method: 'POST' });
+                    await refreshPodcastList();
+                } catch (err) {
+                    alert(err.message);
+                    btn.disabled = false;
+                    btn.textContent = 'Refresh';
+                }
+            });
+        });
+    };
+
+    podcastModal.addEventListener('click', (e) => {
+        if (e.target.matches('[data-modal-close]')) closePodcastModal();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !podcastModal.hidden) closePodcastModal();
+    });
+
+    document.getElementById('active-podcast-btn')?.addEventListener('click', () => {
+        const sess = state?.session;
+        if (!sess) return alert('No active session.');
+        openPodcastModal({ sessionId: sess.id, sessionLabel: sess.label || sess.id });
+    });
+
+    podcastCreateForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!podcastModalSession) return;
+        const fd = new FormData(podcastCreateForm);
+        const payload = {
+            sessionId: podcastModalSession.id,
+            title: (fd.get('title') || '').toString().trim(),
+            description: (fd.get('description') || '').toString().trim(),
+            focus: (fd.get('focus') || '').toString().trim(),
+            length: fd.get('length') === 'STANDARD' ? 'STANDARD' : 'SHORT',
+            includeBotPosts: !!fd.get('includeBotPosts'),
+        };
+        const submitBtn = podcastCreateForm.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        podcastCreateFeedback.textContent = 'kicking off…';
+        podcastCreateFeedback.className = 'hint';
+        try {
+            await api('/admin/podcasts', { method: 'POST', body: JSON.stringify(payload) });
+            podcastCreateFeedback.textContent = 'queued — generation can take a few minutes.';
+            podcastCreateFeedback.className = 'hint';
+            podcastCreateForm.elements['focus'].value = '';
+            await refreshPodcastList();
+        } catch (err) {
+            podcastCreateFeedback.textContent = err.message;
+            podcastCreateFeedback.className = 'hint err';
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
 
     // ---------- Audio ----------
 

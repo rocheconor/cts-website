@@ -28,6 +28,10 @@ export const paths = {
         db.collection('wfg_sessions').doc(sessionId).collection('profiles'),
     profile: (sessionId, charId) =>
         db.collection('wfg_sessions').doc(sessionId).collection('profiles').doc(charId),
+    podcasts: (sessionId) =>
+        db.collection('wfg_sessions').doc(sessionId).collection('podcasts'),
+    podcast: (sessionId, id) =>
+        db.collection('wfg_sessions').doc(sessionId).collection('podcasts').doc(id),
 };
 
 export const FieldValue = admin.firestore.FieldValue;

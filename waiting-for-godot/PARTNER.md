@@ -26,3 +26,12 @@ What you can do from here:
 6. **Cadence** — adjust how often bots post and how aggressively.
 
 That's it. Anything weird, ping Conor.
+
+## Downloads (transcript + podcast)
+
+Each session row in the admin has two download options:
+
+- **Transcript** — plain text file of the panel transcription, downloadable at any time (session does not need to end).
+- **Podcast** — opens a small dialog. Fill in title / description / a sentence of "focus" / pick Short (4–5 min) or Standard (~10 min) / optionally include the bots' chat as extra context. Submit and Google's NotebookLM Enterprise Podcast API generates an MP3 in a few minutes. The dialog will show the status; refresh until it says **ready**, then **Download MP3**.
+
+You can do both for any session, including the live one. Multiple podcasts per session are allowed.

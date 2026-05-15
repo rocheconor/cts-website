@@ -53,6 +53,59 @@ main, section#login-pane { max-width: 980px; margin: 0 auto; padding: 24px 20px;
 .pill.ended   { background: #efe5e5; color: #555; }
 .pill.rehearsal { background: #eef1ff; color: #2d3a8c; }
 .pill.live { background: #ffe9e6; color: #8c2a17; }
+.pill.queued { background: #eee; color: #555; }
+.pill.generating { background: #fff3d6; color: var(--warn, #8a6500); }
+.pill.ready { background: #e6f6ec; color: var(--good, #1d6a3a); }
+.pill.failed { background: #fde7e7; color: #8c2a17; }
+
+/* Podcast modal */
+.modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal[hidden] { display: none; }
+.modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.modal-card {
+  position: relative;
+  width: 100%; max-width: 640px;
+  max-height: 90vh; overflow-y: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  padding: 24px 24px 20px;
+}
+.modal-card h2 { margin: 0 0 4px; font-size: 18px; }
+.modal-card .hint { margin: 0 0 14px; }
+.modal-card .podcast-list-heading { font-size: 13px; margin: 22px 0 8px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+.modal-close {
+  position: absolute; top: 10px; right: 12px;
+  width: 32px; height: 32px;
+  background: transparent; color: #555;
+  border: 0; font-size: 22px; line-height: 1;
+  cursor: pointer; border-radius: 999px;
+}
+.modal-close:hover { background: #f0f0ed; }
+.modal-card .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.modal-card .row-label { font-size: 13px; font-weight: 600; }
+.modal-card .radio { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.modal-card label.wide { display: block; }
+.modal-card label.wide > * { display: block; width: 100%; }
+
+.podcast-list { display: flex; flex-direction: column; gap: 10px; }
+.podcast-row {
+  border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 12px;
+  display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center;
+  background: #fafaf7;
+}
+.podcast-row .pri { font-weight: 600; font-size: 14px; }
+.podcast-row .meta { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-top: 2px; }
+.podcast-row .err { font-size: 12px; color: #8c2a17; margin-top: 4px; }
+.podcast-row .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
 
 .actions { display: flex; gap: 10px; flex-wrap: wrap; }
 button {

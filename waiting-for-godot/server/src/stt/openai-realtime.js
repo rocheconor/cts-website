@@ -2,16 +2,13 @@
 // Server-side WebSocket client that proxies operator audio into OpenAI's
 // realtime transcription endpoint and emits transcript text to a callback.
 //
-// Protocol notes (per https://developers.openai.com/api/docs/guides/realtime-transcription):
+// Protocol notes (GA shape; the older beta shape with `OpenAI-Beta: realtime=v1`
+// + `transcription_session.update` was disabled in early 2026):
 //   - Connect with WebSocket to wss://api.openai.com/v1/realtime?intent=transcription
-//   - Authorization: Bearer <key> ; OpenAI-Beta: realtime=v1
-//   - Configure with `transcription_session.update`
-//   - Audio: 24 kHz mono PCM16, base64-encoded via input_audio_buffer.append
+//   - Authorization: Bearer <api-key> (no OpenAI-Beta header)
+//   - Configure with a `session.update` whose session.type is "transcription"
+//   - Audio: PCM16, 24 kHz mono, base64-encoded via input_audio_buffer.append
 //   - Receive `conversation.item.input_audio_transcription.delta` and `.completed`
-//
-// If the server-side WebSocket auth flow shifts to ephemeral client tokens
-// at build time, swap getRealtimeUrl() / headers — protocol is otherwise the
-// same.
 
 import WebSocket from 'ws';
 import { EventEmitter } from 'node:events';
@@ -34,7 +31,6 @@ export class SttSession extends EventEmitter {
         this.ws = new WebSocket(REALTIME_URL, {
             headers: {
                 Authorization: `Bearer ${config.openaiApiKey}`,
-                'OpenAI-Beta': 'realtime=v1',
             },
         });
 
@@ -56,11 +52,21 @@ export class SttSession extends EventEmitter {
         });
 
         this.#send({
-            type: 'transcription_session.update',
+            type: 'session.update',
             session: {
-                input_audio_format: 'pcm16',
-                input_audio_transcription: { model: STT_MODEL, language: 'en' },
-                turn_detection: { type: 'server_vad', threshold: 0.5, silence_duration_ms: 600 },
+                type: 'transcription',
+                audio: {
+                    input: {
+                        format: { type: 'audio/pcm', rate: 24000 },
+                        transcription: { model: STT_MODEL, language: 'en' },
+                        turn_detection: {
+                            type: 'server_vad',
+                            threshold: 0.5,
+                            prefix_padding_ms: 300,
+                            silence_duration_ms: 600,
+                        },
+                    },
+                },
             },
         });
 
@@ -104,7 +110,6 @@ export class SttSession extends EventEmitter {
             case 'conversation.item.input_audio_transcription.completed':
                 if (msg.transcript) this.emit('completed', msg.transcript);
                 break;
-            case 'transcription_session.updated':
             case 'session.updated':
             case 'session.created':
                 // configuration acks

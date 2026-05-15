@@ -45,6 +45,11 @@ const DEFAULT_SETTINGS = () => ({
     audienceRateLimitMs: 60_000, // per-IP cooldown between submissions
     audienceMaxChars: 200, // max chars per question
     audienceQueueCap: 50, // max items in queue
+    // Idle-quiet gate: if no fresh transcript segment has arrived within this
+    // many ms, the regular tick loop skips. Godot questions still go through.
+    // 0 disables the gate (bots tick on randomness alone — pre-quiet-mode
+    // behaviour). The opener is unaffected — Start always runs the intro.
+    idleQuietMs: 30_000,
 });
 
 export class Orchestrator {
@@ -60,6 +65,10 @@ export class Orchestrator {
         this.lastPostByChar = Object.fromEntries(CHARACTERS.map((c) => [c, 0]));
         this.recentPosts = [];
         this.recentTimestamps = [];
+        // Updated whenever a transcript segment is appended (live STT or
+        // operator injection). Read by the tick loop to decide whether the
+        // bots should be allowed to post. 0 = never appended.
+        this.lastTranscriptAppendAtMs = 0;
 
         this.generating = false;
         this.tickHandle = null;
@@ -253,6 +262,7 @@ export class Orchestrator {
         this.lastPostAt = 0;
         this.lastPostByChar = Object.fromEntries(CHARACTERS.map((c) => [c, 0]));
         this.recentTimestamps = [];
+        this.lastTranscriptAppendAtMs = 0;
         this.generating = false;
         this.godot = {
             active: false,
@@ -306,6 +316,7 @@ export class Orchestrator {
         this.lastPostAt = 0;
         this.lastPostByChar = Object.fromEntries(CHARACTERS.map((c) => [c, 0]));
         this.recentTimestamps = [];
+        this.lastTranscriptAppendAtMs = 0;
         this.generating = false;
         this.godot = {
             active: false,
@@ -330,6 +341,33 @@ export class Orchestrator {
             { merge: true },
         );
         logInfo('orch', 'ended_remote', { sessionId });
+    }
+
+    async deleteSession(sessionId) {
+        if (!sessionId) throw new Error('missing_session_id');
+        if (sessionId === this.currentSessionId) {
+            const err = new Error('cannot_delete_active_session');
+            err.status = 400;
+            throw err;
+        }
+        const docSnap = await paths.session(sessionId).get();
+        if (!docSnap.exists) {
+            const err = new Error('session_not_found');
+            err.status = 404;
+            throw err;
+        }
+        // Wipe subcollections, then the session doc itself. Best-effort —
+        // if a wipe fails partway through, the operator can re-run the
+        // delete to clean up stragglers. Sessions are typically small
+        // (low hundreds of docs) so this finishes in seconds.
+        await wipeCollection(paths.posts(sessionId));
+        await wipeCollection(paths.transcript(sessionId));
+        await wipeCollection(paths.log(sessionId));
+        await wipeCollection(paths.profiles(sessionId));
+        await wipeCollection(paths.podcasts(sessionId));
+        await paths.session(sessionId).delete();
+        logInfo('orch', 'deleted_session', { sessionId });
+        feed.publish({ type: 'session_deleted', sessionId });
     }
 
     async #createSessionDoc({ id, label, kind }) {
@@ -444,6 +482,17 @@ export class Orchestrator {
         if (this.generating) return;
 
         const now = Date.now();
+
+        // Idle-quiet gate: stay silent when nothing is happening on the panel.
+        // The opener already ran on Start; ticks resume only once transcript
+        // segments start arriving (or once an operator injects text). Godot
+        // questions bypass this — they don't go through #tick.
+        const quiet = this.settings.idleQuietMs ?? 0;
+        if (quiet > 0) {
+            if (!this.lastTranscriptAppendAtMs) return;
+            if (now - this.lastTranscriptAppendAtMs > quiet) return;
+        }
+
         if (now - this.lastPostAt < this.settings.globalCooldownMs) return;
 
         this.recentTimestamps = this.recentTimestamps.filter((t) => now - t < 60_000);
@@ -881,6 +930,7 @@ export class Orchestrator {
         const t = (text || '').trim();
         if (!t) return;
         this.transcript.appendCompleted(t);
+        this.lastTranscriptAppendAtMs = Date.now();
         feed.publish({ type: 'transcript_completed', text: t, at: Date.now(), source: 'injected' });
         logInfo('orch', 'transcript_injected', { chars: t.length });
     }
@@ -896,6 +946,7 @@ export class Orchestrator {
         const t = (text || '').trim();
         if (!t) return;
         this.transcript.appendCompleted(t);
+        this.lastTranscriptAppendAtMs = Date.now();
         feed.publish({ type: 'transcript_completed', text: t, at: Date.now() });
     }
 }
