@@ -5,7 +5,13 @@ import crypto from 'node:crypto';
 import * as cookie from 'cookie';
 import { config } from '../config.js';
 
-const COOKIE_NAME = 'panelchat_admin';
+// Firebase Hosting only forwards cookies named __session to the Cloud
+// Run backend; all others are stripped before they reach us. Using the
+// __session name is required for auth to survive the Hosting hop.
+// Trade-off: if the operator is also signed in to wfg-server admin
+// (which also uses __session), the most recent login wins — both
+// products can't be active in the same browser at the same time.
+const COOKIE_NAME = '__session';
 const MAX_AGE_SECONDS = 12 * 60 * 60;
 
 const sign = (payload) => {

@@ -22,6 +22,18 @@ import {
 
 export const adminRouter = express.Router();
 
+// Admin responses are per-user (auth cookie) and must not be cached.
+// Firebase Hosting strips request cookies before forwarding to Cloud Run
+// unless the upstream response is explicitly uncacheable AND advertises
+// that it varies by cookie. Without these headers, /admin/status reads
+// as `authenticated: false` for every cookie-bearing request through
+// Hosting. See: https://firebase.google.com/docs/hosting/manage-cache
+adminRouter.use((_req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    res.setHeader('Vary', 'Cookie');
+    next();
+});
+
 adminRouter.get('/status', (req, res) => {
     res.json({ authenticated: isAuthenticated(req) });
 });
