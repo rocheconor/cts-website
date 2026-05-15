@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sovereign AI Toolkit — Creative Thinking Systems</title>
+    <meta name="description" content="Sovereign AI Toolkit. A practical guide for creative and cultural organisations. Open models, run on your own systems.">
+
+    <meta property="og:title" content="Sovereign AI Toolkit — Creative Thinking Systems">
+    <meta property="og:description" content="A practical guide for creative and cultural organisations. Open models, run on your own systems.">
+    <meta property="og:url" content="https://creativethinkingsystems.com/toolkit">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --rule: rgba(0,0,0,0.12);
+            --light: rgba(0,0,0,0.07);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-size: clamp(1rem, 1.1vw, 1.125rem);
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; }
+        ::selection { background: rgba(0,0,0,0.12); }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
+        }
+
+        /* ===== NAV ===== */
+        .site-nav {
+            padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+        }
+
+        .site-nav__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .site-nav__brand,
+        .site-nav__link {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            text-decoration: none;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .site-nav__brand:hover,
+        .site-nav__link:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .site-nav__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: clamp(3rem, 7vw, 6rem) 0 clamp(4rem, 8vw, 7rem);
+            border-top: 1px solid var(--rule);
+        }
+
+        .hero__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero__headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.4rem, 6vw, 4.8rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.75rem;
+            max-width: 22ch;
+        }
+
+        /* ===== DEFINITIONS CALLOUT ===== */
+        .definitions {
+            margin-top: clamp(2rem, 3.5vw, 2.5rem);
+            background: #fff;
+            border-radius: 12px;
+            padding: clamp(1.5rem, 3vw, 2.25rem);
+            border-left: 3px solid var(--text);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 16px rgba(0,0,0,0.04);
+            max-width: 60rem;
+        }
+
+        .definitions__item + .definitions__item {
+            margin-top: 1rem;
+        }
+
+        .definitions__item {
+            font-size: clamp(0.98rem, 1.1vw, 1.05rem);
+            line-height: 1.7;
+            color: var(--body);
+        }
+
+        .definitions__item strong {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .hero__principle {
+            margin-top: clamp(1.5rem, 3vw, 2rem);
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.15rem, 1.7vw, 1.45rem);
+            line-height: 1.45;
+            color: var(--text);
+            max-width: 48ch;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.95rem 1.5rem;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+            display: inline-block;
+            border: 1px solid var(--text);
+            cursor: pointer;
+        }
+
+        .btn--primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-1px);
+            background: #000;
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn--secondary:hover {
+            transform: translateY(-1px);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* ===== GENERIC SECTION ===== */
+        .section {
+            padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .section__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.75rem;
+            max-width: 24ch;
+        }
+
+        .section__lede {
+            font-size: clamp(1.05rem, 1.25vw, 1.15rem);
+            line-height: 1.75;
+            color: var(--body);
+            max-width: 60ch;
+        }
+
+        /* ===== START TABLE (Where to start) ===== */
+        .start-table-wrap {
+            margin-top: 2.25rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 12px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+
+        .start-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .start-table th,
+        .start-table td {
+            text-align: left;
+            padding: 1rem 1.25rem;
+            vertical-align: top;
+            border-top: 1px solid var(--light);
+            font-size: 0.96rem;
+            line-height: 1.6;
+        }
+
+        .start-table thead th {
+            background: rgba(0,0,0,0.025);
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            border-top: none;
+            white-space: nowrap;
+        }
+
+        .start-table tbody td:first-child {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text);
+            width: 28%;
+        }
+
+        .start-table tbody td:nth-child(2) {
+            color: var(--body);
+            width: 42%;
+        }
+
+        .start-table tbody td:nth-child(3) {
+            width: 30%;
+        }
+
+        .start-table a {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            transition: border-color 0.3s ease;
+        }
+
+        .start-table a:hover {
+            border-bottom-color: var(--text);
+        }
+
+        @media (max-width: 720px) {
+            .start-table thead { display: none; }
+            .start-table,
+            .start-table tbody,
+            .start-table tr,
+            .start-table td {
+                display: block;
+                width: 100%;
+            }
+            .start-table tr {
+                padding: 1.25rem 1.25rem 1.5rem;
+                border-top: 1px solid var(--light);
+            }
+            .start-table tbody tr:first-child {
+                border-top: none;
+            }
+            .start-table td {
+                border: none;
+                padding: 0;
+            }
+            .start-table tbody td:first-child {
+                font-size: 1rem;
+                margin-bottom: 0.4rem;
+                width: auto;
+            }
+            .start-table tbody td:nth-child(2) {
+                width: auto;
+                margin-bottom: 0.75rem;
+            }
+            .start-table tbody td:nth-child(2)::before {
+                content: 'What sovereign looks like';
+                display: block;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 0.66rem;
+                font-weight: 500;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--muted);
+                margin-bottom: 0.2rem;
+            }
+            .start-table tbody td:nth-child(3) {
+                width: auto;
+            }
+            .start-table tbody td:nth-child(3)::before {
+                content: 'Where to start';
+                display: block;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 0.66rem;
+                font-weight: 500;
+                letter-spacing: 0.14em;
+                text-transform: uppercase;
+                color: var(--muted);
+                margin-bottom: 0.25rem;
+            }
+        }
+
+        /* ===== POSITION (Leadership position) ===== */
+        .position-list {
+            list-style: none;
+            margin-top: 2rem;
+            display: grid;
+            gap: 0.75rem;
+            max-width: 56rem;
+        }
+
+        .position-list li {
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.1rem 1.4rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--body);
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 3px 10px rgba(0,0,0,0.03);
+        }
+
+        .position-link {
+            display: inline-block;
+            margin-top: 2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 2px solid rgba(0,0,0,0.18);
+            padding-bottom: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .position-link:hover {
+            border-bottom-color: var(--text);
+        }
+
+        /* ===== BLOCK SECTIONS (A / B / C) ===== */
+        .block-eyebrow {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.9rem;
+            display: block;
+        }
+
+        .block-grid {
+            margin-top: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2.5rem);
+            display: grid;
+            grid-template-columns: 8.5rem 1fr;
+            row-gap: 0.85rem;
+            column-gap: 1.5rem;
+            max-width: 64rem;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 14px rgba(0,0,0,0.03);
+        }
+
+        .block-grid dt {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+            padding-top: 0.25rem;
+        }
+
+        .block-grid dd {
+            font-size: 1rem;
+            line-height: 1.65;
+            color: var(--body);
+        }
+
+        .block-grid dd a {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            transition: border-color 0.3s ease;
+        }
+
+        .block-grid dd a:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .tool-sep {
+            color: var(--muted);
+            margin: 0 0.4em;
+        }
+
+        @media (max-width: 600px) {
+            .block-grid {
+                grid-template-columns: 1fr;
+                row-gap: 0.15rem;
+                padding: 1.5rem;
+            }
+            .block-grid dt {
+                margin-top: 0.85rem;
+                padding-top: 0;
+            }
+            .block-grid dt:first-of-type {
+                margin-top: 0;
+            }
+        }
+
+        /* ===== WORKBOOK FORM ===== */
+        .form-block {
+            margin-top: 2.25rem;
+            background: #fff;
+            border-radius: 12px;
+            padding: clamp(1.75rem, 3vw, 2.5rem);
+            max-width: 38rem;
+            box-shadow:
+                0 1px 2px rgba(0,0,0,0.03),
+                0 4px 16px rgba(0,0,0,0.04);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .form-input {
+            flex: 1 1 220px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            padding: 0.85rem 1rem;
+            border: 1px solid rgba(0,0,0,0.18);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+            transition: border-color 0.25s ease;
+        }
+
+        .form-input:focus {
+            border-color: var(--text);
+        }
+
+        .form-checkbox-row {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--body);
+            line-height: 1.5;
+        }
+
+        .form-checkbox-row input {
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .form-checkbox-row em {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            color: var(--text);
+        }
+
+        .form-privacy {
+            margin-top: 1rem;
+            font-size: 0.82rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+
+        .form-privacy a {
+            color: inherit;
+            border-bottom: 1px solid rgba(0,0,0,0.2);
+            text-decoration: none;
+        }
+
+        .form-status {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 1.5em;
+        }
+
+        .form-status[data-state="ok"] { color: #1a5d2e; }
+        .form-status[data-state="err"] { color: #8a2424; }
+
+        .form-hp {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            border-top: 1px solid var(--rule);
+            padding: clamp(3.5rem, 6vw, 5.5rem) 0 2.5rem;
+        }
+
+        .newsletter {
+            max-width: 44rem;
+        }
+
+        .newsletter__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.4rem, 2vw, 1.7rem);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+            margin-bottom: 1.5rem;
+        }
+
+        .newsletter__title em {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-weight: 400;
+            color: var(--body);
+        }
+
+        .newsletter__sep {
+            color: var(--muted);
+            font-weight: 400;
+            margin: 0 0.15em;
+        }
+
+        .footer-meta {
+            margin-top: clamp(3rem, 5vw, 4rem);
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .footer-meta a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .footer-meta a:hover {
+            border-bottom-color: var(--muted);
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal { opacity: 1; transform: none; }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .js .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .form-row { flex-direction: column; }
+            .form-input { width: 100%; }
+            .footer-meta { flex-direction: column; }
+        }
+
+        /* Scroll-margin so anchor jumps don't tuck headings under the top edge */
+        [id] {
+            scroll-margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="container">
+            <div class="site-nav__inner">
+                <a class="site-nav__brand" href="/">&larr; Creative Thinking Systems</a>
+                <span class="site-nav__meta">Sovereign AI Toolkit</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         HERO + DEFINITIONS
+         ========================================== -->
+    <section class="hero">
+        <div class="container">
+            <p class="hero__label reveal">Sovereign AI Toolkit</p>
+            <h1 class="hero__headline reveal">A practical guide for creative and cultural organisations</h1>
+
+            <div class="definitions reveal" role="note" aria-label="Definitions">
+                <p class="definitions__item"><strong>Sovereign</strong>: AI you run on your own systems, in line with your obligations on data, copyright, and accountability.</p>
+                <p class="definitions__item"><strong>Open model</strong>: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot. Examples: Llama, Mistral, Qwen.</p>
+            </div>
+
+            <p class="hero__principle reveal">This toolkit recommends open models, run on your own systems.</p>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         WHERE TO START
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section__heading reveal">Where to start</h2>
+
+            <div class="start-table-wrap reveal">
+                <table class="start-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">AI Readiness Area</th>
+                            <th scope="col">What sovereign looks like</th>
+                            <th scope="col">Where to start</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Leadership &amp; governance</td>
+                            <td>Leadership can name risks, evaluate them, and hold a position</td>
+                            <td><a href="#leadership-position">Leadership position</a></td>
+                        </tr>
+                        <tr>
+                            <td>GDPR, data protection &amp; confidentiality</td>
+                            <td>Sensitive material processed locally</td>
+                            <td><a href="#block-a">Block A</a></td>
+                        </tr>
+                        <tr>
+                            <td>Approved tools &amp; access</td>
+                            <td>A sanctioned set of AI tools staff can actually use</td>
+                            <td><a href="#block-b">Block B</a></td>
+                        </tr>
+                        <tr>
+                            <td>Staff use, skills &amp; confidence</td>
+                            <td>A safe place for staff to use AI</td>
+                            <td><a href="#block-a">Block A and Block B</a></td>
+                        </tr>
+                        <tr>
+                            <td>Workflow &amp; productivity opportunities</td>
+                            <td>AI embedded in real work</td>
+                            <td><a href="#block-b">Block B</a></td>
+                        </tr>
+                        <tr>
+                            <td>Knowledge, archive &amp; reusable assets</td>
+                            <td>AI that works with your own documents</td>
+                            <td><a href="#block-c">Block C</a></td>
+                        </tr>
+                        <tr>
+                            <td>Creative rights, IP &amp; accountability</td>
+                            <td>Creative material handled locally, with audit trails</td>
+                            <td><a href="#block-a">Block A</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         LEADERSHIP POSITION
+         ========================================== -->
+    <section class="section" id="leadership-position">
+        <div class="container">
+            <h2 class="section__heading reveal">Leadership position</h2>
+            <ul class="position-list reveal">
+                <li>Know the risks, exposure and opportunities.</li>
+                <li>Evaluate them for this organisation.</li>
+                <li>Hold a defensible, commonly understood position.</li>
+            </ul>
+            <a class="position-link reveal" href="/aireadiness/">AI Readiness Assessment &rarr;</a>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         BLOCK A
+         ========================================== -->
+    <section class="section" id="block-a">
+        <div class="container">
+            <span class="block-eyebrow reveal">Block A</span>
+            <h2 class="section__heading reveal">A local AI workspace</h2>
+
+            <dl class="block-grid reveal">
+                <dt>What</dt>
+                <dd>AI on one person's computer. Nothing leaves the device.</dd>
+
+                <dt>Covers</dt>
+                <dd>GDPR. Organisation and Individual safe use.</dd>
+
+                <dt>Best for</dt>
+                <dd>Senior staff working with sensitive material now.</dd>
+
+                <dt>Tools</dt>
+                <dd>
+                    <a href="https://jan.ai" target="_blank" rel="noopener noreferrer">Jan</a><span class="tool-sep">·</span><a href="https://msty.app" target="_blank" rel="noopener noreferrer">Msty</a><span class="tool-sep">·</span><a href="https://lmstudio.ai" target="_blank" rel="noopener noreferrer">LM Studio</a>
+                </dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         BLOCK B
+         ========================================== -->
+    <section class="section" id="block-b">
+        <div class="container">
+            <span class="block-eyebrow reveal">Block B</span>
+            <h2 class="section__heading reveal">A managed shared workspace</h2>
+
+            <dl class="block-grid reveal">
+                <dt>What</dt>
+                <dd>One shared AI system the organisation runs. Staff log in via browser.</dd>
+
+                <dt>Covers</dt>
+                <dd>Approved tools. Team-wide safe use. Workflow.</dd>
+
+                <dt>Best for</dt>
+                <dd>Organisations standardising AI across staff.</dd>
+
+                <dt>Tools</dt>
+                <dd>
+                    <a href="https://openwebui.com" target="_blank" rel="noopener noreferrer">Open WebUI</a><span class="tool-sep">·</span><a href="https://librechat.ai" target="_blank" rel="noopener noreferrer">LibreChat</a>
+                </dd>
+
+                <dt>Note</dt>
+                <dd>Needs basic server admin, in-house or via partner.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         BLOCK C
+         ========================================== -->
+    <section class="section" id="block-c">
+        <div class="container">
+            <span class="block-eyebrow reveal">Block C</span>
+            <h2 class="section__heading reveal">A searchable knowledge layer</h2>
+
+            <dl class="block-grid reveal">
+                <dt>What</dt>
+                <dd>Block B plus the ability to read your own documents.</dd>
+
+                <dt>Covers</dt>
+                <dd>Knowledge, archive, reusable assets. Deeper workflow.</dd>
+
+                <dt>Best for</dt>
+                <dd>Organisations turning institutional memory into a working resource.</dd>
+
+                <dt>Tools</dt>
+                <dd>
+                    <a href="https://anythingllm.com" target="_blank" rel="noopener noreferrer">AnythingLLM</a><span class="tool-sep">·</span><a href="https://openwebui.com" target="_blank" rel="noopener noreferrer">Open WebUI</a>
+                </dd>
+
+                <dt>Note</dt>
+                <dd>Most organisations benefit from a partner at this stage.</dd>
+            </dl>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         DOWNLOAD WORKBOOK
+         ========================================== -->
+    <section class="section" id="workbook">
+        <div class="container">
+            <h2 class="section__heading reveal">Download the AI Readiness Workbook</h2>
+            <p class="section__lede reveal">The next step. Identify which areas are most pressing for your organisation.</p>
+
+            <form class="form-block reveal" id="workbook-form" novalidate>
+                <input type="text" name="company" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                <div class="form-row">
+                    <input type="email" class="form-input" name="email" placeholder="Email address" required autocomplete="email">
+                    <button type="submit" class="btn btn--primary">Send me the workbook</button>
+                </div>
+
+                <label class="form-checkbox-row">
+                    <input type="checkbox" name="newsletter" value="yes">
+                    <span>Send me the monthly newsletter, <em>AI, Culture and Creativity</em>.</span>
+                </label>
+
+                <p class="form-privacy">We use your email only to send what you asked for. You can unsubscribe from the newsletter at any time. See our <a href="/privacy">privacy notice</a>.</p>
+
+                <div class="form-status" id="workbook-status" role="status" aria-live="polite"></div>
+            </form>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER + NEWSLETTER
+         ========================================== -->
+    <footer class="site-footer" id="newsletter">
+        <div class="container">
+            <div class="newsletter">
+                <h2 class="newsletter__title">AI, Culture and Creativity Newsletter <span class="newsletter__sep">:</span> <em>A monthly update on all things AI for the cultural and creative sector.</em></h2>
+
+                <form id="newsletter-form" novalidate>
+                    <input type="text" name="company" class="form-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <div class="form-row">
+                        <input type="email" class="form-input" name="email" placeholder="Email address" required autocomplete="email">
+                        <button type="submit" class="btn btn--primary">Subscribe</button>
+                    </div>
+                    <p class="form-privacy">We use your email only to send the newsletter. You can unsubscribe at any time. See our <a href="/privacy">privacy notice</a>.</p>
+                    <div class="form-status" id="newsletter-status" role="status" aria-live="polite"></div>
+                </form>
+            </div>
+
+            <div class="footer-meta">
+                <span>&copy; 2026 Creative Thinking Systems</span>
+                <span><a href="mailto:hello@creativethinkingsystems.com">hello@creativethinkingsystems.com</a> &nbsp;·&nbsp; <a href="/privacy">Privacy</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+            document.documentElement.classList.add('js');
+
+            // Scroll reveal
+            var reveals = document.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) {
+                            e.target.classList.add('visible');
+                            io.unobserve(e.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+                reveals.forEach(function (el) { io.observe(el); });
+
+                // Hero reveals immediately
+                setTimeout(function () {
+                    document.querySelectorAll('.hero .reveal').forEach(function (el) {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            } else {
+                reveals.forEach(function (el) { el.classList.add('visible'); });
+            }
+
+            // ---- Form submission helpers ----
+            function setStatus(el, msg, state) {
+                el.textContent = msg;
+                el.setAttribute('data-state', state || '');
+            }
+
+            function validEmail(s) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+            }
+
+            function disable(form, on) {
+                form.querySelectorAll('input, button').forEach(function (el) {
+                    el.disabled = on;
+                });
+            }
+
+            async function postJSON(url, body) {
+                var resp = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                var data = null;
+                try { data = await resp.json(); } catch (_) {}
+                if (!resp.ok) {
+                    var msg = (data && data.error) || ('Request failed (' + resp.status + ')');
+                    throw new Error(msg);
+                }
+                return data || {};
+            }
+
+            // ---- Workbook form ----
+            var workbookForm = document.getElementById('workbook-form');
+            var workbookStatus = document.getElementById('workbook-status');
+            if (workbookForm) {
+                workbookForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    var email = workbookForm.email.value.trim();
+                    var newsletter = workbookForm.newsletter.checked;
+                    var hp = workbookForm.company.value;
+
+                    if (!validEmail(email)) {
+                        setStatus(workbookStatus, 'That does not look like a valid email address. Try again.', 'err');
+                        return;
+                    }
+
+                    disable(workbookForm, true);
+                    setStatus(workbookStatus, 'Sending...', '');
+
+                    try {
+                        await postJSON('/api/workbook-request', {
+                            email: email,
+                            newsletter: newsletter,
+                            hp: hp
+                        });
+                        setStatus(workbookStatus, 'Your workbook is on its way. Check your inbox.', 'ok');
+                        workbookForm.reset();
+                    } catch (err) {
+                        setStatus(workbookStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    } finally {
+                        disable(workbookForm, false);
+                    }
+                });
+            }
+
+            // ---- Newsletter form ----
+            var newsForm = document.getElementById('newsletter-form');
+            var newsStatus = document.getElementById('newsletter-status');
+            if (newsForm) {
+                newsForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    var email = newsForm.email.value.trim();
+                    var hp = newsForm.company.value;
+
+                    if (!validEmail(email)) {
+                        setStatus(newsStatus, 'That does not look like a valid email address. Try again.', 'err');
+                        return;
+                    }
+
+                    disable(newsForm, true);
+                    setStatus(newsStatus, 'Subscribing...', '');
+
+                    try {
+                        await postJSON('/api/newsletter-subscribe', {
+                            email: email,
+                            source: 'toolkit-footer',
+                            hp: hp
+                        });
+                        setStatus(newsStatus, 'You are subscribed. Look out for the next issue.', 'ok');
+                        newsForm.reset();
+                    } catch (err) {
+                        setStatus(newsStatus, 'Something went wrong on our end. Please try again, or email hello@creativethinkingsystems.com.', 'err');
+                    } finally {
+                        disable(newsForm, false);
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
