@@ -507,15 +507,25 @@ export class Orchestrator {
         const winner = pickWinner(eligible, this.transcript.windowText(), this.lastPostByChar);
         if (!winner) return;
 
-        await this.#generateAndPost(winner.profile);
+        // Ambient ticks may be dropped by the repetition filter — defer the
+        // typing indicator so we don't show a "thinking" beat that never
+        // results in a post.
+        await this.#generateAndPost(winner.profile, null, { silentBeforeCommit: true });
     }
 
-    async #generateAndPost(profile, extraInstruction = null) {
+    async #generateAndPost(profile, extraInstruction = null, { silentBeforeCommit = false } = {}) {
         if (this.generating) return;
         this.generating = true;
-        this.#startTyping(profile);
+        // Godot flows always produce a post (caller handles drop-recovery),
+        // so showing typing during generation is honest. Ambient ticks may
+        // drop on repetition — those defer the typing indicator until we
+        // know there's real content to commit.
+        if (!silentBeforeCommit) {
+            this.#startTyping(profile);
+        }
         const t0 = Date.now();
         let committed = false;
+        let typingStarted = !silentBeforeCommit;
         try {
             const all = this.recentPosts.slice(-config.defaults.recentChatPostsForContext);
             const ownRecent = all.filter((p) => p.characterId === profile.id).slice(-5);
@@ -540,6 +550,14 @@ export class Orchestrator {
                 });
                 return;
             }
+            // We have real content. If we deferred showing typing dots,
+            // flash them briefly now so the audience sees a "thinking" beat
+            // before the post lands.
+            if (!typingStarted) {
+                this.#startTyping(profile);
+                typingStarted = true;
+                await delay(700);
+            }
             // Per-character artificial pause before committing. Lets you
             // pace characters independently of real model latency. Typing
             // dots stay visible through the pause.
@@ -554,7 +572,7 @@ export class Orchestrator {
                 message: err.message,
             });
         } finally {
-            this.#endTyping();
+            if (typingStarted) this.#endTyping();
             this.generating = false;
             // If this was a Godot generation and nothing committed, the
             // commit-driven scheduling never fires — schedule the recovery

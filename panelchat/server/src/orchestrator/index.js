@@ -510,15 +510,29 @@ export class Orchestrator {
         const winner = pickWinner(eligible, this.transcript.windowText(), this.lastPostByChar);
         if (!winner) return;
 
-        await this.#generateAndPost(winner.profile);
+        // Ambient ticks may PASS or repeat — we don't want the typing
+        // indicator to flash during the model call only to drop. Mark this
+        // as silent until we know there's real content to commit.
+        await this.#generateAndPost(winner.profile, null, { silentBeforeCommit: true });
     }
 
-    async #generateAndPost(profile, extraInstruction = null, { coldContext = false } = {}) {
+    async #generateAndPost(
+        profile,
+        extraInstruction = null,
+        { coldContext = false, silentBeforeCommit = false } = {},
+    ) {
         if (this.generating) return;
         this.generating = true;
-        this.#startTyping(profile);
+        // Question flows (opener / deliberation / answer) always produce a
+        // post, so showing typing dots during the model call is honest.
+        // Ambient ticks might drop on PASS / repetition — those defer the
+        // typing indicator until after we have real content to commit.
+        if (!silentBeforeCommit) {
+            this.#startTyping(profile);
+        }
         const t0 = Date.now();
         let committed = false;
+        let typingStarted = !silentBeforeCommit;
         try {
             // coldContext: true forces an empty transcript + no recent-posts
             // history into the user message. Used by the opener so prior
@@ -560,6 +574,14 @@ export class Orchestrator {
                 });
                 return;
             }
+            // We have real content. If we deferred showing typing dots,
+            // flash them briefly now so the audience sees a "thinking" beat
+            // before the post lands.
+            if (!typingStarted) {
+                this.#startTyping(profile);
+                typingStarted = true;
+                await delay(700);
+            }
             const pause = Math.max(0, Number(profile.responseDelayMs) || 0);
             if (pause > 0) await delay(pause);
             await this.#commitPost(profile, body, genMs);
@@ -571,7 +593,7 @@ export class Orchestrator {
                 message: err.message,
             });
         } finally {
-            this.#endTyping();
+            if (typingStarted) this.#endTyping();
             this.generating = false;
             if (!committed && this.question.active) this.#questionRecoverAfterDrop();
         }
