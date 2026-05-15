@@ -305,9 +305,21 @@
         }
     };
 
+    // The SSE feed stream must bypass Firebase Hosting (which buffers
+    // text/event-stream responses) when in production. The Cloud Run
+    // service is reachable via its *.run.app URL with CORS enabled. In
+    // dev we just hit the same-origin endpoint.
+    const sseStreamUrl = () => {
+        const sameOrigin = '/panelchat-api/feed/stream';
+        const host = location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') return sameOrigin;
+        // Production / Firebase Hosting domain.
+        return 'https://panelchat-server-258493185591.europe-west1.run.app/panelchat-api/feed/stream';
+    };
+
     const connect = () => {
         if (isArchive) return;
-        const es = new EventSource('/panelchat-api/feed/stream');
+        const es = new EventSource(sseStreamUrl(), { withCredentials: true });
         es.onmessage = (e) => {
             try {
                 const env = JSON.parse(e.data);

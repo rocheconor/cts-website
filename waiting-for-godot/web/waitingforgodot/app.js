@@ -261,9 +261,18 @@
         }
     };
 
+    // The SSE feed stream must bypass Firebase Hosting (which buffers
+    // text/event-stream responses) in production. In dev we just hit the
+    // same-origin endpoint.
+    const sseStreamUrl = () => {
+        const host = location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') return '/wfg-api/feed/stream';
+        return 'https://wfg-server-258493185591.europe-west1.run.app/wfg-api/feed/stream';
+    };
+
     const connect = () => {
         if (isArchive) return; // archives are frozen
-        const es = new EventSource('/wfg-api/feed/stream');
+        const es = new EventSource(sseStreamUrl(), { withCredentials: true });
         es.onmessage = (e) => {
             try {
                 const env = JSON.parse(e.data);

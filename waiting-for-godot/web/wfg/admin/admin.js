@@ -632,8 +632,15 @@
         await refreshAudienceQueue();
     };
 
+    // Same Firebase-Hosting-buffer workaround as the visitor.
+    const sseStreamUrl = () => {
+        const host = location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') return '/wfg-api/feed/stream';
+        return 'https://wfg-server-258493185591.europe-west1.run.app/wfg-api/feed/stream';
+    };
+
     const connectSse = () => {
-        const es = new EventSource('/wfg-api/feed/stream');
+        const es = new EventSource(sseStreamUrl(), { withCredentials: true });
         es.onmessage = (e) => {
             try {
                 const env = JSON.parse(e.data);

@@ -719,8 +719,16 @@
         await refreshAudienceQueue();
     };
 
+    // Same Firebase-Hosting-buffer workaround as the visitor: SSE goes
+    // direct to Cloud Run, regular fetches stay on Hosting.
+    const sseStreamUrl = () => {
+        const host = location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') return '/panelchat-api/feed/stream';
+        return 'https://panelchat-server-258493185591.europe-west1.run.app/panelchat-api/feed/stream';
+    };
+
     const connectSse = () => {
-        const es = new EventSource('/panelchat-api/feed/stream');
+        const es = new EventSource(sseStreamUrl(), { withCredentials: true });
         es.onmessage = (e) => {
             try {
                 const env = JSON.parse(e.data);

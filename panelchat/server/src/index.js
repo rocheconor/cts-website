@@ -27,6 +27,33 @@ const app = express();
 app.set('trust proxy', true);
 app.use(express.json({ limit: '256kb' }));
 
+// CORS for the SSE feed stream. Firebase Hosting buffers/blocks
+// `text/event-stream` responses, so the visitor + admin connect their
+// EventSource directly to the Cloud Run URL. Other API calls still go
+// through Hosting (same-origin, no CORS needed). The whitelist below
+// covers the production domain plus local dev origins.
+const ALLOWED_ORIGINS = new Set([
+    'https://creativethinkingsystems.com',
+    'https://www.creativethinkingsystems.com',
+    'http://localhost:8788',
+    'http://127.0.0.1:8788',
+]);
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && ALLOWED_ORIGINS.has(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+        res.setHeader('Vary', 'Origin');
+    }
+    if (req.method === 'OPTIONS') {
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.setHeader('Access-Control-Max-Age', '600');
+        return res.sendStatus(204);
+    }
+    next();
+});
+
 const audio = new AudioPipeline({ orchestrator, devAudioDir });
 app.locals.audio = audio;
 
