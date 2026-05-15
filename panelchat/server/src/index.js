@@ -1,0 +1,120 @@
+// Entrypoint. Boots Express + raw HTTP server + ws upgrade handler.
+// In dev, serves static files from ../web for one-process workflow.
+// In prod (Cloud Run), Firebase Hosting serves /web and rewrites
+// /panelchat-api/** to this service.
+
+import http from 'node:http';
+import path from 'node:path';
+import url from 'node:url';
+import express from 'express';
+import { WebSocketServer } from 'ws';
+import { config } from './config.js';
+import { orchestrator } from './orchestrator/index.js';
+import { adminRouter } from './routes/admin.js';
+import { feedRouter } from './routes/feed.js';
+import { audienceRouter } from './routes/audience.js';
+import { AudioPipeline } from './audio/pipeline.js';
+import { isAuthenticated } from './lib/auth.js';
+import { logCritical, logInfo } from './lib/log.js';
+
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const repoRoot = path.resolve(__dirname, '../..');
+const webRoot = path.join(repoRoot, 'web');
+const devAudioDir = path.join(repoRoot, 'dev-audio');
+
+const app = express();
+app.set('trust proxy', true);
+app.use(express.json({ limit: '256kb' }));
+
+const audio = new AudioPipeline({ orchestrator, devAudioDir });
+app.locals.audio = audio;
+
+app.get('/panelchat-api/health', (_req, res) => {
+    res.json({
+        ok: true,
+        activeSessionId: orchestrator.currentSessionId,
+        state: orchestrator.state,
+    });
+});
+
+app.use('/panelchat-api/feed', feedRouter);
+app.use('/panelchat-api/admin', adminRouter);
+app.use('/panelchat-api/audience', audienceRouter);
+
+// Root → visitor surface.
+app.get('/', (_req, res) => res.redirect(302, '/panelchat/'));
+// Bare /panelchat → /panelchat/ (no-slash form only; loose-routing-safe).
+app.get(/^\/panelchat$/, (_req, res) => res.redirect(301, '/panelchat/'));
+
+// Per-session archive URL: serve the visitor template; the JS reads the
+// sessionId from window.location.pathname.
+app.get(/^\/panelchat\/sessions\/[^/]+\/?$/, (_req, res) =>
+    res.sendFile(path.join(webRoot, 'visitor', 'index.html')),
+);
+
+// Static web. Two roots:
+//   /panelchat/admin/* — admin console
+//   /panelchat/*       — visitor feed
+app.use('/panelchat/admin', express.static(path.join(webRoot, 'admin'), { extensions: ['html'] }));
+app.use('/panelchat', express.static(path.join(webRoot, 'visitor'), { extensions: ['html'] }));
+
+const server = http.createServer(app);
+
+// Operator audio WebSocket — admin-only. Auth via cookie at upgrade time.
+const wss = new WebSocketServer({ noServer: true });
+
+server.on('upgrade', (req, socket, head) => {
+    if (req.url !== '/panelchat-api/ws/audio') {
+        socket.destroy();
+        return;
+    }
+    if (!isAuthenticated({ headers: req.headers })) {
+        socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+        socket.destroy();
+        return;
+    }
+    wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req);
+    });
+});
+
+wss.on('connection', async (ws) => {
+    logInfo('ws', 'operator_connected');
+    try {
+        await audio.startLive();
+    } catch (err) {
+        logCritical('ws', 'live_start_failed', { message: err.message });
+        ws.send(JSON.stringify({ type: 'error', message: err.message }));
+        ws.close();
+        return;
+    }
+    audio.attachOperatorSocket(ws);
+    ws.send(JSON.stringify({ type: 'ready' }));
+});
+
+const boot = async () => {
+    await new Promise((resolve) => server.listen(config.port, resolve));
+    logInfo('server', 'listening', { port: config.port });
+    console.log(`\n  Panelchat ready.\n  Visitor: ${config.publicBaseUrl}/panelchat/\n  Admin:   ${config.publicBaseUrl}/panelchat/admin/\n`);
+    orchestrator.bootstrap().catch((err) => {
+        logCritical('server', 'bootstrap_failed', { message: err.message });
+    });
+};
+
+boot().catch((err) => {
+    console.error('boot failed', err);
+    process.exit(1);
+});
+
+const shutdown = async (sig) => {
+    logInfo('server', 'shutdown', { sig });
+    try {
+        await audio.stop();
+        server.close();
+    } finally {
+        process.exit(0);
+    }
+};
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));

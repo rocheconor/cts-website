@@ -1,0 +1,30 @@
+{
+  "name": "panelchat-server",
+  "version": "0.1.0",
+  "description": "Panelchat — AI commentary backchannel for live panel discussions.",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "dev": "node --env-file=.env.local src/index.js",
+    "start": "node src/index.js",
+    "test:anthropic": "node --env-file=.env.local src/scripts/test-anthropic.js",
+    "test:openai": "node --env-file=.env.local src/scripts/test-openai.js",
+    "test:gemini": "node --env-file=.env.local src/scripts/test-gemini.js",
+    "test:stt": "node --env-file=.env.local src/scripts/test-stt.js",
+    "test:all": "npm run test:anthropic && npm run test:openai && npm run test:gemini && npm run test:stt"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.40.0",
+    "@google/generative-ai": "^0.21.0",
+    "cookie": "^1.0.0",
+    "express": "^4.21.0",
+    "firebase-admin": "^12.7.0",
+    "openai": "^4.77.0",
+    "wavefile": "^11.0.0",
+    "ws": "^8.18.0"
+  }
+}

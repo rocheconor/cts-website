@@ -1,0 +1,5 @@
+server/node_modules
+server/.env.local
+deploy/secrets.prod.env
+**/*.log
+**/.DS_Store

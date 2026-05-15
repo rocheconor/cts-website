@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panelchat Admin</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="/panelchat/admin/admin.css" />
+</head>
+<body>
+  <header>
+    <div class="title">Panelchat · Operator Console</div>
+    <div class="links">
+      <a href="/panelchat/" target="_blank">Live feed</a>
+      <a href="/panelchat/admin/log.html">Session log</a>
+      <button id="logout-btn" hidden>Log out</button>
+    </div>
+  </header>
+
+  <section id="login-pane">
+    <h2>Sign in</h2>
+    <form id="login-form">
+      <label>Password<input type="password" name="password" required autocomplete="current-password" /></label>
+      <button type="submit">Sign in</button>
+      <div class="err" id="login-err"></div>
+    </form>
+  </section>
+
+  <main id="app-pane" hidden>
+    <section class="panel sessions-panel">
+      <h2>Sessions</h2>
+      <div id="sessions-list" class="sessions-list"></div>
+      <form id="new-session-form" class="new-session-form">
+        <label>Label<input name="label" placeholder="e.g. Latency rehearsal 1" required /></label>
+        <label>Kind
+          <select name="kind">
+            <option value="rehearsal">Rehearsal</option>
+            <option value="live">Live</option>
+          </select>
+        </label>
+        <button type="submit">+ New Session</button>
+      </form>
+    </section>
+
+    <section class="panel state-panel">
+      <h2>
+        Active session
+        <span class="session-label" id="active-session-label">—</span>
+        <span class="pill" id="state-pill">idle</span>
+      </h2>
+      <div class="actions">
+        <button data-action="start">Start</button>
+        <button data-action="pause">Pause</button>
+        <button data-action="resume">Resume</button>
+        <button data-action="restart" data-confirm="Restart this session? Posts and transcript will be cleared; character profiles and the session itself stay.">Restart</button>
+        <button data-action="end" class="danger">End session</button>
+        <a id="active-transcript-dl" class="small ghost" target="_blank" rel="noopener" href="/panelchat-api/admin/transcript" download style="display:inline-block;padding:7px 12px;text-decoration:none;border:1px solid #111;color:#111;background:#fff;border-radius:8px;font-size:13px;">Download transcript</a>
+        <button id="active-podcast-btn" class="ghost" type="button">Podcast…</button>
+      </div>
+      <div id="state-ended-notice" class="hint" hidden style="margin-top:10px;color:var(--danger);">
+        This session has ended — ended sessions are terminal. Create a new session in the <strong>Sessions</strong> panel above to continue.
+      </div>
+    </section>
+
+    <section class="panel feed-panel">
+      <h2>
+        Live feed
+        <span class="hint inline" id="feed-cadence-hint"></span>
+      </h2>
+      <div id="admin-feed" class="admin-feed"></div>
+    </section>
+
+    <section class="panel transcript-panel">
+      <h2>Live transcription <span class="hint inline">backend-only — visitor never sees this</span></h2>
+      <div class="transcript-live" id="transcript-live"><span class="placeholder">awaiting audio…</span></div>
+      <div class="transcript-history" id="transcript-history"></div>
+    </section>
+
+    <section class="panel audio-panel">
+      <h2>Audio source</h2>
+      <div class="audio-status" id="audio-status">—</div>
+      <div class="actions">
+        <button id="mic-btn">Start live mic</button>
+        <button id="mic-stop-btn" hidden>Stop mic</button>
+        <button id="audio-stop-btn" class="danger">Stop all audio</button>
+      </div>
+      <div class="staging">
+        <label>Staging audio file
+          <select id="dev-audio-file"></select>
+        </label>
+        <button id="play-file-btn">Play file</button>
+      </div>
+      <p class="hint">
+        Live mic uses the system default input. On event day, route the venue audio into a virtual input
+        (BlackHole / Loopback) before clicking Start live mic.
+      </p>
+    </section>
+
+    <section class="panel inject-panel">
+      <h2>Transcript injection <span class="hint inline">rehearsal helper — bypasses audio</span></h2>
+      <form id="inject-form">
+        <textarea id="inject-text" rows="3" placeholder="Paste or type panel-like text to push into the rolling transcript buffer…"></textarea>
+        <button type="submit">Inject as transcript</button>
+      </form>
+    </section>
+
+    <section class="panel probe-panel">
+      <h2>Per-character probe <span class="hint inline">one-shot reply, no commit, latency timed</span></h2>
+      <form id="probe-form">
+        <label>Character
+          <select id="probe-character"></select>
+        </label>
+        <label>Message<textarea id="probe-message" rows="2" placeholder="Say something to the character…"></textarea></label>
+        <label class="inline-check">
+          <input type="checkbox" id="probe-include-context" />
+          <span>Include live context — transcript + recent chat (verifies what the model actually sees)</span>
+        </label>
+        <button type="submit">Probe</button>
+      </form>
+      <div id="probe-result" class="probe-result" hidden></div>
+    </section>
+
+    <section class="panel ask-panel">
+      <h2>Operator question <span class="hint inline">operator — jumps any queue</span></h2>
+      <form id="operator-ask-form">
+        <textarea id="operator-question" rows="2" placeholder="Ask the panel a question…"></textarea>
+        <button type="submit">Send to bots</button>
+      </form>
+      <p class="hint">
+        Listening pauses; the three deliberate; the answer comes after up to
+        <span id="deliberation-cap-display">3</span> deliberation posts.
+      </p>
+    </section>
+
+    <section class="panel audience-panel">
+      <h2>
+        Audience Asks
+        <span class="hint inline">let visitors submit questions from the live page</span>
+      </h2>
+      <label class="inline-check">
+        <input type="checkbox" id="audience-toggle" />
+        <span>Enable Audience Asks</span>
+      </label>
+      <form id="audience-settings-form" class="audience-settings">
+        <label>Per-user delay (seconds)<input type="number" name="audienceRateLimitMs" data-unit="seconds" min="0" step="1" /></label>
+        <label>Max question chars<input type="number" name="audienceMaxChars" min="10" max="1000" step="10" /></label>
+        <label>Queue cap<input type="number" name="audienceQueueCap" min="1" max="500" step="1" /></label>
+        <button type="submit">Save</button>
+      </form>
+      <div class="audience-meta hint" id="audience-meta">disabled</div>
+      <div id="audience-queue" class="audience-queue"></div>
+      <div class="actions" style="margin-top:10px">
+        <button id="audience-clear" class="ghost small">Clear queue</button>
+      </div>
+    </section>
+
+    <section class="panel settings-panel">
+      <h2>Cadence</h2>
+      <form id="settings-form" class="grid">
+        <label>Global cooldown (seconds)<input type="number" name="globalCooldownMs" data-unit="seconds" min="1" step="0.5" /></label>
+        <label>Per-character cooldown (seconds)<input type="number" name="perCharacterCooldownMs" data-unit="seconds" min="2" step="0.5" /></label>
+        <label>Target posts / minute<input type="number" name="targetPostsPerMinute" min="0" max="20" step="1" /></label>
+        <label>Deliberation cap<input type="number" name="deliberationCap" min="1" max="10" step="1" /></label>
+        <label>Idle quiet (seconds) <span class="hint inline">no posts when no transcript for N s · 0 = disabled</span><input type="number" name="idleQuietMs" data-unit="seconds" min="0" max="600" step="1" /></label>
+        <button type="submit">Save cadence</button>
+      </form>
+    </section>
+
+    <section class="panel profiles-panel">
+      <h2>
+        Characters
+        <span class="hint inline">per-session — edits here only affect the active session</span>
+        <button id="reset-profiles-btn" type="button" class="ghost small" style="margin-left:auto" title="Overwrite every character on this session with the latest seed defaults from profiles.js. Wipes all admin edits.">Reset to defaults</button>
+      </h2>
+      <div id="profile-cards"></div>
+    </section>
+  </main>
+
+  <div id="podcast-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="podcast-modal-title">
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-card">
+      <button class="modal-close" type="button" data-modal-close aria-label="Close">×</button>
+      <h2 id="podcast-modal-title">Podcast</h2>
+      <p class="hint" id="podcast-modal-subtitle"></p>
+      <form id="podcast-create-form" class="grid">
+        <label class="wide">Title<input name="title" maxlength="200" placeholder="e.g. Panel discussion" /></label>
+        <label class="wide">Description<input name="description" maxlength="1000" placeholder="Short description for listeners" /></label>
+        <label class="wide">Focus<textarea name="focus" rows="3" maxlength="1000" placeholder="Narrative direction for the podcast (e.g. 'Highlight the disagreements about AI regulation.')"></textarea></label>
+        <div class="row">
+          <span class="row-label">Length</span>
+          <label class="radio"><input type="radio" name="length" value="SHORT" checked /> Short (4–5 min)</label>
+          <label class="radio"><input type="radio" name="length" value="STANDARD" /> Standard (~10 min)</label>
+        </div>
+        <label class="inline-check"><input type="checkbox" name="includeBotPosts" /> <span>Include AI chat posts as additional context</span></label>
+        <div class="row">
+          <button type="submit">Generate podcast</button>
+          <span class="hint" id="podcast-create-feedback"></span>
+        </div>
+      </form>
+      <h3 class="podcast-list-heading">Podcasts for this session</h3>
+      <div id="podcast-list" class="podcast-list"><div class="hint">none yet.</div></div>
+    </div>
+  </div>
+
+  <script src="/panelchat/admin/admin.js"></script>
+</body>
+</html>

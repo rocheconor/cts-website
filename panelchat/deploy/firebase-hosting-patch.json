@@ -1,0 +1,35 @@
+{
+  "_comment": "DRAFT — do not paste verbatim into the root firebase.json. This shows the rewrites + ignore entries to MERGE into the existing root firebase.json's `hosting` object so /panelchat/** reaches the panelchat-server Cloud Run service. See DEPLOY.md for the merged result.",
+  "hosting_additions": {
+    "ignore_additions": [
+      "panelchat/server/**",
+      "panelchat/dev-audio/**",
+      "panelchat/Dockerfile",
+      "panelchat/.gcloudignore",
+      "panelchat/deploy/**",
+      "panelchat/README.md",
+      "panelchat/DEPLOY.md",
+      "panelchat/PARTNER.md",
+      "panelchat/.gitignore"
+    ],
+    "rewrites_additions": [
+      {
+        "source": "/panelchat-api/**",
+        "run": { "serviceId": "panelchat-server", "region": "europe-west1" }
+      },
+      {
+        "source": "/panelchat/sessions/**",
+        "destination": "/panelchat/web/visitor/index.html"
+      },
+      {
+        "source": "/panelchat/admin/**",
+        "destination": "/panelchat/web/admin/$1"
+      },
+      {
+        "source": "/panelchat/**",
+        "destination": "/panelchat/web/visitor/$1"
+      }
+    ],
+    "redirects_additions": []
+  }
+}

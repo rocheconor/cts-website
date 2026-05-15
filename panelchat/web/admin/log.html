@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panelchat Session Log</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="./admin.css" />
+  <style>
+    .log-row {
+      display: grid;
+      grid-template-columns: 90px 70px 120px 1fr;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .log-row .ts { color: var(--muted); }
+    .log-row .lvl { font-weight: 700; text-transform: uppercase; }
+    .lvl-info { color: #333; }
+    .lvl-warn { color: var(--warn); }
+    .lvl-error { color: var(--danger); }
+    .lvl-critical { color: #fff; background: var(--danger); padding: 0 4px; border-radius: 4px; }
+    .critical-banner {
+      background: #fff3f4; border: 1px solid #f3c2c8; border-radius: 8px;
+      padding: 12px 14px; margin-bottom: 16px;
+    }
+    .critical-banner h3 { margin: 0 0 6px; color: var(--danger); font-size: 14px; }
+    pre { white-space: pre-wrap; margin: 0; font-family: inherit; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">Panelchat · Session Log</div>
+    <div class="links">
+      <a href="./">Back to console</a>
+      <a href="/panelchat/" target="_blank">Live feed</a>
+    </div>
+  </header>
+
+  <main>
+    <div id="critical-zone"></div>
+    <section class="panel">
+      <h2>Recent events</h2>
+      <div id="log"></div>
+    </section>
+  </main>
+
+  <script>
+    const fmtTs = (ms) => {
+      if (!ms) return '—';
+      const d = new Date(ms);
+      return d.toLocaleTimeString([], { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0');
+    };
+    const renderRow = (entry) => {
+      const row = document.createElement('div');
+      row.className = 'log-row';
+      row.innerHTML = `
+        <div class="ts">${fmtTs(entry.createdAtMs)}</div>
+        <div class="lvl lvl-${entry.level}">${entry.level}</div>
+        <div class="src">${entry.source} :: ${entry.event}</div>
+        <div class="data"><pre>${entry.data ? JSON.stringify(entry.data, null, 0) : ''}</pre></div>
+      `;
+      return row;
+    };
+    const load = async () => {
+      const res = await fetch('/panelchat-api/admin/log?limit=300', { credentials: 'same-origin' });
+      if (res.status === 401) { location.href = './'; return; }
+      const { entries } = await res.json();
+      const log = document.getElementById('log');
+      log.innerHTML = '';
+      for (const e of entries) log.appendChild(renderRow(e));
+      const criticals = entries.filter((e) => e.level === 'critical');
+      const zone = document.getElementById('critical-zone');
+      zone.innerHTML = '';
+      for (const e of criticals.slice(0, 5)) {
+        const div = document.createElement('div');
+        div.className = 'critical-banner';
+        div.innerHTML = `<h3>${e.source} :: ${e.event} · ${fmtTs(e.createdAtMs)}</h3><pre>${e.data ? JSON.stringify(e.data, null, 2) : ''}</pre>`;
+        zone.appendChild(div);
+      }
+    };
+    load();
+    setInterval(load, 5000);
+  </script>
+</body>
+</html>
