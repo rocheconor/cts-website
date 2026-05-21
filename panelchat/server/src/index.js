@@ -14,8 +14,8 @@ import { adminRouter } from './routes/admin.js';
 import { feedRouter } from './routes/feed.js';
 import { audienceRouter } from './routes/audience.js';
 import { AudioPipeline } from './audio/pipeline.js';
-import { isAuthenticated } from './lib/auth.js';
-import { logCritical, logInfo } from './lib/log.js';
+import { isAuthenticated, verifyWsTicket } from './lib/auth.js';
+import { logCritical, logInfo, logWarn } from './lib/log.js';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -92,11 +92,30 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ noServer: true });
 
 server.on('upgrade', (req, socket, head) => {
-    if (req.url !== '/panelchat-api/ws/audio') {
+    // The upgrade URL carries the path *and* any query string (ws/audio?ticket=...).
+    const parsed = url.parse(req.url || '', true);
+    if (parsed.pathname !== '/panelchat-api/ws/audio') {
         socket.destroy();
         return;
     }
-    if (!isAuthenticated({ headers: req.headers })) {
+
+    // Origin allowlist — same set as the HTTP CORS allowlist. Defends
+    // against cross-site WebSocket hijacking when auth rides a cookie.
+    const origin = req.headers.origin;
+    if (origin && !ALLOWED_ORIGINS.has(origin)) {
+        logWarn('ws', 'origin_rejected', { origin });
+        socket.write('HTTP/1.1 403 Forbidden\r\n\r\n');
+        socket.destroy();
+        return;
+    }
+
+    // Accept either the __session cookie (works same-origin in dev, or
+    // when a future Hosting hop supports WS) or a short-lived signed
+    // ticket on the query string (required in prod, where the WS goes
+    // direct to *.run.app and the cookie can't ride along).
+    const ticket = typeof parsed.query.ticket === 'string' ? parsed.query.ticket : null;
+    const authed = isAuthenticated({ headers: req.headers }) || (ticket && verifyWsTicket(ticket));
+    if (!authed) {
         socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
         socket.destroy();
         return;

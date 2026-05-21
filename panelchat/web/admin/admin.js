@@ -631,7 +631,29 @@
 
     // ---------- Live mic ----------
 
+    // Firebase Hosting does NOT proxy WebSocket upgrades — same family of
+    // bug as the SSE buffering issue. In prod, open the mic WebSocket
+    // direct to Cloud Run and authenticate with a short-lived ticket
+    // fetched via the Hosting-fronted admin API (which still has the
+    // __session cookie). In dev, same-origin works.
+    const wsAudioUrl = (ticket) => {
+        const host = location.hostname;
+        if (host === 'localhost' || host === '127.0.0.1') {
+            const wsProto = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            return `${wsProto}//${location.host}/panelchat-api/ws/audio?ticket=${encodeURIComponent(ticket)}`;
+        }
+        return `wss://panelchat-server-258493185591.europe-west1.run.app/panelchat-api/ws/audio?ticket=${encodeURIComponent(ticket)}`;
+    };
+
     const startMic = async () => {
+        let ticket;
+        try {
+            const t = await api('/admin/ws-ticket');
+            ticket = t.ticket;
+        } catch (err) {
+            alert('Could not obtain mic ticket: ' + err.message);
+            return;
+        }
         try {
             micStream = await navigator.mediaDevices.getUserMedia({
                 audio: { channelCount: 1, echoCancellation: false, noiseSuppression: false, autoGainControl: false },
@@ -645,8 +667,7 @@
         const source = micCtx.createMediaStreamSource(micStream);
         const node = new AudioWorkletNode(micCtx, 'pcm-worklet');
 
-        const wsProto = location.protocol === 'https:' ? 'wss:' : 'ws:';
-        micWs = new WebSocket(`${wsProto}//${location.host}/panelchat-api/ws/audio`);
+        micWs = new WebSocket(wsAudioUrl(ticket));
         micWs.binaryType = 'arraybuffer';
 
         node.port.onmessage = (e) => {

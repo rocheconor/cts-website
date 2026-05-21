@@ -8,6 +8,7 @@ import {
     clearAdminCookie,
     requireAdmin,
     isAuthenticated,
+    issueWsTicket,
 } from '../lib/auth.js';
 import { orchestrator } from '../orchestrator/index.js';
 import { paths, FieldValue } from '../lib/firestore.js';
@@ -55,6 +56,14 @@ adminRouter.post('/logout', (_req, res) => {
 });
 
 adminRouter.use(requireAdmin);
+
+// Operator mic WebSocket can't ride the __session cookie because it
+// connects direct to *.run.app (Firebase Hosting doesn't proxy WS
+// upgrades). Issue a 60-second signed ticket here instead; the upgrade
+// handler in index.js verifies it.
+adminRouter.get('/ws-ticket', (_req, res) => {
+    res.json(issueWsTicket());
+});
 
 // ---------- Session lifecycle ----------
 

@@ -13,6 +13,7 @@ import { config } from '../config.js';
 // products can't be active in the same browser at the same time.
 const COOKIE_NAME = '__session';
 const MAX_AGE_SECONDS = 12 * 60 * 60;
+const WS_TICKET_TTL_SECONDS = 60;
 
 const sign = (payload) => {
     const body = Buffer.from(JSON.stringify(payload)).toString('base64url');
@@ -65,7 +66,26 @@ export const isAuthenticated = (req) => {
     const header = req.headers.cookie;
     if (!header) return false;
     const parsed = cookie.parse(header);
-    return Boolean(verify(parsed[COOKIE_NAME]));
+    const payload = verify(parsed[COOKIE_NAME]);
+    // Reject short-lived WS tickets here — a ticket must never substitute
+    // for a session cookie on HTTP routes.
+    if (!payload || payload.kind === 'ws') return false;
+    return true;
+};
+
+// Short-lived signed token used to authenticate the operator mic WebSocket
+// when it connects directly to the Cloud Run service URL (bypassing Firebase
+// Hosting, which does not proxy WebSocket upgrades). The browser fetches a
+// ticket via the Hosting-fronted admin API — where the __session cookie
+// works — and presents it as ?ticket=... on the upgrade request.
+export const issueWsTicket = () => {
+    const payload = { kind: 'ws', exp: Math.floor(Date.now() / 1000) + WS_TICKET_TTL_SECONDS };
+    return { ticket: sign(payload), expiresAt: payload.exp };
+};
+
+export const verifyWsTicket = (raw) => {
+    const payload = verify(raw);
+    return Boolean(payload && payload.kind === 'ws');
 };
 
 export const requireAdmin = (req, res, next) => {
