@@ -28,15 +28,37 @@ export class SttSession extends EventEmitter {
 
     async open() {
         if (!config.openaiApiKey) throw new Error('OPENAI_API_KEY not set');
+        logInfo('stt', 'opening', { url: REALTIME_URL, model: STT_MODEL });
         this.ws = new WebSocket(REALTIME_URL, {
             headers: {
                 Authorization: `Bearer ${config.openaiApiKey}`,
             },
+            // Don't let the handshake hang forever — if OpenAI accepts TCP
+            // but stalls the upgrade we want a clean error, not a stuck
+            // request.
+            handshakeTimeout: 10_000,
+        });
+
+        // Log close/error events that fire *during* the handshake too —
+        // the once('error', reject) handler below only fires the first
+        // error, after which the listener detaches. Keep these listeners
+        // attached so a late close after a partial handshake still logs.
+        this.ws.on('unexpected-response', (_req, res) => {
+            logError('stt', 'unexpected_response', { statusCode: res.statusCode, headers: res.headers });
         });
 
         await new Promise((resolve, reject) => {
-            this.ws.once('open', resolve);
-            this.ws.once('error', reject);
+            const onOpen = () => { cleanup(); resolve(); };
+            const onError = (err) => { cleanup(); reject(err); };
+            const onClose = (code, reason) => { cleanup(); reject(new Error(`closed during handshake: code=${code} reason=${reason?.toString()}`)); };
+            const cleanup = () => {
+                this.ws.removeListener('open', onOpen);
+                this.ws.removeListener('error', onError);
+                this.ws.removeListener('close', onClose);
+            };
+            this.ws.once('open', onOpen);
+            this.ws.once('error', onError);
+            this.ws.once('close', onClose);
         });
 
         this.ws.on('message', (raw) => this.#onMessage(raw));
