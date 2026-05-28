@@ -464,6 +464,40 @@
             }
         }
 
+        /* ===== MODELS SECTION ===== */
+        .model {
+            margin-top: clamp(2rem, 3vw, 2.5rem);
+        }
+
+        .model + .model {
+            margin-top: clamp(2.5rem, 4vw, 3.5rem);
+        }
+
+        .model__name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+            line-height: 1.2;
+            letter-spacing: -0.015em;
+            margin-bottom: 0.75rem;
+        }
+
+        .model__name a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.18);
+            padding-bottom: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .model__name a:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .model .block-grid {
+            margin-top: 0;
+        }
+
         /* ===== WORKBOOK FORM ===== */
         .form-block {
             margin-top: 2.25rem;
@@ -662,7 +696,7 @@
 
             <div class="definitions reveal" role="note" aria-label="Definitions">
                 <p class="definitions__item"><strong>Sovereign</strong>: AI you run on your own systems, in line with your obligations on data, copyright, and accountability.</p>
-                <p class="definitions__item"><strong>Open model</strong>: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot. Examples: Llama, Mistral.</p>
+                <p class="definitions__item"><strong>Open model</strong>: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot.</p>
             </div>
 
             <p class="hero__principle reveal">This toolkit recommends open models, run on your own systems.</p>
@@ -764,9 +798,6 @@
                 <dd>
                     <a href="https://jan.ai" target="_blank" rel="noopener noreferrer">Jan</a><span class="tool-sep">·</span><a href="https://msty.app" target="_blank" rel="noopener noreferrer">Msty</a><span class="tool-sep">·</span><a href="https://lmstudio.ai" target="_blank" rel="noopener noreferrer">LM Studio</a>
                 </dd>
-
-                <dt>Models</dt>
-                <dd>Llama<span class="tool-sep">·</span>Mistral</dd>
             </dl>
         </div>
     </section>
@@ -793,9 +824,6 @@
                 <dd>
                     <a href="https://openwebui.com" target="_blank" rel="noopener noreferrer">Open WebUI</a><span class="tool-sep">·</span><a href="https://librechat.ai" target="_blank" rel="noopener noreferrer">LibreChat</a>
                 </dd>
-
-                <dt>Models</dt>
-                <dd>Llama<span class="tool-sep">·</span>Mistral</dd>
 
                 <dt>Note</dt>
                 <dd>Needs basic server admin, in-house or via partner.</dd>
@@ -826,12 +854,76 @@
                     <a href="https://anythingllm.com" target="_blank" rel="noopener noreferrer">AnythingLLM</a><span class="tool-sep">·</span><a href="https://openwebui.com" target="_blank" rel="noopener noreferrer">Open WebUI</a>
                 </dd>
 
-                <dt>Models</dt>
-                <dd>Llama<span class="tool-sep">·</span>Mistral</dd>
-
                 <dt>Note</dt>
                 <dd>Most organisations benefit from a partner at this stage.</dd>
             </dl>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         RECOMMENDED MODELS
+         ========================================== -->
+    <section class="section" id="models">
+        <div class="container">
+            <h2 class="section__heading reveal">Recommended models</h2>
+            <p class="section__lede reveal">Run any of these in the blocks above. Each links to its permanent home.</p>
+
+            <div class="model">
+                <h3 class="model__name reveal">
+                    <a href="https://www.llama.com" target="_blank" rel="noopener noreferrer">Llama</a>
+                </h3>
+                <dl class="block-grid reveal">
+                    <dt>Maker</dt>
+                    <dd>Meta</dd>
+
+                    <dt>License</dt>
+                    <dd>Llama Community License</dd>
+
+                    <dt>Strengths</dt>
+                    <dd>Strongest general-purpose open model, and the most widely supported across the tools above. Works at any scale, from a single laptop to a shared server.</dd>
+
+                    <dt>Limits</dt>
+                    <dd>License allows commercial use but is more restrictive than Apache 2.0. Use is subject to Meta's acceptable use policy.</dd>
+                </dl>
+            </div>
+
+            <div class="model">
+                <h3 class="model__name reveal">
+                    <a href="https://mistral.ai" target="_blank" rel="noopener noreferrer">Mistral</a>
+                </h3>
+                <dl class="block-grid reveal">
+                    <dt>Maker</dt>
+                    <dd>Mistral AI (France)</dd>
+
+                    <dt>License</dt>
+                    <dd>Apache 2.0</dd>
+
+                    <dt>Strengths</dt>
+                    <dd>EU-based. Reliable general-purpose all-rounder with good European-language support. Apache 2.0 license means no usage restrictions.</dd>
+
+                    <dt>Limits</dt>
+                    <dd>Not every Mistral model is self-hostable — some are released only as a paid API, outside the scope of this toolkit.</dd>
+                </dl>
+            </div>
+
+            <div class="model">
+                <h3 class="model__name reveal">
+                    <a href="https://ai.google.dev/gemma" target="_blank" rel="noopener noreferrer">Gemma</a>
+                </h3>
+                <dl class="block-grid reveal">
+                    <dt>Maker</dt>
+                    <dd>Google</dd>
+
+                    <dt>License</dt>
+                    <dd>Gemma Terms of Use</dd>
+
+                    <dt>Strengths</dt>
+                    <dd>Best-in-class on laptop and desktop hardware. Strong multilingual support.</dd>
+
+                    <dt>Limits</dt>
+                    <dd>Less suited for the largest deployment scales than Llama or Mistral. License is open weights with a use policy, similar in spirit to Llama's.</dd>
+                </dl>
+            </div>
         </div>
     </section>
 

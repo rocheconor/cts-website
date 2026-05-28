@@ -10,7 +10,7 @@
 
 **Sovereign**: AI you run on your own systems, in line with your obligations on data, copyright, and accountability.
 
-**Open model**: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot. Examples: Llama, Mistral.
+**Open model**: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot.
 
 This toolkit recommends open models, run on your own systems.
 
@@ -48,7 +48,6 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: GDPR. Organisation and Individual safe use.
 - **Best for**: senior staff working with sensitive material now.
 - **Tools**: [Jan](https://jan.ai) · [Msty](https://msty.app) · [LM Studio](https://lmstudio.ai)
-- **Models**: Llama · Mistral
 
 ---
 
@@ -58,7 +57,6 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: Approved tools. Team-wide safe use. Workflow.
 - **Best for**: organisations standardising AI across staff.
 - **Tools**: [Open WebUI](https://openwebui.com) · [LibreChat](https://librechat.ai)
-- **Models**: Llama · Mistral
 - **Note**: needs basic server admin, in-house or via partner.
 
 ---
@@ -69,8 +67,36 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: Knowledge, archive, reusable assets. Deeper workflow.
 - **Best for**: organisations turning institutional memory into a working resource.
 - **Tools**: [AnythingLLM](https://anythingllm.com) · [Open WebUI](https://openwebui.com)
-- **Models**: Llama · Mistral
 - **Note**: most organisations benefit from a partner at this stage.
+
+---
+
+## Recommended models
+
+> **Dev note**: render each model as a card matching the Block A/B/C visual pattern (block-grid dl). Each model name is an external link to the maker's official page; all outbound links open in a new tab.
+
+Run any of these in the blocks above. Each links to its permanent home.
+
+### [Llama](https://www.llama.com)
+
+- **Maker**: Meta
+- **License**: Llama Community License
+- **Strengths**: Strongest general-purpose open model, and the most widely supported across the tools above. Works at any scale, from a single laptop to a shared server.
+- **Limits**: License allows commercial use but is more restrictive than Apache 2.0. Use is subject to Meta's acceptable use policy.
+
+### [Mistral](https://mistral.ai)
+
+- **Maker**: Mistral AI (France)
+- **License**: Apache 2.0
+- **Strengths**: EU-based. Reliable general-purpose all-rounder with good European-language support. Apache 2.0 license means no usage restrictions.
+- **Limits**: Not every Mistral model is self-hostable — some are released only as a paid API, outside the scope of this toolkit.
+
+### [Gemma](https://ai.google.dev/gemma)
+
+- **Maker**: Google
+- **License**: Gemma Terms of Use
+- **Strengths**: Best-in-class on laptop and desktop hardware. Strong multilingual support.
+- **Limits**: Less suited for the largest deployment scales than Llama or Mistral. License is open weights with a use policy, similar in spirit to Llama's.
 
 ---
 
