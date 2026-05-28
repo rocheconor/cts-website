@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Culture: A Research Brief | Creative Thinking Systems</title>
+    <meta name="description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time. A working research brief from Creative Thinking Systems.">
+
+    <link rel="canonical" href="https://creativethinkingsystems.com/agentculture/">
+
+    <meta property="og:title" content="Agent Culture: A Research Brief">
+    <meta property="og:description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time. A working research brief from Creative Thinking Systems.">
+    <meta property="og:url" content="https://creativethinkingsystems.com/agentculture/">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://creativethinkingsystems.com/agentculture/agent-culture-og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Diagram of the Agent Culture loop: a cultural substrate of norms and artefacts governs and seeds a session of cooperating agents, whose outputs flow back into the substrate.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Agent Culture: A Research Brief">
+    <meta name="twitter:description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time.">
+    <meta name="twitter:image" content="https://creativethinkingsystems.com/agentculture/agent-culture-og.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ScholarlyArticle",
+      "headline": "Agent Culture: A Research Brief",
+      "author": {
+        "@type": "Person",
+        "name": "Conor Roche",
+        "affiliation": {
+          "@type": "Organization",
+          "name": "Creative Thinking Systems"
+        }
+      },
+      "datePublished": "2026-05",
+      "version": "0.14",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Creative Thinking Systems",
+        "url": "https://creativethinkingsystems.com"
+      },
+      "identifier": "https://doi.org/10.5281/zenodo.20430153",
+      "sameAs": "https://doi.org/10.5281/zenodo.20430152",
+      "url": "https://creativethinkingsystems.com/agentculture/"
+    }
+    </script>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --rule: rgba(0,0,0,0.12);
+            --light: rgba(0,0,0,0.07);
+            --panel: #FFFFFF;
+            --panel-warm: #EFEDE5;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 400;
+            font-size: clamp(1rem, 1.1vw, 1.125rem);
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+
+        a { color: inherit; }
+        ::selection { background: rgba(0,0,0,0.12); }
+
+        /* ===== LAYOUT ===== */
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
+        }
+
+        /* ===== NAV ===== */
+        .site-nav {
+            padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+        }
+
+        .site-nav__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+
+        .site-nav__brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            text-decoration: none;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .site-nav__brand:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .site-nav__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            padding: clamp(3rem, 7vw, 6rem) 0 clamp(3.5rem, 7vw, 6rem);
+            border-top: 1px solid var(--rule);
+        }
+
+        .hero__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .hero__headline {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(2.6rem, 7vw, 5.4rem);
+            line-height: 1;
+            letter-spacing: -0.04em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: clamp(1.75rem, 3.5vw, 2.5rem);
+        }
+
+        .hero__meta span {
+            color: var(--rule);
+            margin: 0 0.7em;
+        }
+
+        .hero__sub {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+            line-height: 1.4;
+            color: var(--body);
+            max-width: 36ch;
+        }
+
+        /* ===== STATUS CALLOUT ===== */
+        .status-callout {
+            margin: clamp(2rem, 4vw, 3rem) 0 0;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            border-left: 3px solid var(--text);
+            background: var(--panel-warm);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .status-callout__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: var(--text);
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 0.65rem;
+        }
+
+        .status-callout__body {
+            font-size: 0.98rem;
+            line-height: 1.7;
+            color: var(--body);
+            max-width: 60ch;
+        }
+
+        /* ===== GENERIC SECTION ===== */
+        .section {
+            padding: clamp(3.5rem, 6vw, 5.5rem) 0;
+            border-top: 1px solid var(--rule);
+        }
+
+        .section--quiet {
+            border-top: none;
+            padding-top: 0;
+        }
+
+        .section__number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+
+        .section__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.75rem;
+            max-width: 22ch;
+        }
+
+        .section__lede {
+            font-size: clamp(1.02rem, 1.18vw, 1.1rem);
+            line-height: 1.75;
+            color: var(--body);
+            max-width: 62ch;
+        }
+
+        .section__lede + .section__lede {
+            margin-top: 1.2rem;
+        }
+
+        .section__lede strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ===== FIGURE ===== */
+        .figure {
+            margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+        }
+
+        .figure__frame {
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 12px;
+            padding: clamp(1.5rem, 3vw, 2.25rem);
+            display: flex;
+            justify-content: center;
+        }
+
+        .figure__svg {
+            width: 100%;
+            max-width: 680px;
+            height: auto;
+            display: block;
+        }
+
+        .figure__caption {
+            margin-top: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            color: var(--muted);
+            max-width: 60ch;
+        }
+
+        .figure__caption strong {
+            color: var(--body);
+            font-weight: 500;
+        }
+
+        /* ===== SVG PALETTE (retinted to site tokens, with dark-mode variant) ===== */
+        .ac-svg text { font-family: 'Space Grotesk', sans-serif; }
+        .ac-svg .ac-substrate-bg { fill: #EAF1EA; stroke: #3A7A5C; }
+        .ac-svg .ac-inner-card { fill: #FFFFFF; stroke: rgba(26,26,26,0.18); }
+        .ac-svg .ac-agent-bg { fill: #EDECF3; stroke: #4F4A85; }
+        .ac-svg .ac-agent-dot { fill: #6B65B8; }
+        .ac-svg .ac-agent-edge { stroke: #6B65B8; opacity: 0.4; }
+        .ac-svg .ac-arrow,
+        .ac-svg .ac-arrow-head { stroke: #5F5E5A; }
+        .ac-svg .ac-curve { stroke: #6B65B8; }
+
+        @media (prefers-color-scheme: dark) {
+            .ac-svg .ac-substrate-bg { fill: #1A2C20; stroke: #5DAE85; }
+            .ac-svg .ac-inner-card { fill: #1E1E1B; stroke: rgba(255,255,255,0.22); }
+            .ac-svg .ac-agent-bg { fill: #1F1D32; stroke: #8783C0; }
+            .ac-svg .ac-agent-dot { fill: #8783C0; }
+            .ac-svg .ac-agent-edge { stroke: #8783C0; opacity: 0.5; }
+            .ac-svg .ac-arrow,
+            .ac-svg .ac-arrow-head { stroke: #C7C5BD; }
+            .ac-svg .ac-curve { stroke: #8783C0; }
+        }
+
+        /* ===== ACTIONS ===== */
+        .actions {
+            margin-top: 0.5rem;
+        }
+
+        .cta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.92rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            padding: 0.95rem 1.5rem;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+            display: inline-block;
+            border: 1px solid var(--text);
+            cursor: pointer;
+        }
+
+        .btn--primary {
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        .btn--primary:hover {
+            transform: translateY(-1px);
+            background: #000;
+        }
+
+        .btn--secondary {
+            background: transparent;
+            color: var(--text);
+        }
+
+        .btn--secondary:hover {
+            transform: translateY(-1px);
+            background: var(--text);
+            color: var(--bg);
+        }
+
+        /* ===== CITATION BLOCK ===== */
+        .citation {
+            margin-top: 2rem;
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 12px;
+            padding: clamp(1.5rem, 3vw, 2.25rem);
+        }
+
+        .citation__plain {
+            font-size: 0.98rem;
+            line-height: 1.65;
+            color: var(--body);
+            margin-bottom: 1.25rem;
+        }
+
+        .citation__plain a {
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.18);
+            transition: border-color 0.2s ease;
+        }
+
+        .citation__plain a:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .citation__pre {
+            font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.82rem;
+            line-height: 1.65;
+            color: var(--text);
+            background: var(--panel-warm);
+            border-radius: 8px;
+            padding: 1.1rem 1.25rem;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* ===== ABOUT (closing tinted panel) ===== */
+        .about-panel {
+            margin: clamp(4rem, 7vw, 6rem) 0 clamp(2rem, 4vw, 3rem);
+            background: var(--panel-warm);
+            border-radius: 16px;
+            padding: clamp(2rem, 5vw, 3.25rem) clamp(1.75rem, 4vw, 2.75rem);
+        }
+
+        .about-panel__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            color: var(--text);
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            display: block;
+        }
+
+        .about-panel__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.5rem, 2.6vw, 1.95rem);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            max-width: 22ch;
+        }
+
+        .about-panel__body {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--body);
+            max-width: 60ch;
+        }
+
+        .about-panel__body + .about-panel__body {
+            margin-top: 1.1rem;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            border-top: 1px solid var(--rule);
+            padding: clamp(2.5rem, 5vw, 4rem) 0 2.5rem;
+        }
+
+        .footer-contact {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: clamp(2rem, 4vw, 3rem);
+        }
+
+        .footer-contact a {
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.18);
+            transition: border-color 0.2s ease;
+        }
+
+        .footer-contact a:hover {
+            border-bottom-color: var(--text);
+        }
+
+        .footer-meta {
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--light);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            color: var(--muted);
+        }
+
+        .footer-meta a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .footer-meta a:hover {
+            border-bottom-color: var(--muted);
+        }
+
+        /* ===== REVEAL ===== */
+        .reveal { opacity: 1; transform: none; }
+
+        .js .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1),
+                        transform 0.8s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .js .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .js .reveal { opacity: 1; transform: none; transition: none; }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .hero__headline { font-size: clamp(2.2rem, 9vw, 3.2rem); }
+            .cta-row { flex-direction: column; align-items: stretch; }
+            .cta-row .btn { text-align: center; }
+            .footer-meta { flex-direction: column; }
+            .citation__pre { font-size: 0.76rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="container">
+            <div class="site-nav__inner">
+                <a class="site-nav__brand" href="/">&larr; Creative Thinking Systems</a>
+                <span class="site-nav__meta">Research</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================
+         HERO + STATUS
+         ========================================== -->
+    <section class="hero">
+        <div class="container">
+            <p class="hero__label reveal">A Research Brief</p>
+            <h1 class="hero__headline reveal">Agent Culture</h1>
+            <p class="hero__meta reveal">v0.14<span>·</span>May 2026<span>·</span>Creative Thinking Systems</p>
+            <p class="hero__sub reveal">Research into how AI agents can cooperate in ways that make them collectively more creative over time.</p>
+
+            <aside class="status-callout reveal" aria-label="Research status">
+                <span class="status-callout__label">Status</span>
+                <p class="status-callout__body">Working research brief, pre-experiment. The brief states a position under test. A design doc and pre-registration will follow. A fuller position paper, with framework specification and worked examples, is in development for arXiv submission.</p>
+            </aside>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         ABSTRACT
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">01 · Abstract</span>
+            <h2 class="section__heading reveal">What we are testing</h2>
+
+            <p class="section__lede reveal">Agent Culture tests whether cultural evolution&nbsp;&mdash; cooperation governed by persistent shared norms, producing artefacts that accumulate and seed further cooperation&nbsp;&mdash; can act as a mechanism for building multi-agent AI systems whose creative capability compounds. The central claim is that a population of AI agents, governed by an evolving cultural substrate of inherited norms and accumulated artefacts, can cumulatively improve its ability to generate novel, valuable, and independently verifiable creative artefacts, and that this improvement compounds as the substrate grows.</p>
+
+            <p class="section__lede reveal">The finding under test is not that AI agents can generate creative outputs, nor that multi-agent systems outperform single-agent systems. It is that <strong>creative capability can accumulate outside any individual model, in an inspectable cultural substrate</strong>.</p>
+
+            <figure class="figure reveal">
+                <div class="figure__frame">
+                    <svg class="ac-svg figure__svg" viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg" style="color:var(--text);">
+                        <title>The Agent Culture loop</title>
+                        <desc>A cultural substrate of a norm library and artefact corpus governs and seeds a session of multiple cooperating agents; the cooperation feeds new artefacts and norms back into the substrate.</desc>
+                        <defs>
+                            <marker id="ac-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path class="ac-arrow-head" d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </marker>
+                        </defs>
+
+                        <rect class="ac-substrate-bg" x="50" y="80" width="200" height="160" rx="16" stroke-width="1"/>
+                        <text x="150" y="100" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="currentColor">Cultural substrate</text>
+                        <rect class="ac-inner-card" x="66" y="116" width="168" height="44" rx="8" stroke-width="1"/>
+                        <text x="150" y="138" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="currentColor">Norm library</text>
+                        <rect class="ac-inner-card" x="66" y="176" width="168" height="44" rx="8" stroke-width="1"/>
+                        <text x="150" y="198" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="currentColor">Artefact corpus</text>
+
+                        <rect class="ac-agent-bg" x="430" y="80" width="200" height="160" rx="16" stroke-width="1" stroke-dasharray="5 4"/>
+                        <text x="530" y="100" text-anchor="middle" dominant-baseline="central" font-size="14" font-weight="500" fill="currentColor">Multi-agent cooperation</text>
+                        <line class="ac-agent-edge" x1="485" y1="142" x2="575" y2="142" stroke-width="0.9"/>
+                        <line class="ac-agent-edge" x1="485" y1="196" x2="575" y2="196" stroke-width="0.9"/>
+                        <line class="ac-agent-edge" x1="485" y1="142" x2="485" y2="196" stroke-width="0.9"/>
+                        <line class="ac-agent-edge" x1="575" y1="142" x2="575" y2="196" stroke-width="0.9"/>
+                        <line class="ac-agent-edge" x1="485" y1="142" x2="575" y2="196" stroke-width="0.9"/>
+                        <line class="ac-agent-edge" x1="575" y1="142" x2="485" y2="196" stroke-width="0.9"/>
+                        <circle class="ac-agent-dot" cx="485" cy="142" r="13"/>
+                        <circle class="ac-agent-dot" cx="575" cy="142" r="13"/>
+                        <circle class="ac-agent-dot" cx="485" cy="196" r="13"/>
+                        <circle class="ac-agent-dot" cx="575" cy="196" r="13"/>
+
+                        <line class="ac-arrow" x1="256" y1="130" x2="424" y2="130" stroke-width="1.5" marker-end="url(#ac-arrow)"/>
+                        <text x="340" y="118" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">norms govern cooperation</text>
+                        <line class="ac-arrow" x1="424" y1="195" x2="256" y2="195" stroke-width="1.5" marker-end="url(#ac-arrow)"/>
+                        <text x="340" y="213" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">new artefacts and norms</text>
+
+                        <text x="340" y="278" text-anchor="middle" font-size="14" font-weight="500" fill="currentColor">Capability compounds as the substrate grows across sessions</text>
+                    </svg>
+                </div>
+                <figcaption class="figure__caption"><strong>Figure 1.</strong> The Agent Culture loop. The substrate governs and seeds a session of cooperating agents; the cooperation feeds new artefacts and revised norms back into the substrate.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         THE CLAIM
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">02 · The claim</span>
+            <h2 class="section__heading reveal">What couples to what</h2>
+
+            <p class="section__lede reveal">Inherited norms shape how agents cooperate, critique, search, recombine, and repair. Inherited artefacts provide the material from which future artefacts are made. The coupling between the two is the mechanism under test: whether it produces better, more novel, more valuable artefacts over time, where success can be independently verified.</p>
+
+            <p class="section__lede reveal">Two channels run between sessions. Artefacts produced in one session enter the corpus that later sessions build on. Cooperation logs are analysed to extract norms that shape how later sessions cooperate. Both feed forward from their own outputs, and <strong>it is the coupling of the two, not either alone, that the experiment tests</strong>.</p>
+
+            <figure class="figure reveal">
+                <div class="figure__frame">
+                    <svg class="ac-svg figure__svg" viewBox="0 0 680 300" role="img" xmlns="http://www.w3.org/2000/svg" style="color:var(--text);">
+                        <title>Agent Culture: compounding across sessions</title>
+                        <desc>Across successive sessions the cultural substrate of norms and artefacts accumulates, and creative capability rises with it. The rising curve is the hypothesis under test, not a measured result.</desc>
+                        <defs>
+                            <marker id="ac-arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                                <path class="ac-arrow-head" d="M2 1L8 5L2 9" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </marker>
+                        </defs>
+
+                        <rect class="ac-inner-card" x="75" y="214" width="100" height="30" rx="4" stroke-width="1"/>
+                        <rect class="ac-substrate-bg" x="75" y="184" width="100" height="30" rx="4" stroke-width="1"/>
+
+                        <rect class="ac-inner-card" x="290" y="189" width="100" height="55" rx="4" stroke-width="1"/>
+                        <rect class="ac-substrate-bg" x="290" y="134" width="100" height="55" rx="4" stroke-width="1"/>
+
+                        <rect class="ac-inner-card" x="505" y="159" width="100" height="85" rx="4" stroke-width="1"/>
+                        <rect class="ac-substrate-bg" x="505" y="74" width="100" height="85" rx="4" stroke-width="1"/>
+
+                        <line class="ac-arrow" x1="178" y1="224" x2="287" y2="224" stroke-width="1.5" marker-end="url(#ac-arrow2)"/>
+                        <line class="ac-arrow" x1="393" y1="224" x2="502" y2="224" stroke-width="1.5" marker-end="url(#ac-arrow2)"/>
+                        <text x="232" y="217" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">inherits</text>
+                        <text x="447" y="217" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">inherits</text>
+
+                        <text x="125" y="262" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Session 1</text>
+                        <text x="340" y="262" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Session 2</text>
+                        <text x="555" y="262" text-anchor="middle" font-size="12" fill="currentColor" opacity="0.75">Session 3</text>
+
+                        <line class="ac-curve" x1="128" y1="178" x2="552" y2="56" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ac-arrow2)"/>
+                        <text x="300" y="48" text-anchor="middle" font-size="14" font-weight="500" fill="currentColor">creative capability</text>
+
+                        <rect class="ac-substrate-bg" x="250" y="276" width="12" height="12" rx="3" stroke-width="1"/>
+                        <text x="268" y="286" font-size="12" fill="currentColor" opacity="0.75">norms</text>
+                        <rect class="ac-inner-card" x="338" y="276" width="12" height="12" rx="3" stroke-width="1"/>
+                        <text x="356" y="286" font-size="12" fill="currentColor" opacity="0.75">artefacts</text>
+                    </svg>
+                </div>
+                <figcaption class="figure__caption"><strong>Figure 2.</strong> Compounding across sessions. As norms and artefacts accumulate, creative capability is expected to rise. The rising curve is the hypothesis under test, not a measured result.</figcaption>
+            </figure>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         WHERE IT SITS
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">03 · Where it sits</span>
+            <h2 class="section__heading reveal">What this builds on, what it is not</h2>
+            <p class="section__lede reveal">The work builds on five streams: learning from experience, multi-agent cooperation, LLM-driven artefact evolution, computational creativity, and the cultural evolution of cooperation among language-model agents. It is distinct from open-ended LLM ecologies, social simulations, and cooperation-game benchmarks. Agent Culture tests whether an explicitly maintained, inspectable cultural substrate&nbsp;&mdash; a versioned norm library coupled with an inherited artefact corpus&nbsp;&mdash; can drive compounding improvement in verifiable creative artefact generation.</p>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         ACTIONS
+         ========================================== -->
+    <section class="section">
+        <div class="container">
+            <span class="section__number reveal">04 · Read or cite</span>
+            <h2 class="section__heading reveal">The brief</h2>
+            <p class="section__lede reveal">The Zenodo record is the canonical version. The concept DOI resolves to the latest version of the brief; the version DOI below pins this exact v0.14.</p>
+
+            <div class="actions">
+                <div class="cta-row reveal">
+                    <a class="btn btn--primary" href="/agentculture/agent-culture-research-brief-v0-14.pdf" download>Download the brief (PDF)</a>
+                    <a class="btn btn--secondary" href="https://doi.org/10.5281/zenodo.20430152" rel="noopener">View on Zenodo</a>
+                </div>
+            </div>
+
+            <h3 class="section__heading reveal" style="margin-top: clamp(3rem, 5vw, 4rem); font-size: clamp(1.3rem, 2.2vw, 1.6rem);">How to cite</h3>
+
+            <div class="citation reveal">
+                <p class="citation__plain">Roche, C. (2026). <em>Agent Culture: A Research Brief</em> (Version 0.14). Creative Thinking Systems. <a href="https://doi.org/10.5281/zenodo.20430153" rel="noopener">https://doi.org/10.5281/zenodo.20430153</a></p>
+
+<pre class="citation__pre">@techreport{roche2026agentculture,
+  title        = {Agent Culture: A Research Brief},
+  author       = {Roche, Conor},
+  institution  = {Creative Thinking Systems},
+  year         = {2026},
+  month        = may,
+  type         = {Working Research Brief},
+  version      = {0.14},
+  doi          = {10.5281/zenodo.20430153},
+  url          = {https://doi.org/10.5281/zenodo.20430153}
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         ABOUT THIS RESEARCH
+         ========================================== -->
+    <section class="section section--quiet">
+        <div class="container">
+            <div class="about-panel reveal">
+                <span class="about-panel__label">About this research</span>
+                <h2 class="about-panel__heading">Why Creative Thinking Systems is researching this</h2>
+                <p class="about-panel__body">Agent Culture is part of the research and development programme at Creative Thinking Systems, an applied AI company working exclusively in the cultural and creative industries.</p>
+                <p class="about-panel__body">Creative Thinking Systems exists to enhance, incentivise, and enshrine human creativity in an era of artificial intelligence. Studying how creative capability forms and accumulates in AI systems is part of that mission: it is how we learn to build systems that extend and support human creative practice rather than flatten it, and it keeps us close to the question of where human authorship and value sit as machine creative capability grows.</p>
+                <p class="about-panel__body">This research is conducted in the open. The brief is published early to establish the position, invite scrutiny, and contribute to a fast-moving field. A design doc, a pre-registration, and a fuller position paper will follow.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+    <footer class="site-footer">
+        <div class="container">
+            <p class="footer-contact">Contact: <a href="mailto:conor@creativethinkingsystems.com">conor@creativethinkingsystems.com</a></p>
+            <div class="footer-meta">
+                <span>&copy; 2026 Creative Thinking Systems</span>
+                <span><a href="mailto:hello@creativethinkingsystems.com">hello@creativethinkingsystems.com</a> &nbsp;&middot;&nbsp; <a href="/privacy">Privacy</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+            document.documentElement.classList.add('js');
+
+            var reveals = document.querySelectorAll('.reveal');
+            if ('IntersectionObserver' in window) {
+                var io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) {
+                            e.target.classList.add('visible');
+                            io.unobserve(e.target);
+                        }
+                    });
+                }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+                reveals.forEach(function (el) { io.observe(el); });
+
+                setTimeout(function () {
+                    document.querySelectorAll('.hero .reveal').forEach(function (el) {
+                        el.classList.add('visible');
+                    });
+                }, 100);
+            } else {
+                reveals.forEach(function (el) { el.classList.add('visible'); });
+            }
+        })();
+    </script>
+</body>
+</html>
