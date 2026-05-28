@@ -10,7 +10,7 @@
 
 **Sovereign**: AI you run on your own systems, in line with your obligations on data, copyright, and accountability.
 
-**Open model**: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot. Examples: Llama, Mistral, Qwen.
+**Open model**: an AI model that is open source. You can download it and run it on your own computer. Closed products like ChatGPT and Claude cannot. Examples: Llama, Mistral.
 
 This toolkit recommends open models, run on your own systems.
 
@@ -48,7 +48,7 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: GDPR. Organisation and Individual safe use.
 - **Best for**: senior staff working with sensitive material now.
 - **Tools**: [Jan](https://jan.ai) · [Msty](https://msty.app) · [LM Studio](https://lmstudio.ai)
-- **Models**: Llama 3.1 8B · Mistral Nemo 12B
+- **Models**: Llama · Mistral
 
 ---
 
@@ -58,7 +58,7 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: Approved tools. Team-wide safe use. Workflow.
 - **Best for**: organisations standardising AI across staff.
 - **Tools**: [Open WebUI](https://openwebui.com) · [LibreChat](https://librechat.ai)
-- **Models**: Llama 3.3 70B · Mistral Small 3 (24B)
+- **Models**: Llama · Mistral
 - **Note**: needs basic server admin, in-house or via partner.
 
 ---
@@ -69,7 +69,7 @@ This toolkit recommends open models, run on your own systems.
 - **Covers**: Knowledge, archive, reusable assets. Deeper workflow.
 - **Best for**: organisations turning institutional memory into a working resource.
 - **Tools**: [AnythingLLM](https://anythingllm.com) · [Open WebUI](https://openwebui.com)
-- **Models**: Llama 3.3 70B · Mistral Small 3 (24B)
+- **Models**: Llama · Mistral
 - **Note**: most organisations benefit from a partner at this stage.
 
 ---
