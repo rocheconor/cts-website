@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Culture: A Research Brief | Creative Thinking Systems</title>
-    <meta name="description" content="Whether cultural evolution can act as a mechanism for building multi-agent AI systems whose creative capability compounds. A working research brief from Creative Thinking Systems.">
+    <meta name="description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time. A working research brief from Creative Thinking Systems.">
 
     <link rel="canonical" href="https://creativethinkingsystems.com/agentculture/">
 
     <meta property="og:title" content="Agent Culture: A Research Brief">
-    <meta property="og:description" content="Whether cultural evolution can act as a mechanism for building multi-agent AI systems whose creative capability compounds.">
+    <meta property="og:description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time. A working research brief from Creative Thinking Systems.">
     <meta property="og:url" content="https://creativethinkingsystems.com/agentculture/">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://creativethinkingsystems.com/agentculture/agent-culture-og.png">
@@ -18,7 +18,7 @@
     <meta property="og:image:alt" content="The Agent Culture loop. The substrate governs and seeds a session of cooperating agents; the cooperation feeds new artefacts and revised norms back into the substrate.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Agent Culture: A Research Brief">
-    <meta name="twitter:description" content="Whether cultural evolution can act as a mechanism for building multi-agent AI systems whose creative capability compounds.">
+    <meta name="twitter:description" content="Research into how AI agents can cooperate in ways that make them collectively more creative over time.">
     <meta name="twitter:image" content="https://creativethinkingsystems.com/agentculture/agent-culture-og.png">
 
     <script type="application/ld+json">
@@ -561,10 +561,11 @@
             <p class="hero__label reveal">A Research Brief</p>
             <h1 class="hero__headline reveal">Agent Culture</h1>
             <p class="hero__meta reveal">v0.14<span>|</span>May 2026<span>|</span>Creative Thinking Systems</p>
+            <p class="hero__sub reveal">Research into how AI agents can cooperate in ways that make them collectively more creative over time.</p>
 
             <aside class="status-callout reveal" aria-label="Research status">
                 <span class="status-callout__label">Status</span>
-                <p class="status-callout__body">Working research brief. Pre-experiment. The brief states a position under test. A design doc and pre-registration will follow. A fuller position paper, with framework specification and worked examples, is in development for arXiv submission.</p>
+                <p class="status-callout__body">Working research brief, pre-experiment. The brief states a position under test. A design doc and pre-registration will follow. A fuller position paper, with framework specification and worked examples, is in development for arXiv submission.</p>
             </aside>
         </div>
     </section>
@@ -574,13 +575,11 @@
          ========================================== -->
     <section class="section">
         <div class="container">
-            <h2 class="section__heading reveal">What we are testing</h2>
+            <h2 class="section__heading reveal">Abstract</h2>
 
-            <p class="section__lede reveal">Whether cultural evolution, cooperation governed by persistent shared norms, producing artefacts that accumulate and seed further cooperation, can act as a mechanism for building multi-agent AI systems whose creative capability compounds.</p>
+            <p class="section__lede reveal">Agent Culture tests whether cultural evolution (cooperation governed by persistent shared norms, producing artefacts that accumulate and seed further cooperation) can act as a mechanism for building multi-agent AI systems whose creative capability compounds. The central claim is that a population of AI agents, governed by an evolving cultural substrate of inherited norms and accumulated artefacts, can cumulatively improve its ability to generate novel, valuable, and independently verifiable creative artefacts, and that this improvement compounds as the substrate grows.</p>
 
-            <p class="section__lede reveal">The specific claim is that a population of AI agents, governed by an evolving cultural substrate, can cumulatively improve its ability to generate novel and valuable artefacts, where success can be independently verified.</p>
-
-            <p class="section__lede reveal">The finding, if it holds, is not simply that AI agents can generate creative outputs, or that multi-agent systems can outperform single-agent systems. The finding is that creative capability can accumulate outside any individual model, in an inspectable cultural substrate of inherited norms and artefacts.</p>
+            <p class="section__lede reveal">The finding under test is not that AI agents can generate creative outputs, nor that multi-agent systems outperform single-agent systems. It is that creative capability can accumulate outside any individual model, in an inspectable cultural substrate.</p>
 
             <figure class="figure reveal">
                 <div class="figure__frame">
@@ -625,122 +624,15 @@
     </section>
 
     <!-- ==========================================
-         THE RESEARCH QUESTION
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">The research question</h2>
-
-            <p class="section__lede reveal">Does a multi-agent system of weaker models, governed by a recursive cultural substrate of evolving norms and accumulated artefacts, outperform a single state-of-the-art model under defined and budget-aware experimental conditions at generating novel, valuable, independently verifiable creative artefacts and does that outperformance compound as the substrate accumulates?</p>
-
-            <p class="section__lede reveal">The compounding is what distinguishes cultural evolution from ordinary prompting, ensemble generation, or one-shot creative production: capability lives in the substrate, the substrate grows, and the growing substrate reshapes how future creative cooperation happens.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         WHAT WE MEAN BY CREATIVE CAPABILITY
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">What we mean by creative capability</h2>
-
-            <p class="section__lede reveal">Creative capability is defined here as the ability to generate artefacts that are simultaneously:</p>
-
-            <ul class="cap-list reveal">
-                <li><strong>valid</strong>: they satisfy the formal constraints of the task;</li>
-                <li><strong>novel</strong>: they differ meaningfully from prior artefacts and obvious baselines;</li>
-                <li><strong>valuable</strong>: they achieve a measurable purpose, such as solvability, difficulty, elegance, usefulness, playability, or explanatory power;</li>
-                <li><strong>diverse</strong>: they expand the range of possible artefacts rather than converging on a single repeated pattern.</li>
-            </ul>
-
-            <p class="section__lede reveal">The experiment then asks whether this capability becomes cumulative: whether later sessions produce better creative artefacts by building on, transforming, recombining, or improving prior artefacts through the inherited cultural substrate.</p>
-
-            <p class="section__lede reveal">The initial experiments avoid purely subjective judgements of creativity. They focus on domains where creative artefacts can be independently verified by constraint checkers, solvers, simulators, or benchmark evaluators.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         WHAT THE CULTURAL SUBSTRATE IS
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">What the cultural substrate is</h2>
-
-            <p class="section__lede reveal">Two coupled components, treated as one thing.</p>
-
-            <p class="section__lede reveal">The norm library. A versioned set of behavioural rules - how to cooperate, what to prioritise, what to avoid. Extracted from sessions that produced strong work, carried forward for future sessions to draw on. Norms are not prompts written in advance; they evolve from experience.</p>
-
-            <p class="section__lede reveal">The artefact corpus. The accumulated set of converged outputs - the artefacts the system has produced - together with associated metadata that records how those artefacts were generated, evaluated, varied, and improved: validity results, failure analyses, design rationales, variations, motifs, repair strategies, and benchmark performance. At the start of a new session, relevant prior artefacts from the same task family are made available as input.</p>
-
-            <p class="section__lede reveal">Norms tell the population how to cooperate. Artefacts give it what to build on. In creative domains, this coupling matters: norms shape how the population searches, critiques, recombines, tests, selects, and develops ideas into artefacts; artefacts preserve the forms, motifs, strategies, and failures from which later artefacts are made. Neither alone is sufficient: norms without artefacts is procedure without substance; artefacts without norms is a library with no guidance on how to use, transform, or improve it. Together they form the cultural substrate, and together they accumulate across sessions.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         THE RECURSIVE DIMENSION
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">The recursive dimension</h2>
-
-            <p class="section__lede reveal">Agent Culture tests whether a population of AI agents can develop a recursive cultural substrate: inherited norms and artefacts that are produced by cooperation, shape future cooperation, and are revised through the consequences of their use.</p>
-
-            <p class="section__lede reveal">If successful, creative capability compounds not inside any individual model, but in the shared substrate that the population inherits and modifies across sessions.</p>
-
-            <p class="section__lede reveal">The analogy is human cultural evolution. Norms shape how cooperation happens; that cooperation produces artefacts and further refines norms; and the accumulating substrate alters the conditions under which future cooperation takes place. The substrate is both the product of cooperation and an active shaper of subsequent cooperation.</p>
-
-            <p class="section__lede reveal">In Agent Culture, the same loop runs through two channels: artefacts produced in one session enter a corpus that shapes what future sessions build on; logs of cooperation are analysed to extract norms that shape how future sessions cooperate. Both channels feed forward from their own outputs.</p>
-
-            <p class="section__lede reveal">In creative domains, recursion should be visible not only as better evaluation scores, but as the emergence of reusable design conventions, motifs, critique practices, failure taxonomies, and artefact lineages that shape future production.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         WHAT A NULL LOOKS LIKE
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">What a null looks like</h2>
-
-            <p class="section__lede reveal">A null result would occur if the agent population does not improve its ability to generate valid, novel, valuable artefacts as the substrate accumulates; if any improvement is explained by artefact reuse alone rather than the coupled effect of norms and artefacts; if any improvement is explained by ordinary prompt optimisation, individual memory, or non-cultural evolutionary search; or if a single-model baseline performs as well or better under comparable budget conditions.</p>
-
-            <p class="section__lede reveal">If this instantiation - this substrate representation, this cooperation mechanism, this task space, this scale - does not produce compounding creative capability, the broader theory is not settled either way. A different substrate representation, richer artefact space, stronger verification regime, or more culturally expressive task family might still work. Later work extends scale, varies representation, or reworks the mechanism.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         WHAT HAS BEEN SHOWN ALREADY
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">What has been shown already</h2>
-
-            <p class="section__lede reveal">Five streams of prior work frame what is new here.</p>
-
-            <p class="section__lede reveal">Learning from experience is a plausible next phase of AI capability. Silver &amp; Sutton 2025, Welcome to the Era of Experience, argue that the dominant paradigm of AI progress - training on static human-produced data - is approaching its limits, and the next phase will come from agents that learn from their own lived experience over long horizons. Agent Culture is aligned with this direction but takes a specific position to test: the experience that matters most is not only individual, it is shared. Capability may accumulate in a cultural substrate between agents, not only in any single agent&rsquo;s memory.</p>
-
-            <p class="section__lede reveal">Multi-agent cooperation can beat solo generation on some tasks. Du et al. 2023, Liang et al. 2023, and the broader multi-agent debate literature establish that multi-model cooperation can outperform single-model runs under particular task and protocol conditions. We treat this as the floor, not the contribution.</p>
-
-            <p class="section__lede reveal">LLM-driven cumulative artefact evolution already works in automated discovery systems. FunSearch, AlphaEvolve, PromptBreeder, Reflexion, Voyager, Eureka and related systems show that LLMs can generate, evaluate, select, and improve artefacts over time - equations, prompts, skills, reward functions, code, strategies. FunSearch and AlphaEvolve are especially relevant because they accumulate candidate programs in a database or population and use automated evaluation to guide further search. In these systems, however, the behavioural protocol governing generation, evaluation, selection, and reuse is largely designed in advance. The accumulating object is primarily the artefact population, skill library, reward function, prompt, or program, not an evolving library of cooperation norms. Agent Culture tests the missing coupling: whether creative capability compounds when inherited artefacts are combined with cross-session norms extracted from successful multi-agent cooperation.</p>
-
-            <p class="section__lede reveal">Computational creativity and open-ended artefact generation provide partial precedents. Boden 1998, Wiggins 2006, Ritchie 2007, Colton &amp; Wiggins 2012, and Jordanous 2012 provide frameworks for evaluating novelty, value, surprise, and creative behaviour. Procedural content generation research - Togelius et al. 2011, Smith &amp; Mateas 2011, and Shaker et al. 2016 - shows that systems can generate playable, constraint-satisfying artefacts such as levels, puzzles, and game content. Related work in novelty search, quality-diversity, and open-endedness - Lehman &amp; Stanley 2011, Mouret &amp; Clune 2015, Pugh et al. 2016, and Wang et al. 2019 - shows how systems can search for diverse, novel, and increasingly complex artefacts. These streams provide useful evaluation tools - validity, novelty, diversity, difficulty, playability, constraint satisfaction - but they do not directly test whether creative capability compounds across a multi-agent population through evolving cross-session norms and an inherited artefact corpus.</p>
-
-            <p class="section__lede reveal">Cross-session evolving norms across a multi-agent population are underexplored, but no longer untouched. TerraLingua, Paolo et al. 2026, is a close precedent: a persistent LLM ecology with resource constraints, limited lifespans, and persistent text artefacts, reporting cooperative norms, division of labour, governance attempts, and branching artefact lineages consistent with cumulative cultural processes. Vallinder &amp; Hughes 2024 is also directly relevant: it studies cultural evolution of cooperation among LLM agents in an iterated Donor Game, showing model-dependent emergence of indirect reciprocity and costly punishment. These works move close to the territory Agent Culture occupies. The distinction is that Agent Culture is not primarily an open-ended ecology, a social simulation, or a cooperation-game benchmark. It tests whether an explicitly maintained, inspectable cultural substrate - a versioned norm library coupled with an inherited artefact corpus - can drive compounding improvement in independently verifiable creative artefact generation. Multi-agent frameworks such as AutoGen, MetaGPT, CAMEL, and AgentVerse commit to largely fixed architectures and do not primarily test norms that evolve across sessions. Constitutional AI uses fixed principles, not norms that evolve from experience. Generative Agents has persistent memory within agents, not shared behavioural rules between agents. Recent work on convention formation in language-model agents is relevant, but methodologically unsettled. The key distinction remains: Agent Culture tests evolved and persistent cross-session norms extracted from prior cooperation, coupled with an inherited artefact corpus as the mechanism of creative improvement.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
          THE CLAIM
          ========================================== -->
     <section class="section">
         <div class="container">
-            <h2 class="section__heading reveal">What Agent Culture adds</h2>
+            <h2 class="section__heading reveal">The claim</h2>
 
-            <p class="section__lede reveal">Agent Culture tests the combination of the underserved pieces: multi-agent cooperation governed by cross-session evolving norms, producing a growing artefact corpus that feeds back into future creative production.</p>
+            <p class="section__lede reveal">Inherited norms shape how agents cooperate, critique, search, recombine, and repair. Inherited artefacts provide the material from which future artefacts are made. The coupling between the two is the mechanism under test: whether it produces better, more novel, more valuable artefacts over time, where success can be independently verified.</p>
 
-            <p class="section__lede reveal">The claim is not that an AI system can generate a single creative artefact. Nor is it that multi-agent debate improves one output.</p>
-
-            <p class="section__lede reveal">The claim is that creative capability can compound across a population through a cultural substrate: inherited norms shape how agents cooperate, critique, search, recombine, and repair; inherited artefacts provide the material from which future artefacts are made; and the coupling between the two produces better, more novel, more valuable artefacts over time.</p>
+            <p class="section__lede reveal">Two channels run between sessions. Artefacts produced in one session enter the corpus that later sessions build on. Cooperation logs are analysed to extract norms that shape how later sessions cooperate. Both feed forward from their own outputs, and it is the coupling of the two, not either alone, that the experiment tests.</p>
 
             <figure class="figure reveal">
                 <div class="figure__frame">
@@ -788,53 +680,13 @@
     </section>
 
     <!-- ==========================================
-         WHY IT MATTERS IF THE CLAIM HOLDS
+         WHERE IT SITS
          ========================================== -->
     <section class="section">
         <div class="container">
-            <h2 class="section__heading reveal">Why it matters if the claim holds</h2>
+            <h2 class="section__heading reveal">Where it sits</h2>
 
-            <p class="section__lede reveal">For AI systems. A path to creative capability that does not depend solely on scaling individual models. Capability lives in the cultural substrate - shared across an ensemble of weaker models - rather than in the weights or memory of any one model. The substrate is transferable, inspectable, and composable. It accumulates across sessions rather than being re-learned from scratch.</p>
-
-            <p class="section__lede reveal">For creativity research. An experimental framework for studying creativity as a cumulative, population-level process rather than a one-shot generation event. This moves AI creativity evaluation beyond isolated outputs toward artefact lineages, inherited conventions, recombination, critique, and cultural accumulation.</p>
-
-            <p class="section__lede reveal">For the field. Evidence that cultural-evolution-like mechanisms can be instantiated beyond human populations in AI populations. Secondary to the systems claim, but theoretically significant.</p>
-
-            <p class="section__lede reveal">For future deployment. Systems built on this mechanism could support domains where creative work is cumulative, collaborative, and artefact-based: design, research, education, cultural programming, media development, software, games, and other creative production environments. The immediate objective, however, is controlled research rather than sector-specific deployment.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         THE CORE DESIGN COMMITMENT
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">The core design commitment</h2>
-
-            <p class="section__lede reveal">Every cross-session channel runs through the cultural substrate. No individual agent retains memory across sessions. Within a session, the artefact being produced carries a cooperation state; between sessions, the norm library and artefact corpus are the only channels.</p>
-
-            <p class="section__lede reveal">This is deliberate: if cultural evolution works as the theory predicts, the substrate carries what is needed. If it does not, the design surfaces that directly.</p>
-
-            <p class="section__lede reveal">This is especially important in creative domains, where apparent improvement can be explained by training, prompt optimisation, artefact reuse, individual memory, or untracked human curation. Agent Culture deliberately forces all cumulative creative capability through the inspectable substrate.</p>
-
-            <p class="section__lede reveal">This is a strong claim - stronger than cultural evolution theory itself requires - and it is the claim under test. A system that beats a state-of-the-art single-model baseline cumulatively under this regime establishes the mechanism cleanly.</p>
-        </div>
-    </section>
-
-    <!-- ==========================================
-         MOTIVATIONS
-         ========================================== -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section__heading reveal">Motivations</h2>
-
-            <p class="section__lede reveal">Original research in an underexplored space. Recent LLM ecology and cooperation-game work has moved close to this territory, but the combination above appears not to have been directly tested: multi-agent cooperation, cross-session evolving norms, accumulated artefacts, and independently verifiable creative artefact generation. The field is moving fast enough that the window to establish a mechanism cleanly is now, not in two years.</p>
-
-            <p class="section__lede reveal">A path to rigorous AI creativity evaluation. Current creativity benchmarks often split between shallow psychometric tests, subjective human ratings, and narrow problem-solving tasks. Agent Culture creates a route toward evaluating creativity as cumulative, collaborative, artefact-based, and independently verifiable.</p>
-
-            <p class="section__lede reveal">A path to deployable creative systems. Real-world creative work is cooperative, cumulative, iterative, and shaped by inherited norms and artefacts. If the mechanism works in controlled creative domains, later deployment can extend into design, research, education, cultural programming, games, media, and creative industries.</p>
-
-            <p class="section__lede reveal">Theoretical contribution. Cultural evolution is one of the most successful frameworks in behavioural science for explaining how populations produce capability. Testing whether cultural-evolution-like mechanisms can operate in AI populations generating creative artefacts is a contribution in its own right.</p>
+            <p class="section__lede reveal">The work builds on five streams: learning from experience, multi-agent cooperation, LLM-driven artefact evolution, computational creativity, and the cultural evolution of cooperation among language-model agents. It is distinct from open-ended LLM ecologies, social simulations, and cooperation-game benchmarks. Agent Culture tests whether an explicitly maintained, inspectable cultural substrate, a versioned norm library coupled with an inherited artefact corpus, can drive compounding improvement in verifiable creative artefact generation.</p>
         </div>
     </section>
 
