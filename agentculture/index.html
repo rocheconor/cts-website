@@ -296,7 +296,9 @@
             font-weight: 500;
         }
 
-        /* ===== SVG PALETTE (retinted to site tokens, with dark-mode variant) ===== */
+        /* ===== SVG PALETTE (retinted to site tokens) =====
+           Page is light-first across the whole site, so the SVG stays light
+           regardless of device-level dark mode. */
         .ac-svg text { font-family: 'Space Grotesk', sans-serif; }
         .ac-svg .ac-substrate-bg { fill: #EAF1EA; stroke: #3A7A5C; }
         .ac-svg .ac-inner-card { fill: #FFFFFF; stroke: rgba(26,26,26,0.18); }
@@ -306,17 +308,6 @@
         .ac-svg .ac-arrow,
         .ac-svg .ac-arrow-head { stroke: #5F5E5A; }
         .ac-svg .ac-curve { stroke: #6B65B8; }
-
-        @media (prefers-color-scheme: dark) {
-            .ac-svg .ac-substrate-bg { fill: #1A2C20; stroke: #5DAE85; }
-            .ac-svg .ac-inner-card { fill: #1E1E1B; stroke: rgba(255,255,255,0.22); }
-            .ac-svg .ac-agent-bg { fill: #1F1D32; stroke: #8783C0; }
-            .ac-svg .ac-agent-dot { fill: #8783C0; }
-            .ac-svg .ac-agent-edge { stroke: #8783C0; opacity: 0.5; }
-            .ac-svg .ac-arrow,
-            .ac-svg .ac-arrow-head { stroke: #C7C5BD; }
-            .ac-svg .ac-curve { stroke: #8783C0; }
-        }
 
         /* ===== ACTIONS ===== */
         .actions {
