@@ -345,86 +345,69 @@
         }
 
         .what-we-do__intro {
-            font-family: 'Instrument Serif', serif;
-            font-style: italic;
-            font-size: clamp(1.6rem, 2.4vw, 2rem);
-            line-height: 1.35;
+            font-size: clamp(1.1rem, 1.3vw, 1.2rem);
+            line-height: 1.7;
             color: var(--body);
-            max-width: 28ch;
+            max-width: 60ch;
         }
 
-        /* Three-pillar block */
-        .pillars-block {
+        .what-we-do__intro strong {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Categorised offerings */
+        .pillar-groups {
             padding: clamp(2rem, 3.5vw, 3rem) 0 clamp(4rem, 6vw, 5rem);
+            display: flex;
+            flex-direction: column;
+            gap: clamp(2.25rem, 4vw, 3rem);
         }
 
-        .pillar {
-            display: grid;
-            grid-template-columns: minmax(180px, 240px) 1fr;
-            gap: clamp(1.5rem, 3vw, 3rem);
-            padding: clamp(1.75rem, 3vw, 2.5rem) 0;
-            border-top: 1px solid var(--rule);
-        }
-
-        .pillar:last-child {
-            border-bottom: 1px solid var(--rule);
-        }
-
-        .pillar__label {
+        .pillar-group__label {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.78rem;
             font-weight: 500;
             letter-spacing: 0.22em;
             text-transform: uppercase;
             color: var(--text);
-            padding-top: 0.25rem;
+            padding-bottom: 0.85rem;
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--rule);
         }
 
-        .pillar__body {
-            font-size: clamp(1.05rem, 1.25vw, 1.2rem);
-            line-height: 1.55;
-            color: var(--text);
-            max-width: 48ch;
-            margin-bottom: 1.5rem;
-        }
-
-        .pillar__products {
+        .pillar-list {
             list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 2rem;
+            padding: 0;
+            margin: 0;
         }
 
-        .pillar__products li {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.92rem;
-            font-weight: 500;
-            letter-spacing: 0.01em;
+        .pillar-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.95rem;
+            font-size: clamp(1rem, 1.15vw, 1.05rem);
+            line-height: 1.65;
+            color: var(--body);
+            max-width: 70ch;
         }
 
-        .pillar__products .pillar__link {
+        .pillar-list li:last-child { margin-bottom: 0; }
+
+        .pillar-list li::before {
+            content: "";
+            position: absolute;
+            left: 0.35rem;
+            top: 0.65rem;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--text);
+        }
+
+        .pillar-list li strong {
+            font-weight: 600;
             color: var(--text);
-            text-decoration: none;
-            border-bottom: 1px solid rgba(0,0,0,0.25);
-            padding-bottom: 1px;
-            transition: border-color 0.3s ease;
-        }
-
-        .pillar__products .pillar__link:hover {
-            border-bottom-color: var(--text);
-        }
-
-        .pillar__products .pillar__static {
-            color: var(--muted);
-            cursor: default;
-        }
-
-        @media (max-width: 720px) {
-            .pillar {
-                grid-template-columns: 1fr;
-                gap: 0.85rem;
-            }
-            .pillar__label { padding-top: 0; }
         }
 
         /* Pillar connector line */
@@ -914,40 +897,33 @@
          ========================================== -->
     <section class="content-section what-we-do">
         <div class="container">
-            <p class="what-we-do__intro reveal">CTS works across three areas, each serving the mission.</p>
+            <p class="what-we-do__intro reveal">CTS works across three areas, each serving the mission. <strong>Diagnostics</strong> help organisations adopt AI on their own terms (<a href="./aireadiness" class="offering__link">AI Readiness</a>). <strong>Systems</strong> give them tools they control and study how creative capability compounds (<a href="./toolkit" class="offering__link">Sovereign Deployment</a>, <a href="./agentculture" class="offering__link">Agent Culture</a>). <strong>Measurement</strong> puts value and loss on the record, what creative work is worth to AI, and how far AI content has displaced human voices (Creative Value Monitor, <a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" class="offering__link">Dead Internet Monitor</a>).</p>
         </div>
     </section>
 
-    <section class="content-section pillars-block">
+    <section class="content-section">
         <div class="container">
-            <div class="pillar reveal">
-                <span class="pillar__label">Diagnostics</span>
-                <div>
-                    <p class="pillar__body">Help organisations adopt AI on their own terms.</p>
-                    <ul class="pillar__products">
-                        <li><a href="./aireadiness" class="pillar__link">AI Readiness</a></li>
+            <div class="pillar-groups">
+                <div class="pillar-group reveal">
+                    <h3 class="pillar-group__label">Diagnostics</h3>
+                    <ul class="pillar-list">
+                        <li><strong><a href="./aireadiness" class="offering__link">AI Readiness</a>:</strong> Diagnostic assessments, workflow design, training, and implementation, tailored to the specific constraints and opportunities of organisations adopting AI. A structured entry point at any stage of AI maturity.</li>
                     </ul>
                 </div>
-            </div>
 
-            <div class="pillar reveal">
-                <span class="pillar__label">Systems</span>
-                <div>
-                    <p class="pillar__body">Give them tools they control and study how creative capability compounds.</p>
-                    <ul class="pillar__products">
-                        <li><a href="./toolkit" class="pillar__link">Sovereign Deployment</a></li>
-                        <li><a href="./agentculture" class="pillar__link">Agent Culture</a></li>
+                <div class="pillar-group reveal">
+                    <h3 class="pillar-group__label">Systems</h3>
+                    <ul class="pillar-list">
+                        <li><strong><a href="./toolkit" class="offering__link">Sovereign Deployment</a> and Agentic Workflows:</strong> AI systems built on open-weight models and nationally compliant infrastructure, keeping data, content, and workflows under the organisation&rsquo;s own control. This applies to any institution managing sensitive assets at scale, from digitised collections to multi-site operations.</li>
+                        <li><strong><a href="./agentculture" class="offering__link">Agent Culture</a>:</strong> Research into how AI agents can cooperate through a cultural substrate in ways that make them collectively more creative over time.</li>
                     </ul>
                 </div>
-            </div>
 
-            <div class="pillar reveal">
-                <span class="pillar__label">Measurement</span>
-                <div>
-                    <p class="pillar__body">Put value and loss on the record, what creative work is worth to AI, and how far AI content has displaced human voices.</p>
-                    <ul class="pillar__products">
-                        <li><span class="pillar__static">Creative Value Monitor</span></li>
-                        <li><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" class="pillar__link">Dead Internet Monitor</a></li>
+                <div class="pillar-group reveal">
+                    <h3 class="pillar-group__label">Measurement</h3>
+                    <ul class="pillar-list">
+                        <li><strong>Creative Value Monitor:</strong> Measuring the economic value of creative works to AI systems, across training inputs and generated outputs. Developing a valuation methodology (the Latent Value Index) and building toward a collecting society model for the AI age.</li>
+                        <li><strong><a href="https://deadinternetmonitor.com" target="_blank" rel="noopener noreferrer" class="offering__link">Dead Internet Monitor</a>:</strong> A live diagnostic tool tracking the proliferation of AI-generated content and bot activity across social platforms, measuring how &ldquo;dead&rdquo; the internet is becoming.</li>
                     </ul>
                 </div>
             </div>
