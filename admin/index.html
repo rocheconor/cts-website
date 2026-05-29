@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Creative Thinking Systems</title>
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #F5F4F0;
+            --text: #1a1a1a;
+            --body: #444;
+            --muted: #999;
+            --rule: rgba(0,0,0,0.12);
+            --light: rgba(0,0,0,0.07);
+            --panel: #FFFFFF;
+            --panel-warm: #EFEDE5;
+            --ok: #1a5d2e;
+            --err: #8a2424;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+        }
+        a { color: inherit; }
+
+        .container {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 clamp(1.25rem, 3vw, 2rem);
+        }
+
+        .site-nav {
+            padding: clamp(1.25rem, 2.5vw, 2rem) 0;
+        }
+        .site-nav__inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+        }
+        .site-nav__brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            text-decoration: none;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .site-nav__brand:hover { border-bottom-color: var(--text); }
+        .site-nav__meta {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
+        .signout-btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--muted);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px 0;
+            border-bottom: 1px solid transparent;
+        }
+        .signout-btn:hover { border-bottom-color: var(--muted); color: var(--text); }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            padding: clamp(2rem, 4vw, 3rem) 0 clamp(2rem, 4vw, 3rem);
+            border-top: 1px solid var(--rule);
+        }
+        .page-header__h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.4rem;
+        }
+        .page-header__meta {
+            font-family: 'JetBrains Mono', ui-monospace, monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        /* ===== LOGIN GATE ===== */
+        .gate {
+            margin-top: 3rem;
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 12px;
+            padding: clamp(1.5rem, 3vw, 2.25rem);
+            max-width: 28rem;
+        }
+        .gate__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
+        }
+        .gate__body {
+            color: var(--body);
+            font-size: 0.92rem;
+            margin-bottom: 1.25rem;
+        }
+        .gate__form {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .gate__input {
+            flex: 1 1 200px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--rule);
+            border-radius: 999px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+        }
+        .gate__input:focus { border-color: var(--text); }
+        .gate__btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.8rem 1.4rem;
+            border-radius: 999px;
+            border: 1px solid var(--text);
+            background: var(--text);
+            color: var(--bg);
+            cursor: pointer;
+        }
+        .gate__btn:disabled { opacity: 0.5; cursor: default; }
+        .gate__error {
+            margin-top: 0.8rem;
+            font-size: 0.88rem;
+            color: var(--err);
+            min-height: 1.2em;
+        }
+
+        /* ===== DASHBOARD ===== */
+        .dash { display: none; }
+        .dash.is-active { display: block; }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .stat {
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.1rem 1.25rem;
+        }
+        .stat__label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .stat__value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+        .stat__sub {
+            margin-top: 0.6rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            color: var(--muted);
+        }
+        .stat__sub strong { font-weight: 500; color: var(--body); }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+        .section__title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.15rem;
+            letter-spacing: -0.01em;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .section__count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .breakdown {
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            padding: 1.1rem 1.25rem;
+            margin-bottom: 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.5rem 2rem;
+        }
+        .breakdown__row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            font-size: 0.88rem;
+            border-bottom: 1px dotted var(--light);
+            padding: 0.35rem 0;
+        }
+        .breakdown__row:last-child { border-bottom: none; }
+        .breakdown__row span:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--body);
+        }
+        .breakdown__row span:last-child {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+        }
+
+        .table {
+            background: var(--panel);
+            border: 1px solid var(--rule);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .table th, .table td {
+            padding: 0.65rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--light);
+        }
+        .table th {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+            background: var(--panel-warm);
+            border-bottom: 1px solid var(--rule);
+        }
+        .table tbody tr:last-child td { border-bottom: none; }
+        .table td.mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--body);
+        }
+        .table td.muted { color: var(--muted); }
+        .table .empty {
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.88rem;
+        }
+
+        .footer {
+            padding: 2rem 0;
+            border-top: 1px solid var(--rule);
+            margin-top: 3rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 600px) {
+            .table th, .table td { padding: 0.5rem 0.7rem; }
+            .gate__form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-nav">
+        <div class="container">
+            <div class="site-nav__inner">
+                <a class="site-nav__brand" href="/">&larr; Creative Thinking Systems</a>
+                <button id="signoutBtn" class="signout-btn" style="display:none;">Sign out</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-header__h1">Admin</h1>
+            <p class="page-header__meta" id="generatedAt">&mdash;</p>
+        </div>
+    </section>
+
+    <section class="container">
+        <!-- Login gate -->
+        <div id="gate" class="gate">
+            <h2 class="gate__title">Sign in</h2>
+            <p class="gate__body">Enter the admin password to view site usage stats.</p>
+            <form class="gate__form" id="gateForm" autocomplete="off">
+                <input class="gate__input" id="gatePw" name="password" type="password" placeholder="Password" required autofocus>
+                <button class="gate__btn" type="submit" id="gateBtn">Unlock</button>
+            </form>
+            <p class="gate__error" id="gateError"></p>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dash" class="dash">
+            <!-- Summary -->
+            <div class="summary" id="summary"></div>
+
+            <!-- Newsletter -->
+            <div class="section">
+                <h2 class="section__title">Newsletter <span class="section__count" id="nlCount"></span></h2>
+                <div class="breakdown" id="nlSource"></div>
+                <div class="table" id="nlTable"></div>
+            </div>
+
+            <!-- Workbook -->
+            <div class="section">
+                <h2 class="section__title">Workbook downloads <span class="section__count" id="wbCount"></span></h2>
+                <div class="table" id="wbTable"></div>
+            </div>
+
+            <!-- Assessments -->
+            <div class="section">
+                <h2 class="section__title">AIRD assessments <span class="section__count" id="asCount"></span></h2>
+                <div class="breakdown" id="asBands"></div>
+                <div class="breakdown" id="asSectors"></div>
+                <div class="table" id="asTable"></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer container">
+        <span>Internal &middot; noindex</span>
+        <span id="footerTime"></span>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+
+            var STORAGE_KEY = 'cts-admin-pw';
+            var gate = document.getElementById('gate');
+            var dash = document.getElementById('dash');
+            var form = document.getElementById('gateForm');
+            var pwInput = document.getElementById('gatePw');
+            var errEl = document.getElementById('gateError');
+            var btn = document.getElementById('gateBtn');
+            var signoutBtn = document.getElementById('signoutBtn');
+
+            function show(el) { el.style.display = ''; }
+            function hide(el) { el.style.display = 'none'; }
+
+            function setError(msg) {
+                errEl.textContent = msg || '';
+            }
+
+            function escapeHtml(s) {
+                if (s == null) return '';
+                return String(s)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+            }
+
+            function fmtDate(ms) {
+                if (!ms) return '';
+                var d = new Date(ms);
+                return d.toISOString().slice(0, 10);
+            }
+
+            async function fetchStats(pw) {
+                var res = await fetch('/api/admin-stats', {
+                    method: 'GET',
+                    headers: { Authorization: 'Bearer ' + pw },
+                });
+                if (res.status === 401) throw new Error('Wrong password.');
+                if (!res.ok) throw new Error('Could not load stats (' + res.status + ').');
+                return res.json();
+            }
+
+            function renderBreakdown(elId, obj, totalLabel) {
+                var el = document.getElementById(elId);
+                var entries = Object.entries(obj || {})
+                    .filter(function (e) { return e[1] > 0; })
+                    .sort(function (a, b) { return b[1] - a[1]; });
+                if (!entries.length) { el.style.display = 'none'; return; }
+                el.style.display = '';
+                var html = '';
+                if (totalLabel) {
+                    html += '<div class="breakdown__row"><span>' + escapeHtml(totalLabel) + '</span><span></span></div>';
+                }
+                entries.forEach(function (e) {
+                    html += '<div class="breakdown__row"><span>' + escapeHtml(e[0]) + '</span><span>' + e[1] + '</span></div>';
+                });
+                el.innerHTML = html;
+            }
+
+            function renderTable(elId, columns, rows, emptyMsg) {
+                var el = document.getElementById(elId);
+                if (!rows || !rows.length) {
+                    el.innerHTML = '<div class="empty">' + escapeHtml(emptyMsg || 'No records yet.') + '</div>';
+                    return;
+                }
+                var html = '<table><thead><tr>';
+                columns.forEach(function (c) {
+                    html += '<th>' + escapeHtml(c.label) + '</th>';
+                });
+                html += '</tr></thead><tbody>';
+                rows.forEach(function (r) {
+                    html += '<tr>';
+                    columns.forEach(function (c) {
+                        var v = c.render ? c.render(r) : r[c.key];
+                        var cls = c.mono ? 'mono' : '';
+                        if (v == null || v === '') { v = '&mdash;'; cls += ' muted'; }
+                        html += '<td' + (cls ? ' class="' + cls.trim() + '"' : '') + '>' + (c.html ? v : escapeHtml(v)) + '</td>';
+                    });
+                    html += '</tr>';
+                });
+                html += '</tbody></table>';
+                el.innerHTML = html;
+            }
+
+            function renderStats(data) {
+                document.getElementById('generatedAt').textContent =
+                    'Updated ' + new Date(data.generatedAt).toLocaleString();
+                document.getElementById('footerTime').textContent =
+                    new Date().toISOString();
+
+                var n = data.newsletter, w = data.workbook, a = data.assessments;
+
+                document.getElementById('summary').innerHTML = [
+                    statCard('Newsletter', n.total, [
+                        ['7d', n.last7Days],
+                        ['30d', n.last30Days],
+                    ]),
+                    statCard('Workbook', w.total, [
+                        ['7d', w.last7Days],
+                        ['30d', w.last30Days],
+                        ['opted in', w.newsletterOptIns],
+                    ]),
+                    statCard('Assessments', a.total, [
+                        ['7d', a.last7Days],
+                        ['30d', a.last30Days],
+                        ['with email', a.withEmail],
+                    ]),
+                    statCard('Avg score', a.averageScore != null ? a.averageScore.toFixed(2) : '—', [
+                        ['anonymous', a.anonymous],
+                    ]),
+                ].join('');
+
+                document.getElementById('nlCount').textContent = n.total + ' total';
+                renderBreakdown('nlSource', n.bySource);
+                renderTable('nlTable',
+                    [
+                        { key: 'date', label: 'Date', mono: true, render: function (r) { return fmtDate(r.ts); } },
+                        { key: 'source', label: 'Source', mono: true },
+                        { key: 'email', label: 'Email' },
+                    ],
+                    n.recent,
+                    'No subscribers yet.'
+                );
+
+                document.getElementById('wbCount').textContent = w.total + ' total';
+                renderTable('wbTable',
+                    [
+                        { key: 'date', label: 'Date', mono: true, render: function (r) { return fmtDate(r.ts); } },
+                        { key: 'email', label: 'Email' },
+                        { key: 'newsletter', label: 'Newsletter opt-in', render: function (r) { return r.newsletter ? 'yes' : '—'; } },
+                    ],
+                    w.recent,
+                    'No workbook downloads yet.'
+                );
+
+                document.getElementById('asCount').textContent = a.total + ' total';
+                renderBreakdown('asBands', a.byBand);
+                renderBreakdown('asSectors', a.bySector);
+                renderTable('asTable',
+                    [
+                        { key: 'date', label: 'Date', mono: true, render: function (r) { return fmtDate(r.ts); } },
+                        { key: 'email', label: 'Email' },
+                        { key: 'sector', label: 'Sector' },
+                        { key: 'band', label: 'Band' },
+                        { key: 'overallScore', label: 'Score', mono: true, render: function (r) { return r.overallScore != null ? r.overallScore.toFixed(2) : null; } },
+                    ],
+                    a.recent,
+                    'No assessments yet.'
+                );
+
+                hide(gate);
+                dash.classList.add('is-active');
+                show(signoutBtn);
+            }
+
+            function statCard(label, value, subs) {
+                var html = '<div class="stat"><span class="stat__label">' + escapeHtml(label) + '</span>'
+                    + '<div class="stat__value">' + escapeHtml(String(value)) + '</div>';
+                if (subs && subs.length) {
+                    var sub = subs.map(function (s) {
+                        return '<strong>' + escapeHtml(String(s[1])) + '</strong> ' + escapeHtml(s[0]);
+                    }).join(' &middot; ');
+                    html += '<div class="stat__sub">' + sub + '</div>';
+                }
+                html += '</div>';
+                return html;
+            }
+
+            async function unlock(pw, persistOk) {
+                btn.disabled = true;
+                setError('');
+                try {
+                    var data = await fetchStats(pw);
+                    if (persistOk) {
+                        try { sessionStorage.setItem(STORAGE_KEY, pw); } catch (_) {}
+                    }
+                    renderStats(data);
+                } catch (e) {
+                    setError(e.message || 'Could not unlock.');
+                    try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+                } finally {
+                    btn.disabled = false;
+                }
+            }
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var pw = pwInput.value;
+                if (!pw) return;
+                unlock(pw, true);
+            });
+
+            signoutBtn.addEventListener('click', function () {
+                try { sessionStorage.removeItem(STORAGE_KEY); } catch (_) {}
+                dash.classList.remove('is-active');
+                hide(signoutBtn);
+                show(gate);
+                pwInput.value = '';
+                pwInput.focus();
+            });
+
+            // Try cached password from sessionStorage on load
+            var cached = null;
+            try { cached = sessionStorage.getItem(STORAGE_KEY); } catch (_) {}
+            if (cached) {
+                pwInput.value = cached;
+                unlock(cached, false);
+            }
+        })();
+    </script>
+</body>
+</html>

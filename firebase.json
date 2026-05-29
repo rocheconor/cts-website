@@ -58,6 +58,10 @@
         "function": { "functionId": "submitAssessment", "region": "europe-west1" }
       },
       {
+        "source": "/api/admin-stats",
+        "function": { "functionId": "adminStats", "region": "europe-west1" }
+      },
+      {
         "source": "/wfg-api/**",
         "run": { "serviceId": "wfg-server", "region": "europe-west1" }
       },

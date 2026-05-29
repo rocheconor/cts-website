@@ -18,10 +18,12 @@ if (!admin.apps.length) admin.initializeApp();
 setGlobalOptions({ region: 'europe-west1', maxInstances: 10 });
 
 const RESEND_API_KEY = defineSecret('RESEND_API_KEY');
+const ADMIN_PASSWORD = defineSecret('ADMIN_PASSWORD');
 
 const { handleWorkbookRequest } = require('./handlers/workbook');
 const { handleNewsletterSubscribe } = require('./handlers/newsletter');
 const { handleSubmitAssessment } = require('./handlers/assessment');
+const { handleAdminStats } = require('./handlers/admin');
 
 exports.workbookRequest = onRequest(
     {
@@ -50,4 +52,14 @@ exports.submitAssessment = onRequest(
         secrets: [RESEND_API_KEY],
     },
     (req, res) => handleSubmitAssessment(req, res, RESEND_API_KEY.value()),
+);
+
+exports.adminStats = onRequest(
+    {
+        cors: false,
+        memory: '256MiB',
+        timeoutSeconds: 30,
+        secrets: [ADMIN_PASSWORD],
+    },
+    (req, res) => handleAdminStats(req, res, ADMIN_PASSWORD.value()),
 );
