@@ -8,6 +8,13 @@ const ALLOWED_ORIGINS = new Set([
     'http://127.0.0.1:8765',
 ]);
 
+// Exclude internal/test emails from dashboard counts and tables.
+// Matches rocheconor@gmail.com and any plus-aliased variant.
+const EXCLUDE_EMAIL = /^rocheconor(\+[^@]+)?@gmail\.com$/i;
+function isExcluded(email) {
+    return typeof email === 'string' && EXCLUDE_EMAIL.test(email);
+}
+
 function applyAdminCors(req, res) {
     const origin = req.headers.origin;
     if (origin && ALLOWED_ORIGINS.has(origin)) {
@@ -77,6 +84,7 @@ async function handleAdminStats(req, res, adminPassword) {
 
         const subs = [];
         subsSnap.forEach((doc) => {
+            if (isExcluded(doc.id)) return;
             const d = doc.data();
             subs.push({
                 email: doc.id,
@@ -91,6 +99,7 @@ async function handleAdminStats(req, res, adminPassword) {
         const subm = [];
         submSnap.forEach((doc) => {
             const d = doc.data();
+            if (isExcluded(d.email)) return;
             subm.push({
                 id: doc.id,
                 email: d.email || null,
