@@ -228,6 +228,19 @@
             border-radius: 10px;
             padding: 1.1rem 1.25rem;
             margin-bottom: 1rem;
+        }
+        .breakdown__heading {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            color: var(--muted);
+            text-transform: uppercase;
+            margin-bottom: 0.65rem;
+            padding-bottom: 0.55rem;
+            border-bottom: 1px solid var(--rule);
+        }
+        .breakdown__grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 0.5rem 2rem;
@@ -418,20 +431,19 @@
                 return res.json();
             }
 
-            function renderBreakdown(elId, obj, totalLabel) {
+            function renderBreakdown(elId, heading, obj) {
                 var el = document.getElementById(elId);
                 var entries = Object.entries(obj || {})
                     .filter(function (e) { return e[1] > 0; })
                     .sort(function (a, b) { return b[1] - a[1]; });
                 if (!entries.length) { el.style.display = 'none'; return; }
                 el.style.display = '';
-                var html = '';
-                if (totalLabel) {
-                    html += '<div class="breakdown__row"><span>' + escapeHtml(totalLabel) + '</span><span></span></div>';
-                }
+                var html = '<div class="breakdown__heading">' + escapeHtml(heading) + '</div>';
+                html += '<div class="breakdown__grid">';
                 entries.forEach(function (e) {
                     html += '<div class="breakdown__row"><span>' + escapeHtml(e[0]) + '</span><span>' + e[1] + '</span></div>';
                 });
+                html += '</div>';
                 el.innerHTML = html;
             }
 
@@ -451,7 +463,7 @@
                     columns.forEach(function (c) {
                         var v = c.render ? c.render(r) : r[c.key];
                         var cls = c.mono ? 'mono' : '';
-                        if (v == null || v === '') { v = '&mdash;'; cls += ' muted'; }
+                        if (v == null || v === '') { v = '—'; cls += ' muted'; }
                         html += '<td' + (cls ? ' class="' + cls.trim() + '"' : '') + '>' + (c.html ? v : escapeHtml(v)) + '</td>';
                     });
                     html += '</tr>';
@@ -482,14 +494,13 @@
                         ['7d', a.last7Days],
                         ['30d', a.last30Days],
                         ['with email', a.withEmail],
-                    ]),
-                    statCard('Avg score', a.averageScore != null ? a.averageScore.toFixed(2) : '—', [
                         ['anonymous', a.anonymous],
                     ]),
+                    statCard('Avg score (1–5)', a.averageScore != null ? a.averageScore.toFixed(2) : '—', []),
                 ].join('');
 
                 document.getElementById('nlCount').textContent = n.total + ' total';
-                renderBreakdown('nlSource', n.bySource);
+                renderBreakdown('nlSource', 'By source', n.bySource);
                 renderTable('nlTable',
                     [
                         { key: 'date', label: 'Date', mono: true, render: function (r) { return fmtDate(r.ts); } },
@@ -512,8 +523,8 @@
                 );
 
                 document.getElementById('asCount').textContent = a.total + ' total';
-                renderBreakdown('asBands', a.byBand);
-                renderBreakdown('asSectors', a.bySector);
+                renderBreakdown('asBands', 'By band (control < 2.5 ≤ structure < 3.5 ≤ improvement)', a.byBand);
+                renderBreakdown('asSectors', 'By sector', a.bySector);
                 renderTable('asTable',
                     [
                         { key: 'date', label: 'Date', mono: true, render: function (r) { return fmtDate(r.ts); } },
