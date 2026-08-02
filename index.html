@@ -134,8 +134,9 @@
         .site-nav__list {
             list-style: none;
             display: flex;
+            flex-wrap: wrap;
             justify-content: flex-end;
-            gap: clamp(1.25rem, 3vw, 2.5rem);
+            gap: 0.6rem clamp(1.25rem, 3vw, 2.5rem);
             font-family: 'Space Grotesk', sans-serif;
             font-size: 0.82rem;
             font-weight: 500;
@@ -144,6 +145,7 @@
 
         .site-nav__link {
             color: var(--text);
+            white-space: nowrap;
             text-decoration: none;
             padding-bottom: 2px;
             border-bottom: 1px solid transparent;
@@ -312,31 +314,6 @@
             color: var(--text);
         }
 
-        /* Mission — centred, large, a moment */
-        .intro__mission {
-            font-family: 'Instrument Serif', serif;
-            font-style: italic;
-            font-size: clamp(2rem, 4vw, 3.2rem);
-            line-height: 1.3;
-            color: var(--text);
-            max-width: 22ch;
-            text-align: left;
-            padding-left: 2rem;
-            border-left: 4px solid var(--text);
-        }
-
-        .intro__mission .word {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .intro__mission .word.word-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* =============================================
            WHAT WE DO + PILLARS
            ============================================= */
@@ -377,95 +354,6 @@
         .pillar-section .offerings {
             padding: 0;
             margin: 0;
-        }
-
-        /* Pillar connector line */
-        .pillars-wrapper {
-            position: relative;
-        }
-
-        .pillars-wrapper::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 3px;
-            height: 0;
-            background: var(--text);
-            transition: none;
-            z-index: 1;
-        }
-
-        .pillar {
-            padding: clamp(3rem, 5vw, 4rem) 0;
-            padding-left: clamp(1.5rem, 2.5vw, 2.5rem);
-            border-top: none;
-            position: relative;
-        }
-
-        .pillar + .pillar {
-            border-top: 1px solid var(--light);
-        }
-
-        .pillar__number {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.72rem;
-            font-weight: 500;
-            letter-spacing: 0.12em;
-            color: var(--muted);
-            margin-bottom: 0.75rem;
-            display: block;
-        }
-
-        .pillar__heading {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
-            font-size: clamp(1.4rem, 2vw, 1.7rem);
-            margin-bottom: 0.6rem;
-        }
-
-        .pillar__desc {
-            font-size: 1rem;
-            color: var(--body);
-            max-width: 55ch;
-            line-height: 1.7;
-            margin-bottom: 1.75rem;
-        }
-
-        .pillar__items {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0.65rem;
-        }
-
-        .pillar__item {
-            font-size: 0.95rem;
-            line-height: 1.65;
-            color: var(--body);
-            padding: 1.25rem 1.5rem;
-            background: #fff;
-            border-radius: 6px;
-            border-left: 3px solid transparent;
-            box-shadow:
-                0 1px 2px rgba(0,0,0,0.03),
-                0 4px 12px rgba(0,0,0,0.03);
-            transition: transform 0.35s cubic-bezier(0.16,1,0.3,1),
-                        box-shadow 0.35s ease,
-                        border-color 0.35s ease;
-        }
-
-        .pillar__item:hover {
-            transform: translateY(-2px);
-            border-left-color: var(--text);
-            box-shadow:
-                0 2px 4px rgba(0,0,0,0.04),
-                0 8px 24px rgba(0,0,0,0.06);
-        }
-
-        .pillar__item strong {
-            font-weight: 600;
-            color: var(--text);
         }
 
         /* Offerings — flat list of services/products */
@@ -648,6 +536,8 @@
 
         @media (max-width: 600px) {
             .newsletter-section__row { flex-direction: column; }
+            /* flex-basis 220px would become height once the row goes vertical */
+            .newsletter-section__input { flex: 0 0 auto; }
             .newsletter-section__input,
             .newsletter-section__btn { width: 100%; }
         }
@@ -769,7 +659,6 @@
             .js .reveal { opacity: 1; transform: none; transition: none; }
             .image-canvas__img { animation: none; }
             .hero__scroll::after { animation: none; opacity: 0.3; }
-            .intro__mission .word { opacity: 1; transform: none; transition: none; }
         }
 
         /* =============================================
@@ -781,23 +670,26 @@
             .art-window--section { height: 45vh; }
             .art-window--break   { height: 32vh; }
 
-            .intro__mission { padding-left: 1.5rem; }
-
             .contact-window { min-height: 60vh; }
 
-            .pillar { padding-left: 1rem; }
+            /* The portrait crop puts the densest part of the artwork behind
+               the card, so it needs a more solid backing than on desktop */
+            .contact-window__card { background: rgba(245, 244, 240, 0.93); }
         }
 
         @media (max-width: 480px) {
             .hero__gradient { height: 60%; }
             .hero__name { font-size: clamp(2.8rem, 12vw, 4rem); }
 
+            .site-nav__list {
+                font-size: 0.76rem;
+                gap: 0.5rem 1.1rem;
+            }
+
             .art-window--section { height: 35vh; }
             .art-window--break   { height: 25vh; }
 
             .contact-window__card { margin: 0 0.25rem; }
-
-            .pillar { padding-left: 0.75rem; }
         }
     </style>
 </head>
@@ -811,6 +703,7 @@
         <img src="design/images/dash_3.jpg"
              class="image-canvas__img"
              alt=""
+             fetchpriority="high"
              decoding="async">
     </div>
 
@@ -1001,40 +894,6 @@
             var vh = window.innerHeight;
             var ticking = false;
 
-            // ---- Pillar connector line ----
-            var pillarsWrapper = document.getElementById('pillarsWrapper');
-            var pillarsLine = pillarsWrapper ? pillarsWrapper.querySelector(':before') : null;
-
-            // ---- Mission word reveal ----
-            var mission = document.getElementById('mission');
-            if (mission) {
-                var text = mission.textContent;
-                mission.innerHTML = '';
-                var words = text.split(/\s+/);
-                words.forEach(function (word, i) {
-                    var span = document.createElement('span');
-                    span.className = 'word';
-                    span.textContent = word;
-                    span.style.transitionDelay = (i * 0.06) + 's';
-                    mission.appendChild(span);
-                    if (i < words.length - 1) {
-                        mission.appendChild(document.createTextNode(' '));
-                    }
-                });
-
-                var missionIO = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (e) {
-                        if (e.isIntersecting) {
-                            mission.querySelectorAll('.word').forEach(function (w) {
-                                w.classList.add('word-visible');
-                            });
-                            missionIO.unobserve(mission);
-                        }
-                    });
-                }, { threshold: 0.3 });
-                missionIO.observe(mission);
-            }
-
             // ---- Scroll handler ----
             window.addEventListener('scroll', function () {
                 if (!ticking) {
@@ -1049,22 +908,6 @@
                             heroContent.style.transform = 'translateY(' + drift + 'px)';
                             heroContent.style.opacity = fade;
                             heroScroll.style.opacity = 1 - ratio * 3;
-                        }
-
-                        // Pillar connector line
-                        if (pillarsWrapper) {
-                            var rect = pillarsWrapper.getBoundingClientRect();
-                            var wrapperTop = rect.top;
-                            var wrapperHeight = rect.height;
-                            var viewportMid = vh * 0.5;
-
-                            if (wrapperTop < viewportMid) {
-                                var scrolled = viewportMid - wrapperTop;
-                                var progress = Math.min(scrolled / wrapperHeight, 1);
-                                pillarsWrapper.style.setProperty('--line-height', (progress * 100) + '%');
-                            } else {
-                                pillarsWrapper.style.setProperty('--line-height', '0%');
-                            }
                         }
 
                         ticking = false;
@@ -1122,13 +965,6 @@
 
         })();
     </script>
-
-    <style>
-        /* Pillar line driven by scroll via CSS custom property */
-        .pillars-wrapper::before {
-            height: var(--line-height, 0%);
-        }
-    </style>
 
 </body>
 </html>
