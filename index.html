@@ -294,7 +294,7 @@
            INTRO
            ============================================= */
         .intro {
-            padding: clamp(6rem, 10vw, 10rem) 0;
+            padding: clamp(4.5rem, 8vw, 7.5rem) 0;
         }
 
         .intro__body {
@@ -305,13 +305,42 @@
             margin-bottom: 1.75rem;
         }
 
-        .intro__body + .intro__mission {
-            margin-top: 3.5rem;
-        }
-
         .intro__body strong {
             font-weight: 600;
             color: var(--text);
+        }
+
+        /* Editorial lede — a scale step between the hero and body text */
+        .intro__lede {
+            font-size: clamp(1.3rem, 1.85vw, 1.65rem);
+            line-height: 1.55;
+            color: var(--text);
+            max-width: 44ch;
+        }
+
+        /* Mission — the conviction moment, serif against a solid rule */
+        .intro__mission {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: clamp(1.85rem, 3.3vw, 2.8rem);
+            line-height: 1.35;
+            color: var(--text);
+            max-width: 34ch;
+            margin-top: clamp(2.5rem, 4vw, 3.5rem);
+            padding-left: clamp(1.5rem, 2.5vw, 2rem);
+            border-left: 4px solid var(--text);
+        }
+
+        .intro__mission .word {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .intro__mission .word.word-visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* =============================================
@@ -659,6 +688,7 @@
             .js .reveal { opacity: 1; transform: none; transition: none; }
             .image-canvas__img { animation: none; }
             .hero__scroll::after { animation: none; opacity: 0.3; }
+            .intro__mission .word { opacity: 1; transform: none; transition: none; }
         }
 
         /* =============================================
@@ -669,6 +699,8 @@
 
             .art-window--section { height: 45vh; }
             .art-window--break   { height: 32vh; }
+
+            .intro__mission { padding-left: 1.25rem; }
 
             .contact-window { min-height: 60vh; }
 
@@ -736,8 +768,8 @@
          ========================================== -->
     <section class="content-section intro">
         <div class="container">
-            <p class="intro__body reveal"><strong>Creative Thinking Systems</strong> designs, develops and operates secure AI workflow environments for creative and cultural organisations. We also build tools and publish research on what AI is doing to creative work.</p>
-            <p class="intro__body reveal">We exist to ensure that AI serves creativity rather than displacing it, and that the people and organisations who create retain agency, ownership, and economic reward in the process.</p>
+            <p class="intro__body intro__lede reveal"><strong>Creative Thinking Systems</strong> designs, develops and operates secure AI workflow environments for creative and cultural organisations. We also build tools and publish research on what AI is doing to creative work.</p>
+            <p class="intro__mission" id="mission">We exist to ensure that AI serves creativity rather than displacing it, and that the people and organisations who create retain agency, ownership, and economic reward in the process.</p>
         </div>
     </section>
 
@@ -893,6 +925,36 @@
             var heroScroll = document.querySelector('.hero__scroll');
             var vh = window.innerHeight;
             var ticking = false;
+
+            // ---- Mission word reveal ----
+            var mission = document.getElementById('mission');
+            if (mission) {
+                var text = mission.textContent;
+                mission.innerHTML = '';
+                var words = text.split(/\s+/);
+                words.forEach(function (word, i) {
+                    var span = document.createElement('span');
+                    span.className = 'word';
+                    span.textContent = word;
+                    span.style.transitionDelay = (i * 0.05) + 's';
+                    mission.appendChild(span);
+                    if (i < words.length - 1) {
+                        mission.appendChild(document.createTextNode(' '));
+                    }
+                });
+
+                var missionIO = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) {
+                            mission.querySelectorAll('.word').forEach(function (w) {
+                                w.classList.add('word-visible');
+                            });
+                            missionIO.unobserve(mission);
+                        }
+                    });
+                }, { threshold: 0.3 });
+                missionIO.observe(mission);
+            }
 
             // ---- Scroll handler ----
             window.addEventListener('scroll', function () {
