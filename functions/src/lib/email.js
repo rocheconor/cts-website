@@ -106,4 +106,23 @@ creativethinkingsystems.com
     });
 }
 
-module.exports = { sendWorkbookEmail, sendReportEmail };
+// Notice to the CVM inbox (forwards to Conor) when someone asks for a lookup invite.
+// Reply-to is the requester, so a reply goes straight to them.
+async function sendInviteRequestNotice({ apiKey, email, organisation, source }) {
+    const resend = client(apiKey);
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const org = organisation || 'Not given';
+    return resend.emails.send({
+        from: `Creative Value Monitor <${FROM_EMAIL}>`,
+        to: 'hello@creativevaluemonitor.ai',
+        replyTo: email,
+        subject: `Lookup preview invite request: ${organisation || email}`,
+        text: `Invite request for the lookup preview.\n\nEmail: ${email}\nOrganisation: ${org}\nPage: ${source}\n`,
+        html: htmlShell([
+            'Invite request for the lookup preview.',
+            `Email: ${esc(email)}<br>Organisation: ${esc(org)}<br>Page: ${esc(source)}`,
+        ]),
+    });
+}
+
+module.exports = { sendWorkbookEmail, sendReportEmail, sendInviteRequestNotice };

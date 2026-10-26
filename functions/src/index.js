@@ -24,6 +24,19 @@ const { handleWorkbookRequest } = require('./handlers/workbook');
 const { handleNewsletterSubscribe } = require('./handlers/newsletter');
 const { handleSubmitAssessment } = require('./handlers/assessment');
 const { handleAdminStats } = require('./handlers/admin');
+const { handleCvmInviteRequest } = require('./handlers/cvmInvite');
+
+// Served from creativevaluemonitor.ai via a hosting rewrite in that repo
+// (POST /api/lookup-invite-request), so CORS doesn't apply.
+exports.cvmInviteRequest = onRequest(
+    {
+        cors: false,
+        memory: '256MiB',
+        timeoutSeconds: 15,
+        secrets: [RESEND_API_KEY],
+    },
+    (req, res) => handleCvmInviteRequest(req, res, RESEND_API_KEY.value()),
+);
 
 exports.workbookRequest = onRequest(
     {
