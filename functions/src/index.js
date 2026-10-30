@@ -19,6 +19,8 @@ setGlobalOptions({ region: 'europe-west1', maxInstances: 10 });
 
 const RESEND_API_KEY = defineSecret('RESEND_API_KEY');
 const ADMIN_PASSWORD = defineSecret('ADMIN_PASSWORD');
+// Lookup Preview invite codes by page, as JSON: {"cvm-lookup": "…", "cvm-lookup-eit": "…"}.
+const CVM_LOOKUP_CODES = defineSecret('CVM_LOOKUP_CODES');
 
 const { handleWorkbookRequest } = require('./handlers/workbook');
 const { handleNewsletterSubscribe } = require('./handlers/newsletter');
@@ -33,9 +35,9 @@ exports.cvmInviteRequest = onRequest(
         cors: false,
         memory: '256MiB',
         timeoutSeconds: 15,
-        secrets: [RESEND_API_KEY],
+        secrets: [RESEND_API_KEY, CVM_LOOKUP_CODES],
     },
-    (req, res) => handleCvmInviteRequest(req, res, RESEND_API_KEY.value()),
+    (req, res) => handleCvmInviteRequest(req, res, RESEND_API_KEY.value(), CVM_LOOKUP_CODES.value()),
 );
 
 exports.workbookRequest = onRequest(

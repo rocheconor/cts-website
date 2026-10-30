@@ -9,7 +9,7 @@ const { sendInviteRequestNotice } = require('../lib/email');
 // Records a request for an invite to the Creative Value Monitor lookup preview
 // (creativevaluemonitor.ai/lookup-preview/) and emails a notice to the CVM inbox.
 // Requests are kept apart from newsletter_subscribers.
-async function handleCvmInviteRequest(req, res, resendApiKey) {
+async function handleCvmInviteRequest(req, res, resendApiKey, lookupCodes) {
     if (applyCors(req, res)) return;
     if (req.method !== 'POST') {
         res.status(405).json({ error: 'Method not allowed' });
@@ -40,14 +40,17 @@ async function handleCvmInviteRequest(req, res, resendApiKey) {
         source: clean(source, 40) || 'unknown',
     };
 
+    let requests = 1;
     try {
         const db = admin.firestore();
-        await db.collection('cvm_invite_requests').doc(record.email).set({
+        const ref = db.collection('cvm_invite_requests').doc(record.email);
+        await ref.set({
             ...record,
             requests: admin.firestore.FieldValue.increment(1),
             lastRequestedAt: admin.firestore.FieldValue.serverTimestamp(),
             ip,
         }, { merge: true });
+        requests = (await ref.get()).get('requests') || 1;
     } catch (err) {
         logger.error('CVM invite request failed', err);
         res.status(500).json({ error: 'Could not record request' });
@@ -56,7 +59,9 @@ async function handleCvmInviteRequest(req, res, resendApiKey) {
 
     // The request is saved; a failed notice is logged but doesn't fail it.
     try {
-        await sendInviteRequestNotice({ apiKey: resendApiKey, ...record });
+        let codes = {};
+        try { codes = JSON.parse(lookupCodes || '{}'); } catch (e) { logger.warn('CVM_LOOKUP_CODES is not valid JSON'); }
+        await sendInviteRequestNotice({ apiKey: resendApiKey, ...record, requests, receivedAt: new Date(), code: codes[record.source] || null });
     } catch (err) {
         logger.error('CVM invite notice failed', err);
     }

@@ -108,19 +108,78 @@ creativethinkingsystems.com
 
 // Notice to the CVM inbox (forwards to Conor) when someone asks for a lookup invite.
 // Reply-to is the requester, so a reply goes straight to them.
-async function sendInviteRequestNotice({ apiKey, email, organisation, source }) {
+// Where an invite request came from, in words, from the source tag the lookup page sends
+// ("cvm-lookup" for the main sign-in page, "cvm-lookup-<slug>" for an invite page at /lookup-preview/<slug>/).
+function describeInviteSource(source) {
+    const base = 'https://creativevaluemonitor.ai/lookup-preview/';
+    if (source === 'cvm-lookup') return { label: 'Lookup Preview sign-in page', url: base };
+    const m = /^cvm-lookup-([a-z0-9-]+)$/.exec(source || '');
+    if (m) return { label: `Lookup Preview invite page (${m[1]})`, url: `${base}${m[1]}/` };
+    return { label: 'Not recorded', url: null };
+}
+
+async function sendInviteRequestNotice({ apiKey, email, organisation, source, requests, receivedAt, code }) {
     const resend = client(apiKey);
     const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     const org = organisation || 'Not given';
+    const from = describeInviteSource(source);
+    const when = (receivedAt || new Date()).toLocaleString('en-GB', {
+        timeZone: 'Europe/London', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+    }) + ' (UK time)';
+    const history = requests > 1 ? `Request ${requests} from this address` : 'First request from this address';
+    // The invite link carries the code after "#", so it opens the preview directly and the code never reaches the server.
+    const inviteLink = code && from.url ? `${from.url}#k=${encodeURIComponent(code)}` : null;
+    const rows = [
+        ['Email', email],
+        ['Organisation', org],
+        ['Requested from', from.label],
+        ['Received', when],
+        ['History', history],
+    ];
+    if (inviteLink) rows.push(['Invite link', inviteLink], ['Invite code', code]);
+
+    // A ready-written invite, opened in the mail app as a reply to the requester.
+    const inviteSubject = 'Invite to the Creative Value Monitor Lookup Preview';
+    const inviteBody = inviteLink ? [
+        'Hello,', '',
+        'Here is an invite to the Creative Value Monitor Lookup Preview.', '',
+        `Open the preview: ${inviteLink}`, '',
+        `The link signs in directly. On the sign-in page (${from.url}), the invite code is: ${code}`, '',
+        "The preview shows whether a domain's content is in AI training data, how much of it, and what it is worth a year.", '',
+        'Creative Value Monitor', 'hello@creativevaluemonitor.ai',
+    ].join('\n') : '';
+    const sendInvite = inviteLink ? `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(inviteSubject)}&body=${encodeURIComponent(inviteBody)}` : null;
+
+    const next = inviteLink
+        ? 'To grant access, use Send invite: it opens a ready-written reply with the invite link. Replies go straight to the requester.'
+        : 'To grant access, reply with the invite link for the page above. Replies go straight to the requester.';
+    const text = 'New request for an invite to the Lookup Preview.\n\n'
+        + rows.map(([k, v]) => `${k}: ${v}`).join('\n')
+        + `\n\n${next}\n`
+        + (inviteLink ? `\n--- Invite to send ---\nSubject: ${inviteSubject}\n\n${inviteBody}\n` : '');
+    const cell = (k, v) => {
+        if (k === 'Email') return `<a href="mailto:${esc(v)}" style="${linkStyle()}">${esc(v)}</a>`;
+        if (k === 'Requested from' && from.url) return `<a href="${from.url}" style="${linkStyle()}">${esc(v)}</a>`;
+        if (k === 'Invite link') return `<a href="${esc(v)}" style="${linkStyle()}">${esc(v)}</a>`;
+        if (k === 'Invite code') return `<code style="font-size:14px;">${esc(v)}</code>`;
+        return esc(v);
+    };
+    const table = rows.map(([k, v]) => `<tr><td style="padding:3px 18px 3px 0;color:#6b6b6b;white-space:nowrap;vertical-align:top;">${esc(k)}</td>`
+        + `<td style="padding:3px 0;word-break:break-all;">${cell(k, v)}</td></tr>`).join('');
+    const button = sendInvite
+        ? `<a href="${esc(sendInvite)}" style="display:inline-block;background:#082546;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;">Send invite</a>`
+        : null;
     return resend.emails.send({
         from: `Creative Value Monitor <${FROM_EMAIL}>`,
         to: 'hello@creativevaluemonitor.ai',
         replyTo: email,
-        subject: `Lookup preview invite request: ${organisation || email}`,
-        text: `Invite request for the lookup preview.\n\nEmail: ${email}\nOrganisation: ${org}\nPage: ${source}\n`,
+        subject: `Lookup Preview invite request: ${organisation ? `${organisation} (${email})` : email}`,
+        text,
         html: htmlShell([
-            'Invite request for the lookup preview.',
-            `Email: ${esc(email)}<br>Organisation: ${esc(org)}<br>Page: ${esc(source)}`,
+            'New request for an invite to the Lookup Preview.',
+            `<table style="border-collapse:collapse;font-size:15px;">${table}</table>`,
+            ...(button ? [button] : []),
+            next,
         ]),
     });
 }
