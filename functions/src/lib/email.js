@@ -148,15 +148,19 @@ async function sendInviteRequestNotice({ apiKey, email, organisation, source, re
         "The preview shows whether a domain's content is in AI training data, how much of it, and what it is worth a year.", '',
         'Creative Value Monitor', 'hello@creativevaluemonitor.ai',
     ].join('\n') : '';
-    const sendInvite = inviteLink ? `mailto:${encodeURIComponent(email)}?subject=${encodeURIComponent(inviteSubject)}&body=${encodeURIComponent(inviteBody)}` : null;
+    // Gmail's compose window fills To, Subject and the message reliably; the mailto link is for any other mail app.
+    // The address goes in as written (it was validated), so mail apps show it in the To field.
+    const q = (o) => Object.entries(o).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&');
+    const gmailInvite = inviteLink ? `https://mail.google.com/mail/?view=cm&fs=1&${q({ to: email, su: inviteSubject, body: inviteBody })}` : null;
+    const sendInvite = inviteLink ? `mailto:${encodeURI(email)}?${q({ subject: inviteSubject, body: inviteBody })}` : null;
 
     const next = inviteLink
-        ? 'To grant access, use Send invite: it opens a ready-written reply with the invite link. Replies go straight to the requester.'
+        ? `To grant access, use Send invite: it opens a ready-written invite to ${email} in Gmail. Replies to this email also go straight to the requester.`
         : 'To grant access, reply with the invite link for the page above. Replies go straight to the requester.';
     const text = 'New request for an invite to the Lookup Preview.\n\n'
         + rows.map(([k, v]) => `${k}: ${v}`).join('\n')
         + `\n\n${next}\n`
-        + (inviteLink ? `\n--- Invite to send ---\nSubject: ${inviteSubject}\n\n${inviteBody}\n` : '');
+        + (inviteLink ? `\nSend invite in Gmail: ${gmailInvite}\n\n--- Invite to send ---\nTo: ${email}\nSubject: ${inviteSubject}\n\n${inviteBody}\n` : '');
     const cell = (k, v) => {
         if (k === 'Email') return `<a href="mailto:${esc(v)}" style="${linkStyle()}">${esc(v)}</a>`;
         if (k === 'Requested from' && from.url) return `<a href="${from.url}" style="${linkStyle()}">${esc(v)}</a>`;
@@ -166,8 +170,9 @@ async function sendInviteRequestNotice({ apiKey, email, organisation, source, re
     };
     const table = rows.map(([k, v]) => `<tr><td style="padding:3px 18px 3px 0;color:#6b6b6b;white-space:nowrap;vertical-align:top;">${esc(k)}</td>`
         + `<td style="padding:3px 0;word-break:break-all;">${cell(k, v)}</td></tr>`).join('');
-    const button = sendInvite
-        ? `<a href="${esc(sendInvite)}" style="display:inline-block;background:#082546;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;">Send invite</a>`
+    const button = gmailInvite
+        ? `<a href="${esc(gmailInvite)}" style="display:inline-block;background:#082546;color:#ffffff;text-decoration:none;padding:10px 16px;border-radius:4px;font-weight:600;">Send invite</a>`
+          + `<span style="display:inline-block;margin-left:14px;font-size:13px;"><a href="${esc(sendInvite)}" style="${linkStyle()}">Or open in the default mail app</a></span>`
         : null;
     return resend.emails.send({
         from: `Creative Value Monitor <${FROM_EMAIL}>`,
